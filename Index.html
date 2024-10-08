@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generador de Kits</title>
   <style>
-    /* Estilo inspirado en el juego Rust */
     body {
       font-family: "Verdana", sans-serif;
       background-color: #2b2b2b;
@@ -56,9 +55,6 @@
       font-size: 14px;
       color: #fff;
     }
-    .category {
-      margin-bottom: 20px;
-    }
     .hidden {
       display: none;
     }
@@ -72,9 +68,9 @@
 
   <h1 id="title">Generador de Kits</h1>
   <div class="container">
-    <h2 id="subtitle">Selecciona un kit y agrega los elementos</h2>
+    <h2 id="subtitle">Selecciona o escribe el nombre del kit</h2>
 
-    <!-- Selección de kit -->
+    <!-- Selección o personalización del nombre del kit -->
     <label id="kitLabel" for="kit-select">Nombre del kit:</label>
     <select id="kit-select">
       <option value="user">user</option>
@@ -106,6 +102,9 @@
       <option value="elitekit22">elitekit22</option>
     </select>
 
+    <label for="custom-kit-name">O escribe el nombre del kit:</label>
+    <input type="text" id="custom-kit-name" placeholder="Nombre personalizado del kit">
+
     <!-- Selección de categoría -->
     <div id="category-select" class="category">
       <label id="categoryLabel">Selecciona una categoría:</label>
@@ -125,11 +124,10 @@
       <button id="choose-category">Seleccionar Categoría</button>
     </div>
 
-    <!-- Selección de elemento -->
+    <!-- Selección de ítem -->
     <div id="item-section" class="hidden">
       <label id="itemLabel" for="item-select">Elemento:</label>
       <select id="item-select"></select>
-      <button id="back-to-category">Volver a Categorías</button>
     </div>
 
     <!-- Cantidad -->
@@ -144,8 +142,11 @@
       <option value="Wear">Wear</option>
     </select>
 
-    <!-- Botón para generar el comando -->
-    <button id="generate-btn">Generar comando</button>
+    <!-- Botón para añadir al comando -->
+    <button id="add-to-kit">Añadir al kit</button>
+
+    <!-- Botón para generar el comando final -->
+    <button id="generate-all-btn">Generar todos los comandos</button>
 
     <!-- Sección para mostrar el comando generado -->
     <div class="output" id="output"></div>
@@ -160,44 +161,6 @@
   <!-- Conexión al archivo Items.js -->
   <script src="Items.js"></script>
   <script>
-    // Traducciones
-    const translations = {
-      es: {
-        title: 'Generador de Kits',
-        subtitle: 'Selecciona un kit y agrega los elementos',
-        kitLabel: 'Nombre del kit:',
-        itemLabel: 'Elemento:',
-        quantityLabel: 'Cantidad:',
-        locationLabel: 'Ubicación:',
-        generateButton: 'Generar comando',
-        outputText: 'Comando generado:'
-      },
-      en: {
-        title: 'Kit Generator',
-        subtitle: 'Select a kit and add items',
-        kitLabel: 'Kit name:',
-        itemLabel: 'Item:',
-        quantityLabel: 'Quantity:',
-        locationLabel: 'Location:',
-        generateButton: 'Generate command',
-        outputText: 'Generated command:'
-      }
-    };
-
-    // Función para cambiar idioma
-    function switchLanguage(lang) {
-      document.getElementById('title').innerText = translations[lang].title;
-      document.getElementById('subtitle').innerText = translations[lang].subtitle;
-      document.getElementById('kitLabel').innerText = translations[lang].kitLabel;
-      document.getElementById('itemLabel').innerText = translations[lang].itemLabel;
-      document.getElementById('quantityLabel').innerText = translations[lang].quantityLabel;
-      document.getElementById('locationLabel').innerText = translations[lang].locationLabel;
-      document.getElementById('generate-btn').innerText = translations[lang].generateButton;
-    }
-
-    document.getElementById('btn-es').addEventListener('click', () => switchLanguage('es'));
-    document.getElementById('btn-en').addEventListener('click', () => switchLanguage('en'));
-
     // Inicialización de los elementos del selector desde Items.js
     const itemsSelect = document.getElementById('item-select');
     const items = window.items; // Usar el objeto del archivo Items.js
@@ -216,6 +179,10 @@
       components: items.components,
       electrical: items.electrical
     };
+
+    // Variables para almacenar el nombre del kit y los comandos generados
+    let kitName = '';
+    let commands = [];
 
     // Función para llenar el selector de items por categoría
     function populateItems(category) {
@@ -236,27 +203,77 @@
       document.getElementById('item-section').classList.remove('hidden');
     });
 
-    // Botón para volver a la selección de categoría
-    document.getElementById('back-to-category').addEventListener('click', () => {
-      document.getElementById('category-select').classList.remove('hidden');
-      document.getElementById('item-section').classList.add('hidden');
-    });
+        // Asignar el nombre del kit
+    document.getElementById('add-to-kit').addEventListener('click', () => {
+      // Obtener el nombre del kit del select o del campo personalizado
+      const selectedKit = document.getElementById('kit-select').value;
+      const customKitName = document.getElementById('custom-kit-name').value.trim();
 
-    // Función para generar el comando
-    document.getElementById('generate-btn').addEventListener('click', () => {
-      const kitName = document.getElementById('kit-select').value;
+      // Determinar el nombre del kit (si se escribe uno personalizado, se usa ese)
+      kitName = customKitName ? customKitName : selectedKit;
+
+      // Obtener valores seleccionados
       const itemId = document.getElementById('item-select').value;
       const quantity = document.getElementById('quantity').value;
       const location = document.getElementById('location-select').value;
 
-      const command = `kit add ${kitName} ${itemId} ${quantity} ${location}`;
-      document.getElementById('output').innerText = translations[document.documentElement.lang || 'es'].outputText + ` ${command}`;
+      // Validación básica
+      if (!itemId || !quantity || !location) {
+        alert('Por favor, selecciona un ítem, cantidad y ubicación válidos.');
+        return;
+      }
 
-      // Copiar el comando al portapapeles
-      navigator.clipboard.writeText(command).then(() => {
-        alert('¡Comando copiado al portapapeles!');
+      // Crear el comando
+      const command = `kit add ${kitName} ${itemId} ${quantity} ${location}`;
+      commands.push(command);
+
+      // Mostrar el progreso del comando en la salida
+      document.getElementById('output').innerText = `Comandos actuales:\n${commands.join('\n')}`;
+
+      // Limpiar inputs para agregar más ítems sin perder el progreso
+      document.getElementById('quantity').value = 1;
+    });
+
+    // Función para generar y copiar todos los comandos
+    document.getElementById('generate-all-btn').addEventListener('click', () => {
+      if (commands.length === 0) {
+        alert('No hay comandos generados. Por favor, añade elementos al kit.');
+        return;
+      }
+
+      // Copiar todos los comandos al portapapeles
+      const allCommands = commands.join('\n');
+      navigator.clipboard.writeText(allCommands).then(() => {
+        alert('¡Todos los comandos han sido copiados al portapapeles!');
       });
+
+      // Mostrar todos los comandos en la salida
+      document.getElementById('output').innerText = `Comandos copiados:\n${allCommands}`;
+      
+      // Limpiar los comandos después de copiar
+      commands = [];
+    });
+
+    // Función para llenar el selector de items por categoría
+    function populateItems(category) {
+      itemsSelect.innerHTML = ''; // Limpiamos los elementos previos
+      categories[category].forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.innerText = item.name;
+        itemsSelect.appendChild(option);
+      });
+    }
+
+    // Mostrar el selector de categoría y ocultar la selección de items
+    document.getElementById('choose-category').addEventListener('click', () => {
+      const selectedCategory = document.getElementById('category').value;
+      populateItems(selectedCategory);
+      document.getElementById('category-select').classList.add('hidden');
+      document.getElementById('item-section').classList.remove('hidden');
     });
   </script>
 </body>
 </html>
+
+    
