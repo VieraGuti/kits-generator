@@ -86,6 +86,12 @@
       <option value="electrical">Eléctrico</option>
     </select>
 
+    <!-- Selector para subcategoría -->
+    <div id="subcategory-section" class="hidden">
+      <label for="subcategory-select">Selecciona una subcategoría:</label>
+      <select id="subcategory-select"></select>
+    </div>
+
     <div id="item-section" class="hidden">
       <label for="item-select">Elemento:</label>
       <select id="item-select"></select>
@@ -115,11 +121,10 @@
   <!-- Conexión al archivo Items.js -->
   <script src="Items.js"></script>
   <script>
-    // Inicialización de los elementos del selector desde Items.js
     const itemsSelect = document.getElementById('item-select');
-    const items = window.items; // Usar el objeto del archivo Items.js
+    const subcategorySelect = document.getElementById('subcategory-select');
+    const items = window.items;
 
-    // Categorías de items
     const categories = {
       ammo: items.ammo,
       weapons: items.weapons,
@@ -134,47 +139,61 @@
       electrical: items.electrical
     };
 
-    // Función para llenar el selector de items por categoría
-    function populateItems(category) {
-      itemsSelect.innerHTML = ''; // Limpiamos los elementos previos
-      categories[category].forEach(item => {
+    // Función para llenar el selector de subcategorías
+    function populateSubcategories(category) {
+      subcategorySelect.innerHTML = ''; // Limpiar opciones previas
+      const subcategories = items[category]; // Acceder a la subcategoría correspondiente
+      subcategories.forEach(item => {
         const option = document.createElement('option');
-        option.value = item.id; // Asignar el ID del item
-        option.innerText = item.name; // Mostrar el nombre del item
-        itemsSelect.appendChild(option);
+        option.value = item.id; // Asignar el ID del ítem
+        option.innerText = item.name; // Mostrar el nombre del ítem
+        subcategorySelect.appendChild(option);
       });
     }
 
-    // Detectar cambio de categoría y actualizar los ítems automáticamente
+    // Detectar cambio de categoría y mostrar subcategoría
     document.getElementById('category').addEventListener('change', (e) => {
       const selectedCategory = e.target.value;
-      populateItems(selectedCategory);
-      document.getElementById('item-section').classList.remove('hidden'); // Mostrar sección de ítems
+      document.getElementById('subcategory-section').classList.remove('hidden'); // Mostrar sección de subcategoría
+      populateSubcategories(selectedCategory); // Llenar subcategorías
+      itemsSelect.innerHTML = ''; // Limpiar el selector de ítems
+      document.getElementById('item-section').classList.add('hidden'); // Ocultar sección de ítems hasta que se seleccione una subcategoría
+    });
+
+    // Llenar ítems cuando se seleccione una subcategoría
+    subcategorySelect.addEventListener('change', () => {
+      const selectedSubcategory = subcategorySelect.value;
+      if (selectedSubcategory) {
+        const selectedCategory = document.getElementById('category').value; // Obtener la categoría seleccionada
+        const selectedItems = categories[selectedCategory].filter(item => item.id === selectedSubcategory);
+        itemsSelect.innerHTML = ''; // Limpiar opciones previas
+        selectedItems.forEach(item => {
+          const option = document.createElement('option');
+          option.value = item.id;
+          option.innerText = item.name;
+          itemsSelect.appendChild(option);
+        });
+        document.getElementById('item-section').classList.remove('hidden'); // Mostrar sección de ítems
+      }
     });
 
     // Asignar el nombre del kit
     document.getElementById('add-to-kit').addEventListener('click', () => {
-      // Obtener el nombre del kit del select o del campo personalizado
       const selectedKit = document.getElementById('kit-select').value;
       const customKitName = document.getElementById('custom-kit-name').value.trim();
       const kitName = customKitName ? customKitName : selectedKit;
 
-      // Obtener valores seleccionados
       const itemId = document.getElementById('item-select').value;
       const quantity = document.getElementById('quantity').value;
       const location = document.getElementById('location-select').value;
 
-      // Validación básica
       if (!itemId || !quantity || !location) {
         alert('Por favor, selecciona un ítem, cantidad y ubicación válidos.');
         return;
       }
 
-      // Crear el comando
       const command = `kit add ${kitName} ${itemId} ${quantity} ${location}`;
       document.getElementById('output').innerText += `${command}\n`;
-
-      // Limpiar campos para añadir más ítems sin perder el progreso
       document.getElementById('quantity').value = 1; // Restablecer cantidad
     });
 
