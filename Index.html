@@ -71,31 +71,8 @@
     <label for="custom-kit-name">O escribe el nombre del kit:</label>
     <input type="text" id="custom-kit-name" placeholder="Nombre personalizado del kit">
 
-    <label for="category">Selecciona una categoría:</label>
-    <select id="category">
-      <option value="ammo">Munición</option>
-      <option value="weapons">Armas</option>
-      <option value="construction">Construcción</option>
-      <option value="items">Objetos</option>
-      <option value="resources">Recursos</option>
-      <option value="attire">Ropa</option>
-      <option value="tools">Herramientas</option>
-      <option value="medsAndTeas">Medicinas</option>
-      <option value="trapsAndMiscellaneous">Trampas</option>
-      <option value="components">Componentes</option>
-      <option value="electrical">Eléctrico</option>
-    </select>
-
-    <!-- Selector para subcategoría -->
-    <div id="subcategory-section" class="hidden">
-      <label for="subcategory-select">Selecciona una subcategoría:</label>
-      <select id="subcategory-select"></select>
-    </div>
-
-    <div id="item-section" class="hidden">
-      <label for="item-select">Elemento:</label>
-      <select id="item-select"></select>
-    </div>
+    <label for="item-select">Selecciona un ítem:</label>
+    <select id="item-select"></select>
 
     <label for="quantity">Cantidad:</label>
     <input type="number" id="quantity" min="1" value="1">
@@ -122,60 +99,24 @@
   <script src="Items.js"></script>
   <script>
     const itemsSelect = document.getElementById('item-select');
-    const subcategorySelect = document.getElementById('subcategory-select');
-    const items = window.items;
+    const items = window.items; // Asegúrate de que esto esté definido en Items.js
 
-    const categories = {
-      ammo: items.ammo,
-      weapons: items.weapons,
-      construction: items.construction,
-      items: items.items,
-      resources: items.resources,
-      attire: items.attire,
-      tools: items.tools,
-      medsAndTeas: items.medsAndTeas,
-      trapsAndMiscellaneous: items.trapsAndMiscellaneous,
-      components: items.components,
-      electrical: items.electrical
-    };
-
-    // Función para llenar el selector de subcategorías
-    function populateSubcategories(category) {
-      subcategorySelect.innerHTML = ''; // Limpiar opciones previas
-      const subcategories = items[category]; // Acceder a la subcategoría correspondiente
-      subcategories.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.id; // Asignar el ID del ítem
-        option.innerText = item.name; // Mostrar el nombre del ítem
-        subcategorySelect.appendChild(option);
-      });
-    }
-
-    // Detectar cambio de categoría y mostrar subcategoría
-    document.getElementById('category').addEventListener('change', (e) => {
-      const selectedCategory = e.target.value;
-      document.getElementById('subcategory-section').classList.remove('hidden'); // Mostrar sección de subcategoría
-      populateSubcategories(selectedCategory); // Llenar subcategorías
-      itemsSelect.innerHTML = ''; // Limpiar el selector de ítems
-      document.getElementById('item-section').classList.add('hidden'); // Ocultar sección de ítems hasta que se seleccione una subcategoría
-    });
-
-    // Llenar ítems cuando se seleccione una subcategoría
-    subcategorySelect.addEventListener('change', () => {
-      const selectedSubcategory = subcategorySelect.value;
-      if (selectedSubcategory) {
-        const selectedCategory = document.getElementById('category').value; // Obtener la categoría seleccionada
-        const selectedItems = categories[selectedCategory].filter(item => item.id === selectedSubcategory);
-        itemsSelect.innerHTML = ''; // Limpiar opciones previas
-        selectedItems.forEach(item => {
+    // Función para llenar el selector de ítems
+    function populateItems() {
+      itemsSelect.innerHTML = ''; // Limpiar opciones previas
+      // Iterar sobre todas las categorías y agregar los ítems al selector
+      for (const category in items) {
+        items[category].forEach(item => {
           const option = document.createElement('option');
-          option.value = item.id;
-          option.innerText = item.name;
+          option.value = item.id; // Asignar el ID del ítem
+          option.innerText = `${item.name} (${category})`; // Mostrar el nombre del ítem y la categoría
           itemsSelect.appendChild(option);
         });
-        document.getElementById('item-section').classList.remove('hidden'); // Mostrar sección de ítems
       }
-    });
+    }
+
+    // Llenar el selector de ítems al cargar la página
+    populateItems();
 
     // Asignar el nombre del kit
     document.getElementById('add-to-kit').addEventListener('click', () => {
@@ -211,7 +152,7 @@
     });
 
     // Inicialización por defecto al cargar la página
-    document.getElementById('category').dispatchEvent(new Event('change')); // Cargar automáticamente ítems de la primera categoría
+    populateItems(); // Cargar automáticamente todos los ítems
   </script>
 </body>
 </html>
