@@ -121,11 +121,10 @@
         <option value="components">Componentes / Components</option>
         <option value="electrical">Eléctrico / Electrical</option>
       </select>
-      <button id="choose-category">Seleccionar Categoría</button>
     </div>
 
     <!-- Selección de ítem -->
-    <div id="item-section" class="hidden">
+    <div id="item-section" class="">
       <label id="itemLabel" for="item-select">Elemento:</label>
       <select id="item-select"></select>
     </div>
@@ -195,15 +194,13 @@
       });
     }
 
-    // Mostrar el selector de categoría y ocultar la selección de items
-    document.getElementById('choose-category').addEventListener('click', () => {
-      const selectedCategory = document.getElementById('category').value;
+    // Detectar cambio de categoría y actualizar los ítems automáticamente
+    document.getElementById('category').addEventListener('change', (e) => {
+      const selectedCategory = e.target.value;
       populateItems(selectedCategory);
-      document.getElementById('category-select').classList.add('hidden');
-      document.getElementById('item-section').classList.remove('hidden');
     });
 
-        // Asignar el nombre del kit
+    // Asignar el nombre del kit
     document.getElementById('add-to-kit').addEventListener('click', () => {
       // Obtener el nombre del kit del select o del campo personalizado
       const selectedKit = document.getElementById('kit-select').value;
@@ -223,7 +220,7 @@
         return;
       }
 
-      // Crear el comando
+            // Crear el comando
       const command = `kit add ${kitName} ${itemId} ${quantity} ${location}`;
       commands.push(command);
 
@@ -254,24 +251,8 @@
       commands = [];
     });
 
-    // Función para llenar el selector de items por categoría
-    function populateItems(category) {
-      itemsSelect.innerHTML = ''; // Limpiamos los elementos previos
-      categories[category].forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.id;
-        option.innerText = item.name;
-        itemsSelect.appendChild(option);
-      });
-    }
-
-    // Mostrar el selector de categoría y ocultar la selección de items
-    document.getElementById('choose-category').addEventListener('click', () => {
-      const selectedCategory = document.getElementById('category').value;
-      populateItems(selectedCategory);
-      document.getElementById('category-select').classList.add('hidden');
-      document.getElementById('item-section').classList.remove('hidden');
-    });
+    // Inicialización por defecto al cargar la página
+    document.getElementById('category').dispatchEvent(new Event('change'));
   </script>
 </body>
 </html>
