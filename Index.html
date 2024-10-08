@@ -55,9 +55,6 @@
       font-size: 14px;
       color: #fff;
     }
-    .hidden {
-      display: none;
-    }
   </style>
 </head>
 <body>
@@ -124,7 +121,7 @@
     </div>
 
     <!-- Selección de ítem -->
-    <div id="item-section" class="">
+    <div id="item-section" class="hidden">
       <label id="itemLabel" for="item-select">Elemento:</label>
       <select id="item-select"></select>
     </div>
@@ -198,6 +195,7 @@
     document.getElementById('category').addEventListener('change', (e) => {
       const selectedCategory = e.target.value;
       populateItems(selectedCategory);
+      document.getElementById('item-section').classList.remove('hidden'); // Mostrar sección de ítems
     });
 
     // Asignar el nombre del kit
@@ -214,13 +212,13 @@
       const quantity = document.getElementById('quantity').value;
       const location = document.getElementById('location-select').value;
 
-      // Validación básica
+            // Validación básica
       if (!itemId || !quantity || !location) {
         alert('Por favor, selecciona un ítem, cantidad y ubicación válidos.');
         return;
       }
 
-            // Crear el comando
+      // Crear el comando
       const command = `kit add ${kitName} ${itemId} ${quantity} ${location}`;
       commands.push(command);
 
@@ -252,9 +250,9 @@
     });
 
     // Inicialización por defecto al cargar la página
-    document.getElementById('category').dispatchEvent(new Event('change'));
+    document.getElementById('category').dispatchEvent(new Event('change')); // Para cargar ítems automáticamente en la primera categoría
   </script>
 </body>
 </html>
 
-    
+      
