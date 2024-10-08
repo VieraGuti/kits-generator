@@ -400,3 +400,4 @@ electrical: [
         // No coma al final
     ]
 }; // Cerrar correctamente el objeto 'items'
+window.items = items;
