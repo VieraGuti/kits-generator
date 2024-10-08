@@ -7,9 +7,11 @@
   <style>
     /* Estilo inspirado en el juego Rust */
     body {
-      font-family: "Verdana", sans-serif; /* Fuente estándar para mayor accesibilidad */
+      font-family: "Verdana", sans-serif;
       background-color: #2b2b2b;
-      color: #ffa500; /* Color naranja similar al de Rust */
+      color: #ffa500;
+      margin: 0;
+      padding: 0;
     }
     h1, h2 {
       text-align: center;
@@ -39,17 +41,26 @@
       padding: 20px;
       border-radius: 10px;
       width: 80%;
+      color: #ffa500;
     }
     .language-switch {
-      position: absolute;
+      position: fixed;
       top: 20px;
       right: 20px;
+      display: flex;
+      gap: 10px;
     }
     .credits {
       text-align: center;
       margin-top: 30px;
       font-size: 14px;
       color: #fff;
+    }
+    .category {
+      margin-bottom: 20px;
+    }
+    .hidden {
+      display: none;
     }
   </style>
 </head>
@@ -62,19 +73,64 @@
   <h1 id="title">Generador de Kits</h1>
   <div class="container">
     <h2 id="subtitle">Selecciona un kit y agrega los elementos</h2>
-    
+
     <!-- Selección de kit -->
     <label id="kitLabel" for="kit-select">Nombre del kit:</label>
     <select id="kit-select">
       <option value="user">user</option>
+      <option value="freekit">freekit</option>
+      <option value="freekit2">freekit2</option>
       <option value="vipkit">vipkit</option>
-      <option value="elitekit">elitekit</option>
+      <!-- Agregar los kits elitekit del 1 al 22 -->
+      <option value="elitekit1">elitekit1</option>
+      <option value="elitekit2">elitekit2</option>
+      <option value="elitekit3">elitekit3</option>
+      <option value="elitekit4">elitekit4</option>
+      <option value="elitekit5">elitekit5</option>
+      <option value="elitekit6">elitekit6</option>
+      <option value="elitekit7">elitekit7</option>
+      <option value="elitekit8">elitekit8</option>
+      <option value="elitekit9">elitekit9</option>
+      <option value="elitekit10">elitekit10</option>
+      <option value="elitekit11">elitekit11</option>
+      <option value="elitekit12">elitekit12</option>
+      <option value="elitekit13">elitekit13</option>
+      <option value="elitekit14">elitekit14</option>
+      <option value="elitekit15">elitekit15</option>
+      <option value="elitekit16">elitekit16</option>
+      <option value="elitekit17">elitekit17</option>
+      <option value="elitekit18">elitekit18</option>
+      <option value="elitekit19">elitekit19</option>
+      <option value="elitekit20">elitekit20</option>
+      <option value="elitekit21">elitekit21</option>
       <option value="elitekit22">elitekit22</option>
     </select>
 
+    <!-- Selección de categoría -->
+    <div id="category-select" class="category">
+      <label id="categoryLabel">Selecciona una categoría:</label>
+      <select id="category">
+        <option value="ammo">Munición / Ammo</option>
+        <option value="weapons">Armas / Weapons</option>
+        <option value="construction">Construcción / Construction</option>
+        <option value="items">Objetos / Items</option>
+        <option value="resources">Recursos / Resources</option>
+        <option value="attire">Ropa / Attire</option>
+        <option value="tools">Herramientas / Tools</option>
+        <option value="medsAndTeas">Medicinas / Teas</option>
+        <option value="trapsAndMiscellaneous">Trampas / Misceláneo</option>
+        <option value="components">Componentes / Components</option>
+        <option value="electrical">Eléctrico / Electrical</option>
+      </select>
+      <button id="choose-category">Seleccionar Categoría</button>
+    </div>
+
     <!-- Selección de elemento -->
-    <label id="itemLabel" for="item-select">Elemento:</label>
-    <select id="item-select"></select>
+    <div id="item-section" class="hidden">
+      <label id="itemLabel" for="item-select">Elemento:</label>
+      <select id="item-select"></select>
+      <button id="back-to-category">Volver a Categorías</button>
+    </div>
 
     <!-- Cantidad -->
     <label id="quantityLabel" for="quantity">Cantidad:</label>
@@ -145,14 +201,45 @@
     // Inicialización de los elementos del selector desde Items.js
     const itemsSelect = document.getElementById('item-select');
     const items = window.items; // Usar el objeto del archivo Items.js
-    const allItems = [...items.ammo, ...items.weapons, ...items.construction, ...items.items, ...items.resources, ...items.attire, ...items.tools, ...items.medsAndTeas, ...items.trapsAndMiscellaneous, ...items.components, ...items.electrical];
 
-    // Poblamos el selector de elementos
-    allItems.forEach(item => {
-      const option = document.createElement('option');
-      option.value = item.id;
-      option.innerText = item.name;
-      itemsSelect.appendChild(option);
+    // Categorías de items
+    const categories = {
+      ammo: items.ammo,
+      weapons: items.weapons,
+      construction: items.construction,
+      items: items.items,
+      resources: items.resources,
+      attire: items.attire,
+      tools: items.tools,
+      medsAndTeas: items.medsAndTeas,
+      trapsAndMiscellaneous: items.trapsAndMiscellaneous,
+      components: items.components,
+      electrical: items.electrical
+    };
+
+    // Función para llenar el selector de items por categoría
+    function populateItems(category) {
+      itemsSelect.innerHTML = ''; // Limpiamos los elementos previos
+      categories[category].forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.innerText = item.name;
+        itemsSelect.appendChild(option);
+      });
+    }
+
+    // Mostrar el selector de categoría y ocultar la selección de items
+    document.getElementById('choose-category').addEventListener('click', () => {
+      const selectedCategory = document.getElementById('category').value;
+      populateItems(selectedCategory);
+      document.getElementById('category-select').classList.add('hidden');
+      document.getElementById('item-section').classList.remove('hidden');
+    });
+
+    // Botón para volver a la selección de categoría
+    document.getElementById('back-to-category').addEventListener('click', () => {
+      document.getElementById('category-select').classList.remove('hidden');
+      document.getElementById('item-section').classList.add('hidden');
     });
 
     // Función para generar el comando
@@ -164,6 +251,11 @@
 
       const command = `kit add ${kitName} ${itemId} ${quantity} ${location}`;
       document.getElementById('output').innerText = translations[document.documentElement.lang || 'es'].outputText + ` ${command}`;
+
+      // Copiar el comando al portapapeles
+      navigator.clipboard.writeText(command).then(() => {
+        alert('¡Comando copiado al portapapeles!');
+      });
     });
   </script>
 </body>
