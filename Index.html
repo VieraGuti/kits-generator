@@ -55,6 +55,9 @@
       font-size: 14px;
       color: #fff;
     }
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -185,8 +188,8 @@
       itemsSelect.innerHTML = ''; // Limpiamos los elementos previos
       categories[category].forEach(item => {
         const option = document.createElement('option');
-        option.value = item.id;
-        option.innerText = item.name;
+        option.value = item.id; // Asignar el ID del item
+        option.innerText = item.name; // Mostrar el nombre del item
         itemsSelect.appendChild(option);
       });
     }
@@ -207,12 +210,13 @@
       // Determinar el nombre del kit (si se escribe uno personalizado, se usa ese)
       kitName = customKitName ? customKitName : selectedKit;
 
-      // Obtener valores seleccionados
+      // Obtener valores seleccionado
+       // Obtener valores seleccionados
       const itemId = document.getElementById('item-select').value;
       const quantity = document.getElementById('quantity').value;
       const location = document.getElementById('location-select').value;
 
-            // Validación básica
+      // Validación básica
       if (!itemId || !quantity || !location) {
         alert('Por favor, selecciona un ítem, cantidad y ubicación válidos.');
         return;
@@ -250,7 +254,7 @@
     });
 
     // Inicialización por defecto al cargar la página
-    document.getElementById('category').dispatchEvent(new Event('change')); // Para cargar ítems automáticamente en la primera categoría
+    document.getElementById('category').dispatchEvent(new Event('change')); // Cargar automáticamente ítems de la primera categoría
   </script>
 </body>
 </html>
