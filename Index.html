@@ -8,7 +8,7 @@
     body {
       font-family: "Verdana", sans-serif;
       background-color: #2b2b2b;
-      color: #ffa500; /* Color naranja */
+      color: #ffa500; /* Color naranja estilo Rust */
       margin: 0;
       padding: 0;
     }
@@ -58,10 +58,6 @@
     .hidden {
       display: none;
     }
-    .kit-input {
-      margin-bottom: 20px;
-      text-align: center;
-    }
   </style>
 </head>
 <body>
@@ -81,7 +77,6 @@
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
-        <!-- Agregar los kits elitekit del 1 al 22 -->
         <option value="elitekit1">elitekit1</option>
         <option value="elitekit2">elitekit2</option>
         <option value="elitekit3">elitekit3</option>
@@ -207,56 +202,56 @@
     });
 
     // Asignar el nombre del kit
-    // Asignar el nombre del kit
-document.getElementById('add-to-kit').addEventListener('click', () => {
-  // Obtener el nombre del kit del select o del campo personalizado
-  const selectedKit = document.getElementById('kit-select').value;
-  const customKitName = document.getElementById('custom-kit-name').value.trim();
+    document.getElementById('add-to-kit').addEventListener('click', () => {
+      // Obtener el nombre del kit del select o del campo personalizado
+      const selectedKit = document.getElementById('kit-select').value;
+      const customKitName = document.getElementById('custom-kit-name').value.trim();
 
-  // Determinar el nombre del kit (si se escribe uno personalizado, se usa ese)
-  kitName = customKitName ? customKitName : selectedKit;
+      // Determinar el nombre del kit (si se escribe uno personalizado, se usa ese)
+      kitName = customKitName ? customKitName : selectedKit;
 
-  // Obtener valores seleccionados
-  const itemId = document.getElementById('item-select').value;
-  const quantity = document.getElementById('quantity').value;
-  const location = document.getElementById('location-select').value;
+           // Obtener valores seleccionados
+      const itemId = document.getElementById('item-select').value;
+      const quantity = document.getElementById('quantity').value;
+      const location = document.getElementById('location-select').value;
 
-  // Validación básica
-  if (!itemId || !quantity || !location) {
-    alert('Por favor, selecciona un ítem, cantidad y ubicación válidos.');
-    return;
-  }
+      // Validación básica
+      if (!itemId || !quantity || !location) {
+        alert('Por favor, selecciona un ítem, cantidad y ubicación válidos.');
+        return;
+      }
 
-  // Crear el comando
-  const command = `kit add ${kitName} ${itemId} ${quantity} ${location}`;
-  commands.push(command);
+      // Crear el comando
+      const command = `kit add ${kitName} ${itemId} ${quantity} ${location}`;
+      commands.push(command);
 
-  // Mostrar el progreso del comando en la salida
-  document.getElementById('output').innerText = `Comandos actuales:\n${commands.join('\n')}`;
+      // Mostrar el progreso del comando en la salida
+      document.getElementById('output').innerText = `Comandos actuales:\n${commands.join('\n')}`;
 
-  // Limpiar inputs para agregar más ítems sin perder el progreso
-  document.getElementById('quantity').value = 1;
-});
+      // Limpiar inputs para agregar más ítems sin perder el progreso
+      document.getElementById('quantity').value = 1;
+    });
 
-// Función para generar y copiar todos los comandos
-document.getElementById('generate-all-btn').addEventListener('click', () => {
-  if (commands.length === 0) {
-    alert('No hay comandos generados. Por favor, añade elementos al kit.');
-    return;
-  }
+    // Función para generar y copiar todos los comandos
+    document.getElementById('generate-all-btn').addEventListener('click', () => {
+      if (commands.length === 0) {
+        alert('No hay comandos generados. Por favor, añade elementos al kit.');
+        return;
+      }
 
-  // Copiar todos los comandos al portapapeles
-  const allCommands = commands.join('\n');
-  navigator.clipboard.writeText(allCommands).then(() => {
-    alert('¡Todos los comandos han sido copiados al portapapeles!');
-  });
+      // Copiar todos los comandos al portapapeles
+      const allCommands = commands.join('\n');
+      navigator.clipboard.writeText(allCommands).then(() => {
+        alert('¡Todos los comandos han sido copiados al portapapeles!');
+      });
 
-  // Mostrar todos los comandos en la salida
-  document.getElementById('output').innerText = `Comandos copiados:\n${allCommands}`;
-  
-  // Limpiar los comandos después de copiar
-  commands = [];
-});
+      // Mostrar todos los comandos en la salida
+      document.getElementById('output').innerText = `Comandos copiados:\n${allCommands}`;
+      
+      // Limpiar los comandos después de copiar
+      commands = [];
+    });
+
     // Inicialización por defecto al cargar la página
     document.getElementById('category').dispatchEvent(new Event('change')); // Cargar automáticamente ítems de la primera categoría
   </script>
