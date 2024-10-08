@@ -42,12 +42,8 @@
       width: 80%;
       color: #ffa500;
     }
-    .language-switch {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      display: flex;
-      gap: 10px;
+    .hidden {
+      display: none;
     }
     .credits {
       text-align: center;
@@ -55,103 +51,62 @@
       font-size: 14px;
       color: #fff;
     }
-    .hidden {
-      display: none;
-    }
   </style>
 </head>
 <body>
-  <div class="language-switch">
-    <button id="btn-es">Español</button>
-    <button id="btn-en">English</button>
-  </div>
-
-  <h1 id="title">Generador de Kits</h1>
+  <h1>Generador de Kits</h1>
   <div class="container">
-    <h2 id="subtitle">Selecciona o escribe el nombre del kit</h2>
+    <h2>Selecciona o escribe el nombre del kit</h2>
 
-    <div class="kit-input">
-      <label id="kitLabel" for="kit-select">Nombre del kit:</label>
-      <select id="kit-select">
-        <option value="user">user</option>
-        <option value="freekit">freekit</option>
-        <option value="freekit2">freekit2</option>
-        <option value="vipkit">vipkit</option>
-        <option value="elitekit1">elitekit1</option>
-        <option value="elitekit2">elitekit2</option>
-        <option value="elitekit3">elitekit3</option>
-        <option value="elitekit4">elitekit4</option>
-        <option value="elitekit5">elitekit5</option>
-        <option value="elitekit6">elitekit6</option>
-        <option value="elitekit7">elitekit7</option>
-        <option value="elitekit8">elitekit8</option>
-        <option value="elitekit9">elitekit9</option>
-        <option value="elitekit10">elitekit10</option>
-        <option value="elitekit11">elitekit11</option>
-        <option value="elitekit12">elitekit12</option>
-        <option value="elitekit13">elitekit13</option>
-        <option value="elitekit14">elitekit14</option>
-        <option value="elitekit15">elitekit15</option>
-        <option value="elitekit16">elitekit16</option>
-        <option value="elitekit17">elitekit17</option>
-        <option value="elitekit18">elitekit18</option>
-        <option value="elitekit19">elitekit19</option>
-        <option value="elitekit20">elitekit20</option>
-        <option value="elitekit21">elitekit21</option>
-        <option value="elitekit22">elitekit22</option>
-      </select>
-    </div>
+    <label for="kit-select">Nombre del kit:</label>
+    <select id="kit-select">
+      <option value="user">user</option>
+      <option value="freekit">freekit</option>
+      <option value="freekit2">freekit2</option>
+      <option value="vipkit">vipkit</option>
+      <option value="elitekit1">elitekit1</option>
+      <!-- Agrega más opciones según sea necesario -->
+    </select>
 
     <label for="custom-kit-name">O escribe el nombre del kit:</label>
     <input type="text" id="custom-kit-name" placeholder="Nombre personalizado del kit">
 
-    <!-- Selección de categoría -->
-    <div id="category-select" class="category">
-      <label id="categoryLabel">Selecciona una categoría:</label>
-      <select id="category">
-        <option value="ammo">Munición / Ammo</option>
-        <option value="weapons">Armas / Weapons</option>
-        <option value="construction">Construcción / Construction</option>
-        <option value="items">Objetos / Items</option>
-        <option value="resources">Recursos / Resources</option>
-        <option value="attire">Ropa / Attire</option>
-        <option value="tools">Herramientas / Tools</option>
-        <option value="medsAndTeas">Medicinas / Teas</option>
-        <option value="trapsAndMiscellaneous">Trampas / Misceláneo</option>
-        <option value="components">Componentes / Components</option>
-        <option value="electrical">Eléctrico / Electrical</option>
-      </select>
-    </div>
+    <label for="category">Selecciona una categoría:</label>
+    <select id="category">
+      <option value="ammo">Munición</option>
+      <option value="weapons">Armas</option>
+      <option value="construction">Construcción</option>
+      <option value="items">Objetos</option>
+      <option value="resources">Recursos</option>
+      <option value="attire">Ropa</option>
+      <option value="tools">Herramientas</option>
+      <option value="medsAndTeas">Medicinas</option>
+      <option value="trapsAndMiscellaneous">Trampas</option>
+      <option value="components">Componentes</option>
+      <option value="electrical">Eléctrico</option>
+    </select>
 
-    <!-- Selección de ítem -->
     <div id="item-section" class="hidden">
-      <label id="itemLabel" for="item-select">Elemento:</label>
+      <label for="item-select">Elemento:</label>
       <select id="item-select"></select>
     </div>
 
-    <!-- Cantidad -->
-    <label id="quantityLabel" for="quantity">Cantidad:</label>
+    <label for="quantity">Cantidad:</label>
     <input type="number" id="quantity" min="1" value="1">
 
-    <!-- Ubicación -->
-    <label id="locationLabel" for="location-select">Ubicación:</label>
+    <label for="location-select">Ubicación:</label>
     <select id="location-select">
       <option value="Main">Main</option>
       <option value="Belt">Belt</option>
       <option value="Wear">Wear</option>
     </select>
 
-    <!-- Botón para añadir al comando -->
     <button id="add-to-kit">Añadir al kit</button>
-
-    <!-- Botón para generar el comando final -->
     <button id="generate-all-btn">Generar todos los comandos</button>
 
-    <!-- Sección para mostrar el comando generado -->
     <div class="output" id="output"></div>
   </div>
 
-  <!-- Créditos -->
   <div class="credits">
     <p>Creador: VieraGuti</p>
     <p>Free to Use</p>
@@ -179,10 +134,6 @@
       electrical: items.electrical
     };
 
-    // Variables para almacenar el nombre del kit y los comandos generados
-    let kitName = '';
-    let commands = [];
-
     // Función para llenar el selector de items por categoría
     function populateItems(category) {
       itemsSelect.innerHTML = ''; // Limpiamos los elementos previos
@@ -206,11 +157,9 @@
       // Obtener el nombre del kit del select o del campo personalizado
       const selectedKit = document.getElementById('kit-select').value;
       const customKitName = document.getElementById('custom-kit-name').value.trim();
+      const kitName = customKitName ? customKitName : selectedKit;
 
-      // Determinar el nombre del kit (si se escribe uno personalizado, se usa ese)
-      kitName = customKitName ? customKitName : selectedKit;
-
-      //       // Obtener valores seleccionados
+      // Obtener valores seleccionados
       const itemId = document.getElementById('item-select').value;
       const quantity = document.getElementById('quantity').value;
       const location = document.getElementById('location-select').value;
@@ -223,33 +172,23 @@
 
       // Crear el comando
       const command = `kit add ${kitName} ${itemId} ${quantity} ${location}`;
-      commands.push(command);
+      document.getElementById('output').innerText += `${command}\n`;
 
-      // Mostrar el progreso del comando en la salida
-      document.getElementById('output').innerText = `Comandos actuales:\n${commands.join('\n')}`;
-
-      // Limpiar inputs para agregar más ítems sin perder el progreso
-      document.getElementById('quantity').value = 1; // Restablecer cantidad a 1
+      // Limpiar campos para añadir más ítems sin perder el progreso
+      document.getElementById('quantity').value = 1; // Restablecer cantidad
     });
 
     // Función para generar y copiar todos los comandos
     document.getElementById('generate-all-btn').addEventListener('click', () => {
-      if (commands.length === 0) {
+      const allCommands = document.getElementById('output').innerText;
+      if (!allCommands) {
         alert('No hay comandos generados. Por favor, añade elementos al kit.');
         return;
       }
 
-      // Copiar todos los comandos al portapapeles
-      const allCommands = commands.join('\n');
       navigator.clipboard.writeText(allCommands).then(() => {
         alert('¡Todos los comandos han sido copiados al portapapeles!');
       });
-
-      // Mostrar todos los comandos en la salida
-      document.getElementById('output').innerText = `Comandos copiados:\n${allCommands}`;
-      
-      // Limpiar los comandos después de copiar
-      commands = [];
     });
 
     // Inicialización por defecto al cargar la página
@@ -257,5 +196,3 @@
   </script>
 </body>
 </html>
-
-    
