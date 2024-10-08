@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Kits</title>
+  <style>
+    /* Estilo inspirado en el juego Rust */
+    body {
+      font-family: "Verdana", sans-serif; /* Fuente estándar para mayor accesibilidad */
+      background-color: #2b2b2b;
+      color: #ffa500; /* Color naranja similar al de Rust */
+    }
+    h1, h2 {
+      text-align: center;
+      color: #ffa500;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    select, input, button {
+      padding: 10px;
+      margin: 10px;
+      background-color: #404040;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #606060;
+    }
+    .output {
+      margin-top: 20px;
+      background-color: #333333;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+    }
+    .language-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    .credits {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 14px;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="language-switch">
+    <button id="btn-es">Español</button>
+    <button id="btn-en">English</button>
+  </div>
+
+  <h1 id="title">Generador de Kits</h1>
+  <div class="container">
+    <h2 id="subtitle">Selecciona un kit y agrega los elementos</h2>
+    
+    <!-- Selección de kit -->
+    <label id="kitLabel" for="kit-select">Nombre del kit:</label>
+    <select id="kit-select">
+      <option value="user">user</option>
+      <option value="vipkit">vipkit</option>
+      <option value="elitekit">elitekit</option>
+      <option value="elitekit22">elitekit22</option>
+    </select>
+
+    <!-- Selección de elemento -->
+    <label id="itemLabel" for="item-select">Elemento:</label>
+    <select id="item-select"></select>
+
+    <!-- Cantidad -->
+    <label id="quantityLabel" for="quantity">Cantidad:</label>
+    <input type="number" id="quantity" min="1" value="1">
+
+    <!-- Ubicación -->
+    <label id="locationLabel" for="location-select">Ubicación:</label>
+    <select id="location-select">
+      <option value="Main">Main</option>
+      <option value="Belt">Belt</option>
+      <option value="Wear">Wear</option>
+    </select>
+
+    <!-- Botón para generar el comando -->
+    <button id="generate-btn">Generar comando</button>
+
+    <!-- Sección para mostrar el comando generado -->
+    <div class="output" id="output"></div>
+  </div>
+
+  <!-- Créditos -->
+  <div class="credits">
+    <p>Creador: VieraGuti</p>
+    <p>Free to Use</p>
+  </div>
+
+  <!-- Conexión al archivo Items.js -->
+  <script src="Items.js"></script>
+  <script>
+    // Traducciones
+    const translations = {
+      es: {
+        title: 'Generador de Kits',
+        subtitle: 'Selecciona un kit y agrega los elementos',
+        kitLabel: 'Nombre del kit:',
+        itemLabel: 'Elemento:',
+        quantityLabel: 'Cantidad:',
+        locationLabel: 'Ubicación:',
+        generateButton: 'Generar comando',
+        outputText: 'Comando generado:'
+      },
+      en: {
+        title: 'Kit Generator',
+        subtitle: 'Select a kit and add items',
+        kitLabel: 'Kit name:',
+        itemLabel: 'Item:',
+        quantityLabel: 'Quantity:',
+        locationLabel: 'Location:',
+        generateButton: 'Generate command',
+        outputText: 'Generated command:'
+      }
+    };
+
+    // Función para cambiar idioma
+    function switchLanguage(lang) {
+      document.getElementById('title').innerText = translations[lang].title;
+      document.getElementById('subtitle').innerText = translations[lang].subtitle;
+      document.getElementById('kitLabel').innerText = translations[lang].kitLabel;
+      document.getElementById('itemLabel').innerText = translations[lang].itemLabel;
+      document.getElementById('quantityLabel').innerText = translations[lang].quantityLabel;
+      document.getElementById('locationLabel').innerText = translations[lang].locationLabel;
+      document.getElementById('generate-btn').innerText = translations[lang].generateButton;
+    }
+
+    document.getElementById('btn-es').addEventListener('click', () => switchLanguage('es'));
+    document.getElementById('btn-en').addEventListener('click', () => switchLanguage('en'));
+
+    // Inicialización de los elementos del selector desde Items.js
+    const itemsSelect = document.getElementById('item-select');
+    const items = window.items; // Usar el objeto del archivo Items.js
+    const allItems = [...items.ammo, ...items.weapons, ...items.construction, ...items.items, ...items.resources, ...items.attire, ...items.tools, ...items.medsAndTeas, ...items.trapsAndMiscellaneous, ...items.components, ...items.electrical];
+
+    // Poblamos el selector de elementos
+    allItems.forEach(item => {
+      const option = document.createElement('option');
+      option.value = item.id;
+      option.innerText = item.name;
+      itemsSelect.appendChild(option);
+    });
+
+    // Función para generar el comando
+    document.getElementById('generate-btn').addEventListener('click', () => {
+      const kitName = document.getElementById('kit-select').value;
+      const itemId = document.getElementById('item-select').value;
+      const quantity = document.getElementById('quantity').value;
+      const location = document.getElementById('location-select').value;
+
+      const command = `kit add ${kitName} ${itemId} ${quantity} ${location}`;
+      document.getElementById('output').innerText = translations[document.documentElement.lang || 'es'].outputText + ` ${command}`;
+    });
+  </script>
+</body>
+</html>
