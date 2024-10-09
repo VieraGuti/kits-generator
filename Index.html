@@ -20,10 +20,6 @@
             text-shadow: 2px 2px 4px #000;
         }
 
-        .section {
-            margin: 20px 0;
-        }
-
         label {
             display: block;
             margin: 10px 0 5px;
@@ -92,15 +88,26 @@
     <h1>Generador de Kits</h1>
 
     <div class="section">
-        <h2>Selecciona una sección: Construcción</h2>
-        <button id="selectConstruction">Construcción</button>
+        <h2>Selecciona una sección:</h2>
+        <select id="sectionSelect" onchange="updateItemList()">
+            <option value="none">Seleccione una sección</option>
+            <option value="ammo">Munición</option>
+            <option value="weapons">Armas</option>
+            <option value="construction">Construcción</option>
+            <option value="attire">Atuendos</option>
+            <option value="tools">Herramientas</option>
+            <option value="medsAndTeas">Medicinas y Té</option>
+            <option value="trapsAndMiscellaneous">Trampas y Misceláneos</option>
+            <option value="components">Componentes</option>
+            <option value="electrical">Eléctricos</option>
+        </select>
     </div>
 
-    <div class="form" id="constructionForm" style="display: none;">
-        <h3>Formulario de Construcción</h3>
+    <div class="form">
+        <h3>Formulario de Kit</h3>
 
         <label for="kit_name">Nombre del Kit:</label>
-        <input type="text" id="kit_name" placeholder="Ejemplo: Kit de Construcción">
+        <input type="text" id="kit_name" placeholder="Ejemplo: Kit de Munición">
 
         <label for="select_kaosbot">O elige un nombre del Kaosbot:</label>
         <select id="select_kaosbot">
@@ -132,104 +139,40 @@
             <option value="elitekit22">Elitekit22</option>
         </select>
 
-        <label for="constructionItems">Elige un ítem:</label>
-        <select id="constructionItems">
-            <option value="door.wood">Wooden Door</option>
-            <option value="door.double.hinged.toptier">Armored Double Door</option>
-            <option value="door.hinged">Hinged Door</option>
-            <option value="door.double.hinged">Double Hinged Door</option>
-            <option value="foundation">Foundation</option>
-            <option value="wall">Wall</option>
-            <option value="floor">Floor</option>
-            <option value="roof">Roof</option>
-            <option value="window">Window</option>
-            <option value="stair">Stair</option>
-            <option value="ladder">Ladder</option>
-            <option value="ceiling">Ceiling</option>
-            <option value="hatch">Hatch</option>
-            <option value="floor.tiers">Floor Tier</option>
+        <label for="itemSelect">Elige un ítem:</label>
+        <select id="itemSelect" onchange="showItemDetails()">
+            <option value="none">Seleccione un ítem</option>
+            <!-- Aquí se añadirán dinámicamente las opciones -->
         </select>
 
-        <label for="constructionQuantity">Cantidad:</label>
-        <input type="number" id="constructionQuantity" value="1" min="1">
+        <label for="itemDetails">Detalles del Ítem:</label>
+        <input type="text" id="itemDetails" readonly placeholder="Detalles del ítem seleccionado" />
 
-        <label for="constructionLocation">Ubicación:</label>
-        <select id="constructionLocation">
+        <label for="quantity">Cantidad:</label>
+        <input type="number" id="quantity" value="1" min="1">
+
+        <label for="location">Ubicación:</label>
+        <select id="location">
             <option value="Main">Main</option>
             <option value="Belt">Belt</option>
             <option value="Wear">Wear</option>
         </select>
 
-        <button id="submitConstruction">Añadir al Kit</button>
+        <button id="submitKit">Añadir al Kit</button>
 
         <div id="command_list"></div>
     </div>
 
-    <div class="section">
-        <h2>Selecciona una sección: Atuendos</h2>
-        <button id="selectOutfits">Atuendos</button>
-    </div>
-
-    <div class="form" id="outfitsForm" style="display: none;">
-        <h3>Formulario de Atuendos</h3>
-
-        <label for="kit_name_outfit">Nombre del Kit:</label>
-        <input type="text" id="kit_name_outfit" placeholder="Ejemplo: Kit de Atuendos">
-
-        <label for="outfitItems">Elige un ítem:</label>
-        <select id="outfitItems">
-            <option value="armor.wood">Wood Armor</option>
-            <option value="armor.leather">Leather Armor</option>
-            <option value="armor.tactical">Tactical Armor</option>
-            <option value="armor.heavy">Heavy Armor</option>
-            <option value="clothing.helmet">Helmet</option>
-            <option value="clothing.jacket">Jacket</option>
-            <option value="clothing.pants">Pants</option>
-            <option value="clothing.boots">Boots</option>
-            <option value="clothing.mask">Mask</option>
-            <option value="clothing.bonniehat">Bonnie Hat</option>
-            <option value="clothing.bonehat">Bone Helmet</option>
-            <option value="clothing.fur">Fur Armor</option>
-            <option value="clothing.ghillie">Ghillie Suit</option>
-        </select>
-
-        <label for="outfitQuantity">Cantidad:</label>
-        <input type="number" id="outfitQuantity" value="1" min="1">
-
-        <label for="outfitLocation">Ubicación:</label>
-        <select id="outfitLocation">
-            <option value="Main">Main</option>
-            <option value="Belt">Belt</option>
-            <option value="Wear">Wear</option>
-        </select>
-
-        <button id="submitOutfits">Añadir al Kit</button>
-
-        <div id="outfitsResult"></div>
-    </div>
-
-    <div id="command_list"></div>
-
     <script>
         const commands = [];
 
-                document.getElementById('selectConstruction').addEventListener('click', function() {
-            document.getElementById('constructionForm').style.display = 'block';
-            document.getElementById('outfitsForm').style.display = 'none';
-        });
-
-        document.getElementById('selectOutfits').addEventListener('click', function() {
-            document.getElementById('outfitsForm').style.display = 'block';
-            document.getElementById('constructionForm').style.display = 'none';
-        });
-
-        document.getElementById('submitConstruction').addEventListener('click', function() {
+        document.getElementById('submitKit').addEventListener('click', function() {
             const kitName = document.getElementById('kit_name').value || document.getElementById('select_kaosbot').value;
-            const item = document.getElementById('constructionItems').value;
-            const quantity = document.getElementById('constructionQuantity').value;
-            const location = document.getElementById('constructionLocation').value;
+            const item = document.getElementById('itemSelect').value;
+            const quantity = document.getElementById('quantity').value;
+            const location = document.getElementById('location').value;
 
-            if (!kitName || !item || !quantity || !location) {
+            if (!kitName || item === "none" || !quantity || !location) {
                 alert('Por favor, completa todos los campos.');
                 return;
             }
@@ -240,22 +183,40 @@
             displayCommands();
         });
 
-        document.getElementById('submitOutfits').addEventListener('click', function() {
-            const kitName = document.getElementById('kit_name_outfit').value || document.getElementById('select_kaosbot').value;
-            const item = document.getElementById('outfitItems').value;
-            const quantity = document.getElementById('outfitQuantity').value;
-            const location = document.getElementById('outfitLocation').value;
+        function updateItemList() {
+            const section = document.getElementById('sectionSelect').value;
+            const itemSelect = document.getElementById('itemSelect');
 
-            if (!kitName || !item || !quantity || !location) {
-                alert('Por favor, completa todos los campos.');
-                return;
+            // Limpiar las opciones actuales
+            itemSelect.innerHTML = '<option value="none">Seleccione un ítem</option>';
+
+            // Añadir ítems según la categoría seleccionada
+            if (items[section]) {
+                items[section].forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id; // Asegúrate de usar la id correcta del item
+                    option.textContent = item.name;
+                    itemSelect.appendChild(option);
+                });
+            } else {
+                console.log("Categoría seleccionada inválida o sin ítems.");
             }
+        }
 
-            const command = `kit add "${kitName}" "${item}" ${quantity} 1 "${location}"`;
-            commands.push(command);
-            localStorage.setItem('commands', JSON.stringify(commands));
-            displayCommands();
-        });
+        function showItemDetails() {
+            const itemSelect = document.getElementById('itemSelect');
+            const selectedItemId = itemSelect.value;
+            const selectedItemDetails = document.getElementById('itemDetails');
+
+                        const section = document.getElementById('sectionSelect').value;
+
+            if (selectedItemId !== "none") {
+                const selectedItem = items[section].find(item => item.id === selectedItemId);
+                selectedItemDetails.value = selectedItem ? selectedItem.name : ''; // Muestra el nombre del ítem seleccionado
+            } else {
+                selectedItemDetails.value = ''; // Limpiar si no hay selección
+            }
+        }
 
         function displayCommands() {
             const commandList = document.getElementById('command_list');
@@ -297,6 +258,7 @@
                 commands.push(...JSON.parse(savedCommands)); // Cargar los comandos en el array
                 displayCommands(); // Mostrar comandos al cargar la página
             }
+            document.getElementById('sectionSelect').addEventListener('change', updateItemList); // Actualizar lista de ítems al cambiar la sección
         };
     </script>
     <footer>
@@ -304,5 +266,3 @@
     </footer>
 </body>
 </html>
-
-        
