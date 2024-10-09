@@ -71,6 +71,12 @@
             margin-right: 10px;
         }
 
+        .category {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #FF4500; /* Naranja Rust */
+        }
+
         footer {
             text-align: center;
             color: #EAEAEA;
@@ -147,10 +153,15 @@
 
         function updateItemList() {
             const itemList = document.getElementById('item_list');
-            itemList.innerHTML = '<option value="none">Seleccione un ítem</option>'; // Limpiar opciones
+            itemList.innerHTML = ''; // Limpiar opciones
 
-            // Aquí añadir las categorías según el items.js
+            // Agrupar los ítems por categoría
             Object.keys(items).forEach(category => {
+                const categoryHeader = document.createElement('option');
+                categoryHeader.disabled = true; // Deshabilitar el encabezado de la categoría
+                categoryHeader.textContent = category.charAt(0).toUpperCase() + category.slice(1); // Capitaliza la primera letra
+                itemList.appendChild(categoryHeader); // Añadir el encabezado
+
                 items[category].forEach(item => {
                     const option = document.createElement('option');
                     option.value = item.id;
@@ -171,7 +182,7 @@
                 return;
             }
 
-            const command = `Kit add "${kitName}" "${itemId}" "${quantity}" "(1)" "${location}"`;
+            const command = `Kit add "${kitName}" "${itemId}" "${quantity}" "1" "${location}"`;
             commands.push(command);
             localStorage.setItem('commands', JSON.stringify(commands));
             displayKits();
