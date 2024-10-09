@@ -26,6 +26,13 @@
             text-shadow: 2px 2px 4px #000;
         }
 
+        h2 {
+            font-size: 1.5em;
+            color: #FF4500; /* Naranja Rust */
+            cursor: pointer; /* Cambiar cursor al pasar sobre el texto */
+            margin-bottom: 10px;
+        }
+
         label {
             display: block;
             margin: 10px 0 5px;
@@ -52,13 +59,14 @@
             background-color: #E53E00; /* Hover más oscuro */
         }
 
-        #command_list, #kit_list {
+        #command_list, #kit_list, #community_kits {
             margin-top: 20px;
             padding: 10px;
             background-color: #292929; /* Cuadro oscuro */
             border: 2px solid #FF4500; /* Borde naranja */
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7); /* Sombra */
+            display: none; /* Ocultar por defecto */
         }
 
         .command-item, .kit-item {
@@ -105,6 +113,11 @@
             font-size: 1.5em;
             color: #FF4500; /* Naranja Rust */
             margin-bottom: 10px;
+        }
+
+        .kit-details {
+            display: none; /* Ocultar detalles del kit por defecto */
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -156,8 +169,17 @@
     </div>
 
     <div class="kits-container">
-        <h2>VieraGuti - Kits</h2>
+        <h2 onclick="toggleKits()">VieraGuti - Kits</h2>
         <div id="kit_list"></div>
+    </div>
+
+    <div class="kits-container">
+        <h2 onclick="toggleCommunityKits()">Kits de Comunidad</h2>
+        <div id="community_kits">
+            <div class="kit-item">Ejemplo de Kit de Comunidad 1</div>
+            <div class="kit-item">Ejemplo de Kit de Comunidad 2</div>
+            <div class="kit-item">Ejemplo de Kit de Comunidad 3</div>
+        </div>
     </div>
 
     <script src="items.js"></script>
@@ -192,7 +214,7 @@
                 ]
             },
             {
-                name: "BuzoDive",
+                                name: "BuzoDive",
                 commands: [
                     'Kit add "BuzoDive" "diving.fins" 1 1 "Wear"',
                     'Kit add "BuzoDive" "diving.mask" 1 1 "Wear"',
@@ -200,7 +222,7 @@
                     'Kit add "BuzoDive" "hazmatsuit" 1 1 "Main"',
                     'Kit add "BuzoDive" "diving.wetsuit" 1 1 "Wear"',
                     'Kit add "BuzoDive" "speargun" 1 1 "Belt"',
-                                        'Kit add "BuzoDive" "bow.hunting" 1 1 "Belt"',
+                    'Kit add "BuzoDive" "bow.hunting" 1 1 "Belt"',
                     'Kit add "BuzoDive" "arrow.wooden" 68 1 "Main"',
                     'Kit add "BuzoDive" "speargun.spear" 80 1 "Main"',
                     'Kit add "BuzoDive" "syringe.medical" 6 1 "Belt"',
@@ -238,64 +260,87 @@
             }
         ];
 
-        // Función para mostrar los kits predefinidos
-        function displayPredefinedKits() {
+        function toggleKits() {
             const kitList = document.getElementById('kit_list');
-            kitList.innerHTML = ''; // Limpiar la lista existente
+            kitList.innerHTML = ''; // Limpiar la lista de kits al mostrar
 
             predefinedKits.forEach(kit => {
                 const kitItem = document.createElement('div');
                 kitItem.className = 'kit-item';
                 kitItem.innerHTML = `
                     <strong>${kit.name}</strong>
-                    <div>${kit.commands.join('<br>')}</div>
                     <div class="kit-actions">
-                        <button onclick="copyKit('${kit.name}')">Copiar</button>
-                        <button onclick="editKit('${kit.name}')">Editar</button>
+                        <button onclick="copyKits('${kit.name}')">Copiar</button>
                         <button onclick="deleteKit('${kit.name}')">Borrar</button>
+                        <button onclick="showKitDetails('${kit.name}')">Información</button>
+                    </div>
+                    <div class="kit-details" id="details-${kit.name.replace(/ /g, '_')}">
+                        ${kit.commands.join('<br>')}
+                    </div>
+                `;
+                kitList.appendChild(kitItem);
+            });
+
+            kitList.style.display = kitList.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showKitDetails(kitName) {
+            const details = document.getElementById(`details-${kitName.replace(/ /g, '_')}`);
+            details.style.display = details.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function copyKits(kitName) {
+            const kit = predefinedKits.find(k => k.name === kitName);
+            const kitCommands = kit.commands.join('\n');
+            navigator.clipboard.writeText(kitCommands).then(() => {
+                alert('Comandos copiados: \n' + kitCommands);
+            });
+        }
+
+        function deleteKit(kitName) {
+            if (confirm(`Vas a borrar toda la lista del kit "${kitName}". ¿Estás seguro?`)) {
+                const kitIndex = predefinedKits.findIndex(k => k.name === kitName);
+                if (kitIndex > -1) {
+                    predefinedKits.splice(kitIndex, 1);
+                    displayKits();
+                }
+            }
+        }
+
+        function displayKits() {
+            const kitList = document.getElementById('kit_list');
+            kitList.innerHTML = '';
+
+            predefinedKits.forEach(kit => {
+                const kitItem = document.createElement('div');
+                kitItem.className = 'kit-item';
+                kitItem.innerHTML = `
+                    <strong>${kit.name}</strong>
+                    <div class="kit-actions">
+                        <button onclick="copyKits('${kit.name}')">Copiar</button>
+                        <button onclick="deleteKit('${kit.name}')">Borrar</button>
+                        <button onclick="showKitDetails('${kit.name}')">Información</button>
+                    </div>
+                    <div class="kit-details" id="details-${kit.name.replace(/ /g, '_')}">
+                        ${kit.commands.join('<br>')}
                     </div>
                 `;
                 kitList.appendChild(kitItem);
             });
         }
 
-        // Función para copiar el kit
-        function copyKit(kitName) {
-            const kit = predefinedKits.find(k => k.name === kitName);
-            if (kit) {
-                const command = kit.commands.join('\n');
-                const tempInput = document.createElement('textarea');
-                tempInput.value = command;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                alert(`Kit "${kitName}" copiado!`);
+        function toggleCommunityKits() {
+            const communityKits = document.getElementById('community_kits');
+            communityKits.style.display = communityKits.style.display === 'none' ? 'block' : 'none';
+        }
+
+        window.onload = function() {
+            const savedCommands = localStorage.getItem('commands');
+            if (savedCommands) {
+                commands.push(...JSON.parse(savedCommands));
+                displayCommands();
             }
-        }
-
-        // Función para editar el kit
-        function editKit(kitName) {
-            // Aquí puedes implementar la lógica para editar el kit
-            alert(`Funcionalidad para editar el kit "${kitName}" aún no implementada.`);
-        }
-
-        // Función para eliminar el kit
-        function deleteKit(kitName) {
-            if (confirm(`Vas a borrar el kit "${kitName}". ¿Estás seguro?`)) {
-                const index = predefinedKits.findIndex(k => k.name === kitName);
-                if (index > -1) {
-                    predefinedKits.splice(index, 1);
-                    displayPredefinedKits();
-                    alert(`Kit "${kitName}" borrado.`);
-                }
-            }
-        }
-
-        // Inicializa mostrando los kits predefinidos
-        displayPredefinedKits();
-        
-        // Otras funciones aquí...
+        };
     </script>
     <footer>
         <p>Hecho por VieraGuti</p>
@@ -303,4 +348,4 @@
 </body>
 </html>
 
-                    
+                
