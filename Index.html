@@ -133,7 +133,37 @@
     <input type="text" id="selected_item_id" readonly placeholder="ID del ítem seleccionado" />
 
     <label for="kit_name">Nombre del Kit:</label>
-    <input type="text" id="kit_name" placeholder="Escribe el nombre del kit">
+    <input type="text" id="kit_name" placeholder="Escribe el nombre del kit o elige KaosBot">
+
+    <label for="kaosbot_kits">Seleccionar un kit de KaosBot:</label>
+    <select id="kaosbot_kits">
+        <option value="none">Selecciona un kit</option>
+        <option value="freekit">freekit</option>
+        <option value="freekit2">freekit2</option>
+        <option value="vipkit">vipkit</option>
+        <option value="elitekit1">elitekit1</option>
+        <option value="elitekit2">elitekit2</option>
+        <option value="elitekit3">elitekit3</option>
+        <option value="elitekit4">elitekit4</option>
+        <option value="elitekit5">elitekit5</option>
+        <option value="elitekit6">elitekit6</option>
+        <option value="elitekit7">elitekit7</option>
+        <option value="elitekit8">elitekit8</option>
+        <option value="elitekit9">elitekit9</option>
+        <option value="elitekit10">elitekit10</option>
+        <option value="elitekit11">elitekit11</option>
+        <option value="elitekit12">elitekit12</option>
+        <option value="elitekit13">elitekit13</option>
+        <option value="elitekit14">elitekit14</option>
+        <option value="elitekit15">elitekit15</option>
+        <option value="elitekit16">elitekit16</option>
+        <option value="elitekit17">elitekit17</option>
+        <option value="elitekit18">elitekit18</option>
+        <option value="elitekit19">elitekit19</option>
+        <option value="elitekit20">elitekit20</option>
+        <option value="elitekit21">elitekit21</option>
+        <option value="elitekit22">elitekit22</option>
+    </select>
 
     <label for="quantity">Cantidad:</label>
     <input type="number" id="quantity" placeholder="Escribe la cantidad" min="1" value="1">
@@ -171,7 +201,7 @@
                     'Kit add "Fullequip" "weapon.mod.lasersight" 2 1 "Main"',
                     'Kit add "Fullequip" "weapon.mod.small.scope" 2 1 "Main"',
                     'Kit add "Fullequip" "rifle.bolt" 1 1 "Belt"',
-                    'Kit add "Fullequip" "ammo.rifle" 420 1 1 "Main"',
+                                        'Kit add "Fullequip" "ammo.rifle" 420 1 "Main"',
                     'Kit add "Fullequip" "syringe.medical" 14 1 "Belt"',
                     'Kit add "Fullequip" "blueberries" 60 1 "Belt"',
                     'Kit add "Fullequip" "barricade.wood.cover" 4 1 "Belt"',
@@ -195,7 +225,7 @@
                     'Kit add "BuzoDive" "bow.hunting" 1 1 "Belt"',
                     'Kit add "BuzoDive" "arrow.wooden" 68 1 "Main"',
                     'Kit add "BuzoDive" "speargun.spear" 80 1 "Main"',
-                                        'Kit add "BuzoDive" "syringe.medical" 6 1 "Belt"',
+                    'Kit add "BuzoDive" "syringe.medical" 6 1 "Belt"',
                     'Kit add "BuzoDive" "bandage" 9 1 "Belt"'
                 ]
             },
@@ -262,12 +292,113 @@
             communityKits.style.display = communityKits.style.display === 'none' ? 'block' : 'none';
         }
 
-        // Aquí va tu código existente
-        // ...
+        function showItemDetails() {
+            const itemList = document.getElementById('item_list');
+            const selectedItemName = document.getElementById('selected_item_name');
+            const selectedItemId = document.getElementById('selected_item_id');
+            const selectedCategory = document.getElementById('item_category').value;
+
+            const selectedItem = items[selectedCategory].find(item => item.id === itemList.value);
+
+            if (selectedItem) {
+                selectedItemName.value = selectedItem.name;
+                selectedItemId.value = selectedItem.id;
+            } else {
+                selectedItemName.value = '';
+                selectedItemId.value = '';
+            }
+        }
+
+        function generateCommand() {
+            const kitName = document.getElementById('kit_name').value || document.getElementById('kaosbot_kits').value;
+            const shortName = document.getElementById('item_list').value;
+            const quantity = document.getElementById('quantity').value;
+            const location = document.getElementById('location').value;
+
+            if (!kitName || shortName === "none" || !quantity) {
+                alert('Por favor, completa todos los campos.');
+                return;
+            }
+
+            const command = `Kit add "${kitName}" "${shortName}" ${quantity} 1 "${location}"`;
+            const existingKit = commands.find(kit => kit.name === kitName);
+
+            if (existingKit) {
+                existingKit.commands.push(command);
+            } else {
+                commands.push({
+                    name: kitName,
+                    commands: [command]
+                });
+            }
+
+            localStorage.setItem('commands', JSON.stringify(commands));
+            displayCommands();
+            document.getElementById('item_list').value = 'none'; // Reiniciar la selección de ítems
+            showItemDetails(); // Limpiar detalles de ítem
+        }
+
+        function displayCommands() {
+            const commandList = document.getElementById('kit_list');
+            commandList.innerHTML = ''; // Limpiar lista existente
+
+            commands.forEach((kit) => {
+                const kitItem = document.createElement('div');
+                kitItem.className = 'kit-item';
+                kitItem.innerHTML = `
+                    <strong>${kit.name}</strong>
+                    <div>
+                        ${kit.commands.join('<br>')}
+                    </div>
+                    <div class="kit-actions">
+                        <button onclick="copyKits('${kit.name}')">Copiar</button>
+                        <button onclick="editKit('${kit.name}')">Editar</button>
+                        <button onclick="deleteKit('${kit.name}')">Borrar</button>
+                    </div>
+                `;
+                commandList.appendChild(kitItem);
+            });
+        }
+
+        function copyKits(kitName) {
+            const kit = commands.find(k => k.name === kitName);
+            if (kit) {
+                const tempInput = document.createElement('input');
+                tempInput.value = kit.commands.join('\n');
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                alert('Comando copiado: ' + kit.commands.join('\n'));
+            }
+        }
+
+        function editKit(kitName) {
+            const kit = commands.find(k => k.name === kitName);
+            if (kit) {
+                const newCommands = prompt('Edita los comandos del kit:', kit.commands.join('\n'));
+                if (newCommands) {
+                    kit.commands = newCommands.split('\n');
+                                        localStorage.setItem('commands', JSON.stringify(commands));
+                    displayCommands();
+                }
+            }
+        }
+
+        function deleteKit(kitName) {
+            if (confirm(`Vas a borrar toda la lista del "${kitName}". ¿Estás seguro?`)) {
+                commands = commands.filter(k => k.name !== kitName);
+                localStorage.setItem('commands', JSON.stringify(commands));
+                displayCommands();
+            }
+        }
 
         window.onload = function() {
-            loadCommunityKits(); // Cargar kits de la comunidad al inicio
-            // Resto de tu código...
+            const savedCommands = localStorage.getItem('commands');
+            if (savedCommands) {
+                commands.push(...JSON.parse(savedCommands));
+                displayCommands();
+            }
         };
     </script>
     <footer>
@@ -276,4 +407,5 @@
 </body>
 </html>
 
+                
                     
