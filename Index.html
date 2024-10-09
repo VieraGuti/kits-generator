@@ -1,179 +1,251 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de Kits</title>
-  <style>
-    body {
-      font-family: "Verdana", sans-serif;
-      background-color: #2b2b2b;
-      color: #ffa500; /* Color naranja estilo Rust */
-      margin: 0;
-      padding: 0;
-    }
-    h1, h2 {
-      text-align: center;
-      color: #ffa500;
-    }
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-    select, input, button {
-      padding: 10px;
-      margin: 10px;
-      background-color: #404040;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      width: 90%; /* Ancho responsivo */
-    }
-    button:hover {
-      background-color: #606060;
-    }
-    .output {
-      margin-top: 20px;
-      background-color: #333333;
-      padding: 20px;
-      border-radius: 10px;
-      width: 90%;
-      color: #ffa500;
-    }
-    .credits {
-      text-align: center;
-      margin-top: 30px;
-      font-size: 14px;
-      color: #fff;
-    }
-    .item-list {
-      max-height: 200px;
-      overflow-y: auto;
-      width: 90%; /* Ancho responsivo */
-      background-color: #404040;
-      border-radius: 5px;
-      display: none; /* Oculto por defecto */
-    }
-    .item {
-      padding: 5px;
-      cursor: pointer;
-    }
-    .item:hover {
-      background-color: #606060;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Comandos - Rust Style</title>
+    <style>
+        body {
+            font-family: 'Press Start 2P', sans-serif; /* Estilo gaming */
+            background-color: #1e1e1e; /* Fondo oscuro */
+            color: #fff; /* Texto claro */
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            color: #FF4500; /* Naranja Rust */
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333; /* Fondo de campos */
+            color: #fff;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #FF4500; /* Naranja Rust */
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #E53E00; /* Hover más oscuro */
+        }
+
+        #command_list {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #292929; /* Cuadro oscuro */
+            border: 2px solid #FF4500; /* Borde naranja */
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7); /* Sombra */
+        }
+
+        .command-item {
+            background-color: #444; /* Fondo de cada comando */
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #FF4500; /* Borde de comandos */
+        }
+
+        .command-text {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        .command-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .copied-message {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            color: #EAEAEA;
+            font-size: 0.8em;
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Generador de Kits</h1>
-  <div class="container">
-    <h2>Selecciona o escribe el nombre del kit</h2>
+    <h1>Generador de Kits</h1>
 
-    <label for="kit-select">Nombre del kit:</label>
-    <select id="kit-select">
-      <option value="user">user</option>
-      <option value="freekit">freekit</option>
-      <option value="freekit2">freekit2</option>
-      <option value="vipkit">vipkit</option>
-      <option value="elitekit1">elitekit1</option>
+    <label for="item_category">Seleccionar categoría:</label>
+    <select id="item_category" onchange="updateItemList()">
+        <option value="none">Seleccione una categoría</option>
+        <option value="ammo">Ammo</option>
+        <option value="weapons">Armas</option>
+        <option value="construction">Items de Construcción</option>
+        <option value="attire">Attire</option>
+        <option value="tools">Tools</option>
+        <option value="medsAndTeas">Meds and Teas</option>
+        <option value="trapsAndMiscellaneous">Traps and Miscellaneous</option>
+        <option value="components">Components</option>
+        <option value="electrical">Electrical</option>
     </select>
 
-    <label for="custom-kit-name">O escribe el nombre del kit:</label>
-    <input type="text" id="custom-kit-name" placeholder="Nombre personalizado del kit">
+    <label for="item_list">Seleccionar ítem:</label>
+    <select id="item_list" onchange="showItemDetails()">
+        <option value="none">Seleccione un ítem</option>
+    </select>
 
-    <button id="load-items">Cargar Ítems</button>
-    
-    <div class="item-list" id="item-list"></div>
+    <label for="selected_item_name">Nombre del ítem seleccionado:</label>
+    <input type="text" id="selected_item_name" readonly placeholder="Nombre del ítem seleccionado" />
+
+    <label for="selected_item_id">ID del ítem seleccionado:</label>
+    <input type="text" id="selected_item_id" readonly placeholder="ID del ítem seleccionado" />
+
+    <label for="kit_name">Nombre del Kit:</label>
+    <input type="text" id="kit_name" placeholder="Escribe el nombre del kit" required>
 
     <label for="quantity">Cantidad:</label>
-    <input type="number" id="quantity" min="1" value="1">
-
-    <label for="location-select">Ubicación:</label>
-    <select id="location-select">
-      <option value="Main">Main</option>
-      <option value="Belt">Belt</option>
-      <option value="Wear">Wear</option>
+    <input type="number" id="quantity" min="1" value="1" required>
+        
+    <label for="location">Ubicación:</label>
+    <select id="location">
+        <option value="Main">Main</option>
+        <option value="Belt">Belt</option>
+        <option value="Wear">Wear</option>
     </select>
 
-    <button id="add-to-kit">Añadir al kit</button>
-    <button id="generate-all-btn">Generar todos los comandos</button>
+    <button onclick="addToKit()">Añadir al Kit</button>
+    <button onclick="generateAllCommands()">Generar Todos los Comandos</button>
+    
+    <div id="command_list"></div>
 
-    <div class="output" id="output"></div>
-  </div>
+    <!-- Incluir el script externo items.js -->
+    <script src="Items.js"></script>
+    <script>
+        const commands = [];
 
-  <div class="credits">
-    <p>Creador: VieraGuti</p>
-    <p>Free to Use</p>
-  </div>
+        function updateItemList() {
+            const category = document.getElementById('item_category').value;
+            const itemList = document.getElementById('item_list');
 
-  <script src="Items.js"></script>
-  <script>
-    const items = window.items; // Asegúrate de que esto esté definido en Items.js
-    const itemList = document.getElementById('item-list');
-    const itemSelect = document.getElementById('item-select');
+            // Limpiar las opciones actuales
+            itemList.innerHTML = '<option value="none">Seleccione un ítem</option>';
+            document.getElementById('selected_item_name').value = ''; // Limpiar el campo de nombre
+            document.getElementById('selected_item_id').value = ''; // Limpiar el campo de ID
 
-    // Función para cargar y mostrar los ítems
-    function loadItems() {
-      itemList.innerHTML = ''; // Limpiar lista anterior
-      itemList.style.display = 'block'; // Mostrar lista de ítems
-      // Iterar sobre todas las categorías y agregar los ítems a la lista
-      for (const category in items) {
-        items[category].forEach(item => {
-          const div = document.createElement('div');
-          div.classList.add('item');
-          div.innerText = item.name; // Mostrar el nombre del ítem
-          div.onclick = () => selectItem(item); // Asignar evento de selección
-          itemList.appendChild(div);
-        });
-      }
-    }
+            // Añadir ítems según la categoría seleccionada
+            if (items[category]) {
+                items[category].forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = item.name;
+                    itemList.appendChild(option);
+                });
+            } else {
+                console.log("Categoría seleccionada inválida o sin ítems.");
+            }
+        }
 
-    // Función para seleccionar un ítem
-    function selectItem(item) {
-      const itemSelect = document.createElement('select');
-      itemSelect.id = 'item-select'; // Crear un nuevo selector
-      itemSelect.innerHTML = `<option value="${item.id}">${item.name}</option>`; // Agregar el ítem seleccionado
-      itemList.style.display = 'none'; // Ocultar lista después de la selección
-      alert(`Seleccionaste: ${item.name}`); // Mensaje de confirmación
-    }
+        function showItemDetails() {
+            const itemList = document.getElementById('item_list');
+            const selectedItemName = document.getElementById('selected_item_name');
+            const selectedItemId = document.getElementById('selected_item_id');
+            const selectedCategory = document.getElementById('item_category').value;
 
-    // Asignar el evento al botón de carga de ítems
-    document.getElementById('load-items').addEventListener('click', loadItems);
+            const selectedItem = items[selectedCategory].find(item => item.id === itemList.value);
 
-    // Asignar el nombre del kit
-    document.getElementById('add-to-kit').addEventListener('click', () => {
-      const selectedKit = document.getElementById('kit-select').value;
-      const customKitName = document.getElementById('custom-kit-name').value.trim();
-      const kitName = customKitName ? customKitName : selectedKit;
+            if (selectedItem) {
+                selectedItemName.value = selectedItem.name;
+                selectedItemId.value = selectedItem.id;
+            } else {
+                selectedItemName.value = '';
+                selectedItemId.value = '';
+            }
+        }
 
-      const itemId = document.getElementById('item-select')?.value; // Usar el selector creado dinámicamente
-      const quantity = document.getElementById('quantity').value;
-      const location = document.getElementById('location-select').value;
+        function addToKit() {
+            const kitName = document.getElementById('kit_name').value;
+            const itemId = document.getElementById('selected_item_id').value;
+            const quantity = document.getElementById('quantity').value;
+            const location = document.getElementById('location').value;
 
-      if (!itemId || !quantity || !location) {
-        alert('Por favor, selecciona un ítem, cantidad y ubicación válidos.');
-        return;
-      }
+            if (!kitName || !itemId || !quantity || !location) {
+                alert('Por favor, completa todos los campos.');
+                return;
+            }
 
-      const command = `kit add ${kitName} ${itemId} ${quantity} ${location}`;
-      document.getElementById('output').innerText += `${command}\n`;
-      document.getElementById('quantity').value = 1; // Restablecer cantidad
-    });
+            const command = `kit add ${kitName} ${itemId} ${quantity} ${location}`;
+            commands.push(command);
+            localStorage.setItem('commands', JSON.stringify(commands));
+            displayCommands();
+        }
 
-    // Función para generar y copiar todos los comandos
-    document.getElementById('generate-all-btn').addEventListener('click', () => {
-      const allCommands = document.getElementById('output').innerText;
-      if (!allCommands) {
-        alert('No hay comandos generados. Por favor, añade elementos al kit.');
-        return;
-      }
+        function generateAllCommands() {
+            const commandList = document.getElementById('command_list');
+            commandList.innerHTML = '';
 
-      navigator.clipboard.writeText(allCommands).then(() => {
-        alert('¡Todos los comandos han sido copiados al portapapeles!');
-      });
-    });
-  </script>
+            commands.forEach((cmd, index) => {
+                const commandItem = document.createElement('div');
+                commandItem.className = 'command-item';
+                commandItem.innerHTML = `
+                    <span class="command-text">${cmd}</span>
+                    <div class="command-actions">
+                        <button onclick="copyCommand(${index})">Copiar</button>
+                        <button onclick="deleteCommand(${index})">Eliminar</button>
+                    </div>
+                `;
+                commandList.appendChild(commandItem);
+            });
+        }
+
+        function copyCommand(index) {
+            const tempInput = document.createElement('input');
+            tempInput.value = commands[index];
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert('Comando copiado: ' + commands[index]);
+
+            const commandItem = document.querySelectorAll('.command-item')[index];
+            const copiedMessage = document.createElement('span');
+            copiedMessage.className = 'copied-message';
+            copiedMessage.textContent = ' - Ya copiado';
+            commandItem.appendChild(copiedMessage);
+        }
+
+        function deleteCommand(index) {
+            commands.splice(index, 1);
+            localStorage.setItem('commands', JSON.stringify(commands));
+            generateAllCommands();
+        }
+
+        window.onload = function() {
+            const savedCommands = localStorage.getItem('commands');
+            if (savedCommands) {
+                commands.push(...JSON.parse(savedCommands));
+                generateAllCommands();
+            }
+        };
+    </script>
+    <footer>
+        <p>Hecho por VieraGuti</p>
+    </footer>
 </body>
 </html>
