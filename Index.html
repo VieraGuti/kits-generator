@@ -71,10 +71,9 @@
             margin-right: 10px;
         }
 
-        .category {
-            margin-top: 20px;
-            font-weight: bold;
-            color: #FF4500; /* Naranja Rust */
+        .kit-actions {
+            display: flex;
+            gap: 5px;
         }
 
         footer {
@@ -82,6 +81,11 @@
             color: #EAEAEA;
             font-size: 0.8em;
             margin-top: 40px;
+        }
+
+        .download-message {
+            margin-top: 20px;
+            color: #28a745; /* Verde */
         }
     </style>
 </head>
@@ -121,6 +125,20 @@
         <option value="elitekit22">Elitekit22</option>
     </select>
 
+    <label for="item_category">Seleccionar categoría:</label>
+    <select id="item_category" onchange="updateItemList()">
+        <option value="none">Seleccione una categoría</option>
+        <option value="ammo">Ammo</option>
+        <option value="weapons">Armas</option>
+        <option value="construction">Items de Construcción</option>
+        <option value="attire">Attire</option>
+        <option value="tools">Tools</option>
+        <option value="medsAndTeas">Meds and Teas</option>
+        <option value="trapsAndMiscellaneous">Traps and Miscellaneous</option>
+        <option value="components">Components</option>
+        <option value="electrical">Electrical</option>
+    </select>
+
     <label for="item_list">Seleccionar ítem:</label>
     <select id="item_list">
         <option value="none">Seleccione un ítem</option>
@@ -138,8 +156,10 @@
     </select>
 
     <button onclick="addKit()">Añadir al Kit</button>
+    <button onclick="downloadKits()">Descargar Kits</button>
 
     <div id="kit_list"></div>
+    <div id="download_message" class="download-message"></div>
 
     <!-- Incluir el script externo items.js -->
     <script src="items.js"></script>
@@ -152,23 +172,20 @@
         }
 
         function updateItemList() {
+            const category = document.getElementById('item_category').value;
             const itemList = document.getElementById('item_list');
-            itemList.innerHTML = ''; // Limpiar opciones
 
-            // Agrupar los ítems por categoría
-            Object.keys(items).forEach(category => {
-                const categoryHeader = document.createElement('option');
-                categoryHeader.disabled = true; // Deshabilitar el encabezado de la categoría
-                categoryHeader.textContent = category.charAt(0).toUpperCase() + category.slice(1); // Capitaliza la primera letra
-                itemList.appendChild(categoryHeader); // Añadir el encabezado
+            // Limpiar opciones
+            itemList.innerHTML = '<option value="none">Seleccione un ítem</option>'; 
 
+            if (category !== "none") {
                 items[category].forEach(item => {
                     const option = document.createElement('option');
                     option.value = item.id;
                     option.textContent = item.name;
                     itemList.appendChild(option);
                 });
-            });
+            }
         }
 
         function addKit() {
@@ -183,7 +200,14 @@
             }
 
             const command = `Kit add "${kitName}" "${itemId}" "${quantity}" "1" "${location}"`;
-            commands.push(command);
+            const existingKit = commands.find(kit => kit.name === kitName);
+
+            if (existingKit) {
+                existingKit.commands.push(command); // Añadir el nuevo comando al kit existente
+            } else {
+                commands.push({ name: kitName, commands: [command] }); // Crear un nuevo kit
+            }
+
             localStorage.setItem('commands', JSON.stringify(commands));
             displayKits();
         }
@@ -192,14 +216,70 @@
             const kitList = document.getElementById('kit_list');
             kitList.innerHTML = ''; // Limpiar lista existente
 
-            commands.forEach((cmd, index) => {
+            commands.forEach(kit => {
                 const kitItem = document.createElement('div');
                 kitItem.className = 'kit-item';
                 kitItem.innerHTML = `
-                    <span class="kit-text">${cmd}</span>
+                                        <strong>${kit.name}</strong>
+                    ${kit.commands.join('<br>')}
+                    <div class="kit-actions">
+                        <button onclick="copyKits('${kit.name}')">Copiar</button>
+                        <button onclick="editKit('${kit.name}')">Editar</button>
+                        <button onclick="deleteKit('${kit.name}')">Eliminar</button>
+                    </div>
                 `;
                 kitList.appendChild(kitItem);
             });
+        }
+
+        function copyKits(kitName) {
+            const kit = commands.find(k => k.name === kitName);
+            if (kit) {
+                const kitCommands = kit.commands.join('\n');
+                const tempInput = document.createElement('textarea');
+                tempInput.value = kitCommands;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                alert('Kits copiados: \n' + kitCommands);
+            }
+        }
+
+        function editKit(kitName) {
+            const kit = commands.find(k => k.name === kitName);
+            if (kit) {
+                const newName = prompt('Edita el nombre del kit:', kitName);
+                if (newName && newName !== kitName) {
+                    kit.name = newName; // Cambiar el nombre del kit
+                    localStorage.setItem('commands', JSON.stringify(commands));
+                    displayKits(); // Actualizar la lista
+                }
+            }
+        }
+
+        function deleteKit(kitName) {
+            const kitIndex = commands.findIndex(k => k.name === kitName);
+            if (kitIndex > -1) {
+                commands.splice(kitIndex, 1); // Eliminar el kit
+                localStorage.setItem('commands', JSON.stringify(commands));
+                displayKits(); // Actualizar la lista
+            }
+        }
+
+        function downloadKits() {
+            const text = commands.map(kit => `${kit.name}:\n${kit.commands.join('\n')}`).join('\n\n');
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'kits.txt'; // Nombre del archivo
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            alert('VieraGuti: Disfruta de tu kit'); // Mensaje en español
+            // Para inglés, descomentar la línea siguiente
+            // alert('VieraGuti: Enjoy your kit'); 
         }
 
         window.onload = function() {
