@@ -30,6 +30,7 @@
       border: none;
       border-radius: 5px;
       font-size: 16px;
+      width: 90%; /* Ancho responsivo */
     }
     button:hover {
       background-color: #606060;
@@ -39,7 +40,7 @@
       background-color: #333333;
       padding: 20px;
       border-radius: 10px;
-      width: 80%;
+      width: 90%;
       color: #ffa500;
     }
     .credits {
@@ -47,6 +48,21 @@
       margin-top: 30px;
       font-size: 14px;
       color: #fff;
+    }
+    .item-list {
+      max-height: 200px;
+      overflow-y: auto;
+      width: 90%; /* Ancho responsivo */
+      background-color: #404040;
+      border-radius: 5px;
+      display: none; /* Oculto por defecto */
+    }
+    .item {
+      padding: 5px;
+      cursor: pointer;
+    }
+    .item:hover {
+      background-color: #606060;
     }
   </style>
 </head>
@@ -62,14 +78,14 @@
       <option value="freekit2">freekit2</option>
       <option value="vipkit">vipkit</option>
       <option value="elitekit1">elitekit1</option>
-      <!-- Agrega más opciones según sea necesario -->
     </select>
 
     <label for="custom-kit-name">O escribe el nombre del kit:</label>
     <input type="text" id="custom-kit-name" placeholder="Nombre personalizado del kit">
 
-    <label for="item-select">Selecciona un ítem:</label>
-    <select id="item-select"></select>
+    <button id="load-items">Cargar Ítems</button>
+    
+    <div class="item-list" id="item-list"></div>
 
     <label for="quantity">Cantidad:</label>
     <input type="number" id="quantity" min="1" value="1">
@@ -92,28 +108,39 @@
     <p>Free to Use</p>
   </div>
 
-  <!-- Conexión al archivo Items.js -->
   <script src="Items.js"></script>
   <script>
-    const itemsSelect = document.getElementById('item-select');
     const items = window.items; // Asegúrate de que esto esté definido en Items.js
+    const itemList = document.getElementById('item-list');
+    const itemSelect = document.getElementById('item-select');
 
-    // Función para llenar el selector de ítems
-    function populateItems() {
-      itemsSelect.innerHTML = ''; // Limpiar opciones previas
-      // Iterar sobre todas las categorías y agregar los ítems al selector
+    // Función para cargar y mostrar los ítems
+    function loadItems() {
+      itemList.innerHTML = ''; // Limpiar lista anterior
+      itemList.style.display = 'block'; // Mostrar lista de ítems
+      // Iterar sobre todas las categorías y agregar los ítems a la lista
       for (const category in items) {
         items[category].forEach(item => {
-          const option = document.createElement('option');
-          option.value = item.id; // Asignar el ID del ítem
-          option.innerText = `${item.name} (${category})`; // Mostrar el nombre del ítem y la categoría
-          itemsSelect.appendChild(option);
+          const div = document.createElement('div');
+          div.classList.add('item');
+          div.innerText = item.name; // Mostrar el nombre del ítem
+          div.onclick = () => selectItem(item); // Asignar evento de selección
+          itemList.appendChild(div);
         });
       }
     }
 
-    // Llenar el selector de ítems al cargar la página
-    populateItems();
+    // Función para seleccionar un ítem
+    function selectItem(item) {
+      const itemSelect = document.createElement('select');
+      itemSelect.id = 'item-select'; // Crear un nuevo selector
+      itemSelect.innerHTML = `<option value="${item.id}">${item.name}</option>`; // Agregar el ítem seleccionado
+      itemList.style.display = 'none'; // Ocultar lista después de la selección
+      alert(`Seleccionaste: ${item.name}`); // Mensaje de confirmación
+    }
+
+    // Asignar el evento al botón de carga de ítems
+    document.getElementById('load-items').addEventListener('click', loadItems);
 
     // Asignar el nombre del kit
     document.getElementById('add-to-kit').addEventListener('click', () => {
@@ -121,7 +148,7 @@
       const customKitName = document.getElementById('custom-kit-name').value.trim();
       const kitName = customKitName ? customKitName : selectedKit;
 
-      const itemId = document.getElementById('item-select').value;
+      const itemId = document.getElementById('item-select')?.value; // Usar el selector creado dinámicamente
       const quantity = document.getElementById('quantity').value;
       const location = document.getElementById('location-select').value;
 
@@ -147,9 +174,6 @@
         alert('¡Todos los comandos han sido copiados al portapapeles!');
       });
     });
-
-    // Inicialización por defecto al cargar la página
-    populateItems(); // Cargar automáticamente todos los ítems
   </script>
 </body>
 </html>
