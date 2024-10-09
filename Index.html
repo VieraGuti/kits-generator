@@ -46,7 +46,7 @@
             background-color: #E53E00; /* Hover más oscuro */
         }
 
-        #command_list {
+        #kit_list {
             margin-top: 20px;
             padding: 10px;
             background-color: #292929; /* Cuadro oscuro */
@@ -55,25 +55,20 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7); /* Sombra */
         }
 
-        .command-item {
-            background-color: #444; /* Fondo de cada comando */
+        .kit-item {
+            background-color: #444; /* Fondo de cada kit */
             padding: 10px;
             margin: 5px 0;
             border-radius: 5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #FF4500; /* Borde de comandos */
+            border: 1px solid #FF4500; /* Borde de kits */
         }
 
-        .command-text {
+        .kit-text {
             flex-grow: 1;
             margin-right: 10px;
-        }
-
-        .command-actions {
-            display: flex;
-            gap: 5px;
         }
 
         footer {
@@ -87,178 +82,122 @@
 <body>
     <h1>Generador de Kits</h1>
 
-    <div class="section">
-        <h2>Selecciona una categoría:</h2>
-        <select id="categorySelect" onchange="updateItemList()">
-            <option value="none">Seleccione una categoría</option>
-            <option value="ammo">Munición</option>
-            <option value="weapons">Armas</option>
-            <option value="construction">Construcción</option>
-            <option value="attire">Atuendos</option>
-            <option value="tools">Herramientas</option>
-            <option value="medsAndTeas">Medicinas y Té</option>
-            <option value="trapsAndMiscellaneous">Trampas y Misceláneos</option>
-            <option value="components">Componentes</option>
-            <option value="electrical">Eléctricos</option>
-        </select>
-    </div>
+    <label for="kit_name">Nombre del Kit:</label>
+    <input type="text" id="kit_name" placeholder="Escribe el nombre del kit o selecciona 'KaosBot'">
 
-    <div class="form">
-        <h3>Formulario de Kit</h3>
+    <label for="preset_kits">Seleccionar kit predefinido (KaosBot):</label>
+    <select id="preset_kits" onchange="setPresetKit()">
+        <option value="">Selecciona un kit</option>
+        <option value="freekit">Freekit</option>
+        <option value="freekit2">Freekit2</option>
+        <option value="vipkit">Vipkit</option>
+        <option value="elitekit1">Elitekit1</option>
+        <option value="elitekit2">Elitekit2</option>
+        <option value="elitekit3">Elitekit3</option>
+        <option value="elitekit4">Elitekit4</option>
+        <option value="elitekit5">Elitekit5</option>
+        <option value="elitekit6">Elitekit6</option>
+        <option value="elitekit7">Elitekit7</option>
+        <option value="elitekit8">Elitekit8</option>
+        <option value="elitekit9">Elitekit9</option>
+        <option value="elitekit10">Elitekit10</option>
+        <option value="elitekit11">Elitekit11</option>
+        <option value="elitekit12">Elitekit12</option>
+        <option value="elitekit13">Elitekit13</option>
+        <option value="elitekit14">Elitekit14</option>
+        <option value="elitekit15">Elitekit15</option>
+        <option value="elitekit16">Elitekit16</option>
+        <option value="elitekit17">Elitekit17</option>
+        <option value="elitekit18">Elitekit18</option>
+        <option value="elitekit19">Elitekit19</option>
+        <option value="elitekit20">Elitekit20</option>
+        <option value="elitekit21">Elitekit21</option>
+        <option value="elitekit22">Elitekit22</option>
+    </select>
 
-        <label for="kit_name">Nombre del Kit:</label>
-        <input type="text" id="kit_name" placeholder="Ejemplo: Kit de Munición">
+    <label for="item_list">Seleccionar ítem:</label>
+    <select id="item_list">
+        <option value="none">Seleccione un ítem</option>
+        <!-- Aquí se añadirán dinámicamente las opciones -->
+    </select>
 
-        <label for="select_kaosbot">O elige un nombre del Kaosbot:</label>
-        <select id="select_kaosbot">
-            <option value="none">Seleccione un nombre</option>
-            <option value="freekit">Freekit</option>
-            <option value="freekit2">Freekit2</option>
-            <option value="vipkit">Vipkit</option>
-            <option value="elitekit1">Elitekit1</option>
-            <option value="elitekit2">Elitekit2</option>
-            <option value="elitekit3">Elitekit3</option>
-            <option value="elitekit4">Elitekit4</option>
-            <option value="elitekit5">Elitekit5</option>
-            <option value="elitekit6">Elitekit6</option>
-            <option value="elitekit7">Elitekit7</option>
-            <option value="elitekit8">Elitekit8</option>
-            <option value="elitekit9">Elitekit9</option>
-            <option value="elitekit10">Elitekit10</option>
-            <option value="elitekit11">Elitekit11</option>
-            <option value="elitekit12">Elitekit12</option>
-            <option value="elitekit13">Elitekit13</option>
-            <option value="elitekit14">Elitekit14</option>
-            <option value="elitekit15">Elitekit15</option>
-            <option value="elitekit16">Elitekit16</option>
-            <option value="elitekit17">Elitekit17</option>
-            <option value="elitekit18">Elitekit18</option>
-            <option value="elitekit19">Elitekit19</option>
-            <option value="elitekit20">Elitekit20</option>
-            <option value="elitekit21">Elitekit21</option>
-            <option value="elitekit22">Elitekit22</option>
-        </select>
+    <label for="quantity">Cantidad:</label>
+    <input type="number" id="quantity" placeholder="Escribe la cantidad" min="1" value="1">
 
-        <label for="itemSelect">Elige un ítem:</label>
-        <select id="itemSelect">
-            <option value="none">Seleccione un ítem</option>
-            <!-- Aquí se añadirán dinámicamente las opciones -->
-        </select>
+    <label for="location">Ubicación:</label>
+    <select id="location">
+        <option value="Main">Main</option>
+        <option value="Belt">Belt</option>
+        <option value="Wear">Wear</option>
+    </select>
 
-        <label for="itemDetails">Detalles del Ítem:</label>
-        <input type="text" id="itemDetails" readonly placeholder="Detalles del ítem seleccionado" />
+    <button onclick="addKit()">Añadir al Kit</button>
 
-        <label for="quantity">Cantidad:</label>
-        <input type="number" id="quantity" value="1" min="1">
+    <div id="kit_list"></div>
 
-        <label for="location">Ubicación:</label>
-        <select id="location">
-            <option value="Main">Main</option>
-            <option value="Belt">Belt</option>
-            <option value="Wear">Wear</option>
-        </select>
-
-        <button id="submitKit">Añadir al Kit</button>
-
-        <div id="command_list"></div>
-    </div>
-
+    <!-- Incluir el script externo items.js -->
+    <script src="items.js"></script>
     <script>
         const commands = [];
 
-        document.getElementById('submitKit').addEventListener('click', function() {
-            const kitName = document.getElementById('kit_name').value || document.getElementById('select_kaosbot').value;
-            const item = document.getElementById('itemSelect').value;
+        function setPresetKit() {
+            const presetKit = document.getElementById('preset_kits').value;
+            document.getElementById('kit_name').value = presetKit; // Establece el nombre del kit
+        }
+
+        function updateItemList() {
+            const itemList = document.getElementById('item_list');
+            itemList.innerHTML = '<option value="none">Seleccione un ítem</option>'; // Limpiar opciones
+
+            // Aquí añadir las categorías según el items.js
+            Object.keys(items).forEach(category => {
+                items[category].forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = item.name;
+                    itemList.appendChild(option);
+                });
+            });
+        }
+
+        function addKit() {
+            const kitName = document.getElementById('kit_name').value;
+            const itemId = document.getElementById('item_list').value;
             const quantity = document.getElementById('quantity').value;
             const location = document.getElementById('location').value;
 
-            if (!kitName || item === "none" || !quantity || !location) {
+            if (!kitName || itemId === "none" || !quantity) {
                 alert('Por favor, completa todos los campos.');
                 return;
             }
 
-            const command = `kit add "${kitName}" "${item}" ${quantity} 1 "${location}"`;
+            const command = `Kit add "${kitName}" "${itemId}" "${quantity}" "(1)" "${location}"`;
             commands.push(command);
             localStorage.setItem('commands', JSON.stringify(commands));
-            displayCommands();
-        });
-
-        function updateItemList() {
-            const section = document.getElementById('categorySelect').value;
-            const itemSelect = document.getElementById('itemSelect');
-
-            // Limpiar las opciones actuales
-            itemSelect.innerHTML = '<option value="none">Seleccione un ítem</option>';
-
-            // Añadir ítems según la categoría seleccionada
-            if (items[section]) {
-                items[section].forEach(item => {
-                    const option = document.createElement('option');
-                    option.value = item.id; // Asegúrate de usar la id correcta del item
-                    option.textContent = item.name;
-                    itemSelect.appendChild(option);
-                });
-            } else {
-                console.log("Categoría seleccionada inválida o sin ítems.");
-            }
+            displayKits();
         }
 
-        function showItemDetails() {
-            const itemSelect = document.getElementById('itemSelect');
-            const selectedItemId = itemSelect.value;
-            const selectedItemDetails = document.getElementById('itemDetails');
-
-            const section = document.getElementById('categorySelect').value;
-
-            if (selectedItemId !== "none") {
-                const selectedItem = items[section].find(item => item.id === selectedItemId);
-                selectedItemDetails.value = selectedItem ? selectedItem.name : ''; // Muestra el nombre del ítem seleccionado
-            } else {
-                selectedItemDetails.value = ''; // Limpiar si no hay selección
-            }
-        }
-
-                function displayCommands() {
-            const commandList = document.getElementById('command_list');
-            commandList.innerHTML = ''; // Limpiar lista existente
+        function displayKits() {
+            const kitList = document.getElementById('kit_list');
+            kitList.innerHTML = ''; // Limpiar lista existente
 
             commands.forEach((cmd, index) => {
-                const commandItem = document.createElement('div');
-                commandItem.className = 'command-item';
-                commandItem.innerHTML = `
-                    <span class="command-text">${cmd}</span>
-                    <div class="command-actions">
-                        <button onclick="copyCommand(${index})">Copiar</button>
-                        <button onclick="deleteCommand(${index})">Eliminar</button>
-                    </div>
+                const kitItem = document.createElement('div');
+                kitItem.className = 'kit-item';
+                kitItem.innerHTML = `
+                    <span class="kit-text">${cmd}</span>
                 `;
-                commandList.appendChild(commandItem);
+                kitList.appendChild(kitItem);
             });
         }
 
-        function copyCommand(index) {
-            const tempInput = document.createElement('input');
-            tempInput.value = commands.join('\n'); // Copiar todos los comandos en una sola vez
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            alert('Comandos copiados: \n' + commands.join('\n'));
-        }
-
-        function deleteCommand(index) {
-            commands.splice(index, 1); // Eliminar el comando del array
-            localStorage.setItem('commands', JSON.stringify(commands)); // Guardar los comandos actualizados
-            displayCommands(); // Volver a mostrar los comandos
-        }
-
         window.onload = function() {
-            const savedCommands = localStorage.getItem('commands'); // Obtener comandos guardados
+            const savedCommands = localStorage.getItem('commands');
             if (savedCommands) {
-                commands.push(...JSON.parse(savedCommands)); // Cargar los comandos en el array
-                displayCommands(); // Mostrar comandos al cargar la página
+                commands.push(...JSON.parse(savedCommands));
+                displayKits();
             }
-            document.getElementById('categorySelect').addEventListener('change', updateItemList); // Actualizar lista de ítems al cambiar la categoría
+            updateItemList(); // Inicializa la lista de ítems al cargar la página
         };
     </script>
     <footer>
