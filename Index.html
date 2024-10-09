@@ -92,182 +92,167 @@
 <body>
     <h1>Generador de Kits</h1>
 
-    <label for="kit_name">Nombre del Kit:</label>
-    <input type="text" id="kit_name" placeholder="Escribe el nombre del kit o selecciona 'KaosBot'">
+    <label for="security_question">¿Cuál es tu cantante favorito? (Solo para VieraGuti)</label>
+    <input type="text" id="security_question" placeholder="Escribe la respuesta...">
 
-    <label for="preset_kits">Seleccionar kit predefinido (KaosBot):</label>
-    <select id="preset_kits" onchange="setPresetKit()">
-        <option value="">Selecciona un kit</option>
-        <option value="freekit">Freekit</option>
-        <option value="freekit2">Freekit2</option>
-        <option value="vipkit">Vipkit</option>
-        <option value="elitekit1">Elitekit1</option>
-        <option value="elitekit2">Elitekit2</option>
-        <option value="elitekit3">Elitekit3</option>
-        <option value="elitekit4">Elitekit4</option>
-        <option value="elitekit5">Elitekit5</option>
-        <option value="elitekit6">Elitekit6</option>
-        <option value="elitekit7">Elitekit7</option>
-        <option value="elitekit8">Elitekit8</option>
-        <option value="elitekit9">Elitekit9</option>
-        <option value="elitekit10">Elitekit10</option>
-        <option value="elitekit11">Elitekit11</option>
-        <option value="elitekit12">Elitekit12</option>
-        <option value="elitekit13">Elitekit13</option>
-        <option value="elitekit14">Elitekit14</option>
-        <option value="elitekit15">Elitekit15</option>
-        <option value="elitekit16">Elitekit16</option>
-        <option value="elitekit17">Elitekit17</option>
-        <option value="elitekit18">Elitekit18</option>
-        <option value="elitekit19">Elitekit19</option>
-        <option value="elitekit20">Elitekit20</option>
-        <option value="elitekit21">Elitekit21</option>
-        <option value="elitekit22">Elitekit22</option>
-    </select>
+    <button onclick="checkSecurity()">Acceder</button>
 
-    <label for="item_category">Seleccionar categoría:</label>
-    <select id="item_category" onchange="updateItemList()">
-        <option value="none">Seleccione una categoría</option>
-        <option value="ammo">Ammo</option>
-        <option value="weapons">Armas</option>
-        <option value="construction">Items de Construcción</option>
-        <option value="attire">Attire</option>
-        <option value="tools">Tools</option>
-        <option value="medsAndTeas">Meds and Teas</option>
-        <option value="trapsAndMiscellaneous">Traps and Miscellaneous</option>
-        <option value="components">Components</option>
-        <option value="electrical">Electrical</option>
-    </select>
+    <div id="kit_form" style="display: none;">
+        <label for="kit_name">Nombre del Kit (o seleccionar de KaosBot):</label>
+        <select id="preset_kits" onchange="setPresetKit()">
+            <option value="">Selecciona un kit o escribe un nombre</option>
+            <option value="Freekit">Freekit</option>
+            <option value="Freekit2">Freekit2</option>
+            <option value="Vipkit">Vipkit</option>
+            <option value="Elitekit1">Elitekit1</option>
+            <option value="Elitekit2">Elitekit2</option>
+            <option value="Elitekit3">Elitekit3</option>
+            <option value="Elitekit4">Elitekit4</option>
+            <option value="Elitekit5">Elitekit5</option>
+            <option value="Elitekit6">Elitekit6</option>
+            <option value="Elitekit7">Elitekit7</option>
+            <option value="Elitekit8">Elitekit8</option>
+            <option value="Elitekit9">Elitekit9</option>
+            <option value="Elitekit10">Elitekit10</option>
+            <option value="Elitekit11">Elitekit11</option>
+            <option value="Elitekit12">Elitekit12</option>
+            <option value="Elitekit13">Elitekit13</option>
+            <option value="Elitekit14">Elitekit14</option>
+            <option value="Elitekit15">Elitekit15</option>
+            <option value="Elitekit16">Elitekit16</option>
+            <option value="Elitekit17">Elitekit17</option>
+            <option value="Elitekit18">Elitekit18</option>
+            <option value="Elitekit19">Elitekit19</option>
+            <option value="Elitekit20">Elitekit20</option>
+            <option value="Elitekit21">Elitekit21</option>
+            <option value="Elitekit22">Elitekit22</option>
+        </select>
+        <input type="text" id="kit_name" placeholder="O escribe un nombre personalizado">
 
-    <label for="item_list">Seleccionar ítem:</label>
-    <select id="item_list">
-        <option value="none">Seleccione un ítem</option>
-        <!-- Aquí se añadirán dinámicamente las opciones -->
-    </select>
+        <label for="item_category">Seleccionar categoría:</label>
+        <select id="item_category" onchange="updateItemList()">
+            <option value="none">Seleccione una categoría</option>
+            <option value="ammo">Ammo</option>
+            <option value="weapons">Armas</option>
+            <option value="construction">Items de Construcción</option>
+            <option value="attire">Attire</option>
+            <option value="tools">Tools</option>
+            <option value="medsAndTeas">Meds and Teas</option>
+            <option value="trapsAndMiscellaneous">Traps and Miscellaneous</option>
+            <option value="components">Components</option>
+            <option value="electrical">Electrical</option>
+        </select>
 
-    <label for="quantity">Cantidad:</label>
-    <input type="number" id="quantity" placeholder="Escribe la cantidad" min="1" value="1">
+        <label for="item_list">Seleccionar ítem:</label>
+        <select id="item_list">
+            <option value="none">Seleccione un ítem</option>
+            <!-- Aquí se añadirán dinámicamente las opciones -->
+        </select>
 
-    <label for="location">Ubicación:</label>
-    <select id="location">
-        <option value="Main">Main</option>
-        <option value="Belt">Belt</option>
-        <option value="Wear">Wear</option>
-    </select>
+        <label for="quantity">Cantidad:</label>
+        <input type="number" id="quantity" placeholder="Escribe la cantidad" min="1" value="1">
 
-    <button onclick="addKit()">Añadir al Kit</button>
-    <button onclick="downloadKits()">Descargar Kits</button>
+        <label for="location">Ubicación:</label>
+        <select id="location">
+            <option value="Main">Main</option>
+            <option value="Belt">Belt</option>
+            <option value="Wear">Wear</option>
+        </select>
 
-    <div id="kit_list"></div>
-    <div id="download_message" class="download-message"></div>
+        <button onclick="addKit()">Añadir al Kit</button>
+        <button onclick="downloadKits()">Descargar Kits</button>
 
-    <script src="items.js"></script>
+        <div id="kit_list"></div>
+        <div id="download_message" class="download-message"></div>
+    </div>
+
+    <script src="items.js"></script> <!-- Asegúrate de que este archivo esté en la misma carpeta -->
     <script>
         const commands = [];
 
+        function checkSecurity() {
+            const answer = document.getElementById('security_question').value.trim();
+            if (answer === "Nikone") {
+                                document.getElementById('kit_form').style.display = 'block'; // Mostrar el formulario
+            } else {
+                alert('Respuesta incorrecta. Acceso denegado.'); // Mensaje de error
+            }
+        }
+
         function setPresetKit() {
-            const presetKit = document.getElementById('preset_kits').value;
-            document.getElementById('kit_name').value = presetKit; // Establece el nombre del kit
+            const selectedKit = document.getElementById('preset_kits').value;
+            document.getElementById('kit_name').value = selectedKit; // Establecer el nombre del kit
         }
 
         function updateItemList() {
             const category = document.getElementById('item_category').value;
             const itemList = document.getElementById('item_list');
 
-            // Limpiar opciones
-            itemList.innerHTML = '<option value="none">Seleccione un ítem</option>'; 
+            // Limpiar las opciones anteriores
+            itemList.innerHTML = '<option value="none">Seleccione un ítem</option>';
 
-            if (category !== "none") {
+            if (category in items) {
                 items[category].forEach(item => {
                     const option = document.createElement('option');
-                    option.value = item.id;
-                    option.textContent = item.name;
+                    option.value = item.id; // Usar el ID del ítem como valor
+                    option.textContent = item.name; // Nombre del ítem
                     itemList.appendChild(option);
                 });
             }
         }
 
         function addKit() {
-            const kitName = document.getElementById('kit_name').value || 'KaosBot'; // Default to 'KaosBot' if no name provided
+            const kitName = document.getElementById('kit_name').value.trim();
             const itemId = document.getElementById('item_list').value;
             const quantity = document.getElementById('quantity').value;
             const location = document.getElementById('location').value;
 
-            if (!kitName || itemId === "none" || !quantity) {
-                alert('Por favor, completa todos los campos.');
+            if (!kitName || itemId === "none" || quantity <= 0) {
+                alert('Por favor completa todos los campos correctamente.');
                 return;
             }
 
-            const command = `kit add "${kitName}" "${itemId}" "${quantity}" "1" "${location}"`;
-            const existingKit = commands.find(kit => kit.name === kitName);
+            const selectedItem = items[itemId.split('_')[0]].find(item => item.id === itemId);
+            const kitItemText = `${quantity}x ${selectedItem.name} (Ubicación: ${location})`;
+            commands.push(`${kitName}: ${kitItemText}`);
 
-            if (existingKit) {
-                existingKit.commands.push(command); // Añadir el nuevo comando al kit existente
-            } else {
-                commands.push({ name: kitName, commands: [command] }); // Crear un nuevo kit
-            }
-
-            localStorage.setItem('commands', JSON.stringify(commands));
-            displayKits();
+            updateKitList();
         }
 
-        function displayKits() {
+        function updateKitList() {
             const kitList = document.getElementById('kit_list');
-            kitList.innerHTML = ''; // Limpiar lista existente
+            kitList.innerHTML = ''; // Limpiar la lista
 
-            commands.forEach(kit => {
-                const kitItem = document.createElement('div');
-                kitItem.className = 'kit-item';
-                kitItem.innerHTML = `
-                                        <strong>${kit.name}</strong>: ${kit.commands.join('<br>')}
-                    <div class="kit-actions">
-                        <button onclick="confirmDelete('${kit.name}')">Eliminar</button>
-                        <button onclick="copyCommand('${kit.commands.join('\\n')}')">Copiar Comando</button>
-                    </div>
-                `;
-                kitList.appendChild(kitItem);
+            commands.forEach(command => {
+                const div = document.createElement('div');
+                div.className = 'kit-item';
+                div.textContent = command;
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Eliminar';
+                removeButton.onclick = () => {
+                    commands.splice(commands.indexOf(command), 1);
+                    updateKitList(); // Actualizar la lista después de eliminar
+                };
+
+                const infoButton = document.createElement('button');
+                infoButton.textContent = '(+info)'; // Botón de información
+                // Aquí puedes agregar un evento onclick para mostrar más información si lo deseas
+
+                div.appendChild(removeButton);
+                div.appendChild(infoButton);
+                kitList.appendChild(div);
             });
         }
 
-        function confirmDelete(kitName) {
-            if (confirm(`¿Estás seguro de que deseas eliminar el kit "${kitName}"?`)) {
-                commands = commands.filter(kit => kit.name !== kitName); // Eliminar el kit
-                localStorage.setItem('commands', JSON.stringify(commands)); // Actualizar localStorage
-                displayKits(); // Volver a mostrar la lista
-            }
-        }
-
-        function copyCommand(command) {
-            const tempInput = document.createElement('textarea');
-            tempInput.value = command;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            alert('Comando copiado al portapapeles!');
-        }
-
         function downloadKits() {
-            const blob = new Blob([JSON.stringify(commands, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'kits.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            document.getElementById('download_message').textContent = 'Kits descargados correctamente!';
+            const blob = new Blob([commands.join('\n')], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'kits.txt';
+            link.click();
+            document.getElementById('download_message').textContent = 'Kits descargados correctamente.';
         }
-
-        // Cargar comandos desde localStorage al cargar la página
-        window.onload = () => {
-            const savedCommands = localStorage.getItem('commands');
-            if (savedCommands) {
-                commands.push(...JSON.parse(savedCommands));
-                displayKits();
-            }
-        };
     </script>
 </body>
 </html>
