@@ -140,7 +140,7 @@
         </select>
 
         <label for="itemSelect">Elige un ítem:</label>
-        <select id="itemSelect" onchange="showItemDetails()">
+        <select id="itemSelect">
             <option value="none">Seleccione un ítem</option>
             <!-- Aquí se añadirán dinámicamente las opciones -->
         </select>
@@ -208,7 +208,7 @@
             const selectedItemId = itemSelect.value;
             const selectedItemDetails = document.getElementById('itemDetails');
 
-                        const section = document.getElementById('categorySelect').value;
+            const section = document.getElementById('categorySelect').value;
 
             if (selectedItemId !== "none") {
                 const selectedItem = items[section].find(item => item.id === selectedItemId);
@@ -218,7 +218,7 @@
             }
         }
 
-        function displayCommands() {
+                function displayCommands() {
             const commandList = document.getElementById('command_list');
             commandList.innerHTML = ''; // Limpiar lista existente
 
