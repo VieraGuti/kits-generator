@@ -87,35 +87,10 @@
             margin-top: 20px;
             color: #28a745; /* Verde */
         }
-
-        /* Botón "Kits VieraGuti" */
-        #kvg-button {
-            background-color: #FF4500;
-            margin-top: 20px;
-            color: white;
-            cursor: pointer;
-            padding: 10px;
-            text-align: center;
-        }
-
-        /* Botón de información */
-        .info-button {
-            background: none;
-            border: none;
-            font-size: 1.2em;
-            color: #FF4500;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
     <h1>Generador de Kits</h1>
-
-    <!-- Simulación de autenticación Discord -->
-    <div id="discord_login">
-        <p id="user_welcome">Conéctate a través de Discord</p>
-        <button onclick="loginWithDiscord()">Conectar con Discord</button>
-    </div>
 
     <label for="kit_name">Nombre del Kit:</label>
     <input type="text" id="kit_name" placeholder="Escribe el nombre del kit o selecciona 'KaosBot'">
@@ -123,14 +98,45 @@
     <label for="preset_kits">Seleccionar kit predefinido (KaosBot):</label>
     <select id="preset_kits" onchange="setPresetKit()">
         <option value="">Selecciona un kit</option>
-        <!-- Aquí se agregarán kits predefinidos -->
+        <option value="freekit">Freekit</option>
+        <option value="freekit2">Freekit2</option>
+        <option value="vipkit">Vipkit</option>
+        <option value="elitekit1">Elitekit1</option>
+        <option value="elitekit2">Elitekit2</option>
+        <option value="elitekit3">Elitekit3</option>
+        <option value="elitekit4">Elitekit4</option>
+        <option value="elitekit5">Elitekit5</option>
+        <option value="elitekit6">Elitekit6</option>
+        <option value="elitekit7">Elitekit7</option>
+        <option value="elitekit8">Elitekit8</option>
+        <option value="elitekit9">Elitekit9</option>
+        <option value="elitekit10">Elitekit10</option>
+        <option value="elitekit11">Elitekit11</option>
+        <option value="elitekit12">Elitekit12</option>
+        <option value="elitekit13">Elitekit13</option>
+        <option value="elitekit14">Elitekit14</option>
+        <option value="elitekit15">Elitekit15</option>
+        <option value="elitekit16">Elitekit16</option>
+        <option value="elitekit17">Elitekit17</option>
+        <option value="elitekit18">Elitekit18</option>
+        <option value="elitekit19">Elitekit19</option>
+        <option value="elitekit20">Elitekit20</option>
+        <option value="elitekit21">Elitekit21</option>
+        <option value="elitekit22">Elitekit22</option>
     </select>
 
     <label for="item_category">Seleccionar categoría:</label>
     <select id="item_category" onchange="updateItemList()">
         <option value="none">Seleccione una categoría</option>
         <option value="ammo">Ammo</option>
-        <!-- Más categorías -->
+        <option value="weapons">Armas</option>
+        <option value="construction">Items de Construcción</option>
+        <option value="attire">Attire</option>
+        <option value="tools">Tools</option>
+        <option value="medsAndTeas">Meds and Teas</option>
+        <option value="trapsAndMiscellaneous">Traps and Miscellaneous</option>
+        <option value="components">Components</option>
+        <option value="electrical">Electrical</option>
     </select>
 
     <label for="item_list">Seleccionar ítem:</label>
@@ -144,9 +150,9 @@
 
     <label for="location">Ubicación:</label>
     <select id="location">
-        <option value="Main">Inventario</option>
-        <option value="Belt">Cinturón</option>
-        <option value="Wear">Equipado</option>
+        <option value="Main">Main</option>
+        <option value="Belt">Belt</option>
+        <option value="Wear">Wear</option>
     </select>
 
     <button onclick="addKit()">Añadir al Kit</button>
@@ -155,35 +161,34 @@
     <div id="kit_list"></div>
     <div id="download_message" class="download-message"></div>
 
-    <!-- Botón especial "Kits VieraGuti" -->
-    <button id="kvg-button" style="display:none;" onclick="showVieraGutiKits()">Kits VieraGuti</button>
-
-    <!-- Script -->
     <script src="items.js"></script>
     <script>
         const commands = [];
-        let currentUser = null; // Para simular autenticación de usuario
 
-        // Simular login con Discord
-        function loginWithDiscord() {
-            const username = prompt('Introduce tu nombre de Discord');
-            currentUser = username;
-            document.getElementById('user_welcome').textContent = `Bienvenido, ${username}`;
+        function setPresetKit() {
+            const presetKit = document.getElementById('preset_kits').value;
+            document.getElementById('kit_name').value = presetKit; // Establece el nombre del kit
+        }
 
-            if (username === 'VieraGuti') {
-                // Mostrar el botón de Kits VieraGuti para el jefe de la página
-                document.getElementById('kvg-button').style.display = 'block';
+        function updateItemList() {
+            const category = document.getElementById('item_category').value;
+            const itemList = document.getElementById('item_list');
+
+            // Limpiar opciones
+            itemList.innerHTML = '<option value="none">Seleccione un ítem</option>'; 
+
+            if (category !== "none") {
+                items[category].forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = item.name;
+                    itemList.appendChild(option);
+                });
             }
         }
 
-        // Mostrar kits de VieraGuti
-        function showVieraGutiKits() {
-            alert('Mostrando los kits de VieraGuti');
-            // Lógica para mostrar kits creados por VieraGuti
-        }
-
         function addKit() {
-            const kitName = document.getElementById('kit_name').value;
+            const kitName = document.getElementById('kit_name').value || 'KaosBot'; // Default to 'KaosBot' if no name provided
             const itemId = document.getElementById('item_list').value;
             const quantity = document.getElementById('quantity').value;
             const location = document.getElementById('location').value;
@@ -193,7 +198,7 @@
                 return;
             }
 
-            const command = `Kit add "${kitName}" "${itemId}" "${quantity}" "1" "${location}"`;
+            const command = `kit add "${kitName}" "${itemId}" "${quantity}" "1" "${location}"`;
             const existingKit = commands.find(kit => kit.name === kitName);
 
             if (existingKit) {
@@ -206,7 +211,6 @@
             displayKits();
         }
 
-                // Mostrar lista de kits con botón de información
         function displayKits() {
             const kitList = document.getElementById('kit_list');
             kitList.innerHTML = ''; // Limpiar lista existente
@@ -214,119 +218,56 @@
             commands.forEach(kit => {
                 const kitItem = document.createElement('div');
                 kitItem.className = 'kit-item';
-                
-                // Crear el contenido del kit, incluyendo el botón de información ℹ️
                 kitItem.innerHTML = `
-                    <div class="kit-text">
-                        <strong>${kit.name}</strong> 
-                        <button class="info-button" onclick="showKitInfo('${kit.name}')">ℹ️</button>
-                    </div>
-                    ${kit.commands.join('<br>')}
+                                        <strong>${kit.name}</strong>: ${kit.commands.join('<br>')}
                     <div class="kit-actions">
-                        <button onclick="copyKits('${kit.name}')">Copiar</button>
-                        <button onclick="editKit('${kit.name}')">Editar</button>
-                        <button onclick="deleteKit('${kit.name}')">Eliminar</button>
+                        <button onclick="confirmDelete('${kit.name}')">Eliminar</button>
+                        <button onclick="copyCommand('${kit.commands.join('\\n')}')">Copiar Comando</button>
                     </div>
                 `;
                 kitList.appendChild(kitItem);
             });
         }
 
-        // Mostrar información detallada del kit cuando se pulsa ℹ️
-        function showKitInfo(kitName) {
-            const kit = commands.find(k => k.name === kitName);
-            if (kit) {
-                let kitInfo = `Información del kit "${kitName}":\n\n`;
-
-                // Procesar cada comando del kit para obtener cantidad y ubicación
-                kit.commands.forEach(command => {
-                    const parts = command.split('"');
-                    const itemId = parts[3];
-                    const quantity = parts[5];
-                    const location = parts[9];
-                    let locationText = '';
-
-                    // Traducir la ubicación
-                    switch(location) {
-                        case 'Main':
-                            locationText = 'Inventario';
-                            break;
-                        case 'Belt':
-                            locationText = 'Cinturón';
-                            break;
-                        case 'Wear':
-                            locationText = 'Equipado';
-                            break;
-                    }
-
-                    kitInfo += `x${quantity} ${itemId} en ${locationText}\n`;
-                });
-
-                alert(kitInfo); // Mostrar la información en un cuadro de alerta
+        function confirmDelete(kitName) {
+            if (confirm(`¿Estás seguro de que deseas eliminar el kit "${kitName}"?`)) {
+                commands = commands.filter(kit => kit.name !== kitName); // Eliminar el kit
+                localStorage.setItem('commands', JSON.stringify(commands)); // Actualizar localStorage
+                displayKits(); // Volver a mostrar la lista
             }
         }
 
-        function copyKits(kitName) {
-            const kit = commands.find(k => k.name === kitName);
-            if (kit) {
-                const kitCommands = kit.commands.join('\n');
-                const tempInput = document.createElement('textarea');
-                tempInput.value = kitCommands;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                alert('Kits copiados: \n' + kitCommands);
-            }
-        }
-
-        function editKit(kitName) {
-            const kit = commands.find(k => k.name === kitName);
-            if (kit) {
-                const newName = prompt('Edita el nombre del kit:', kitName);
-                if (newName && newName !== kitName) {
-                    kit.name = newName; // Cambiar el nombre del kit
-                    localStorage.setItem('commands', JSON.stringify(commands));
-                    displayKits(); // Actualizar la lista
-                }
-            }
-        }
-
-        function deleteKit(kitName) {
-            const kitIndex = commands.findIndex(k => k.name === kitName);
-            if (kitIndex > -1) {
-                commands.splice(kitIndex, 1); // Eliminar el kit
-                localStorage.setItem('commands', JSON.stringify(commands));
-                displayKits(); // Actualizar la lista
-            }
+        function copyCommand(command) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = command;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert('Comando copiado al portapapeles!');
         }
 
         function downloadKits() {
-            const text = commands.map(kit => `${kit.name}:\n${kit.commands.join('\n')}`).join('\n\n');
-            const blob = new Blob([text], { type: 'text/plain' });
+            const blob = new Blob([JSON.stringify(commands, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'kits.txt'; // Nombre del archivo
+            a.download = 'kits.json';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            alert('VieraGuti: Disfruta de tu kit'); 
+            URL.revokeObjectURL(url);
+            document.getElementById('download_message').textContent = 'Kits descargados correctamente!';
         }
 
-        window.onload = function() {
+        // Cargar comandos desde localStorage al cargar la página
+        window.onload = () => {
             const savedCommands = localStorage.getItem('commands');
             if (savedCommands) {
                 commands.push(...JSON.parse(savedCommands));
                 displayKits();
             }
-            updateItemList(); // Inicializa la lista de ítems al cargar la página
         };
     </script>
-    <footer>
-        <p>Hecho por VieraGuti</p>
-    </footer>
 </body>
 </html>
-
-        
