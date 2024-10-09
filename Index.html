@@ -3,8 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Kits</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Generador de Kits - Rust Style</title>
+    <style>
+        body {
+            font-family: 'Press Start 2P', sans-serif; /* Estilo gaming */
+            background-color: #1e1e1e; /* Fondo oscuro */
+            color: #fff; /* Texto claro */
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            color: #FF4500; /* Naranja Rust */
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        .section {
+            margin: 20px 0;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333; /* Fondo de campos */
+            color: #fff;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #FF4500; /* Naranja Rust */
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #E53E00; /* Hover más oscuro */
+        }
+
+        #command_list {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #292929; /* Cuadro oscuro */
+            border: 2px solid #FF4500; /* Borde naranja */
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7); /* Sombra */
+        }
+
+        .command-item {
+            background-color: #444; /* Fondo de cada comando */
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #FF4500; /* Borde de comandos */
+        }
+
+        .command-text {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        .command-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        footer {
+            text-align: center;
+            color: #EAEAEA;
+            font-size: 0.8em;
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
     <h1>Generador de Kits</h1>
@@ -80,7 +162,7 @@
 
         <button id="submitConstruction">Añadir al Kit</button>
 
-        <div id="constructionResult"></div>
+        <div id="command_list"></div>
     </div>
 
     <div class="section">
@@ -131,7 +213,7 @@
     <script>
         const commands = [];
 
-        document.getElementById('selectConstruction').addEventListener('click', function() {
+                document.getElementById('selectConstruction').addEventListener('click', function() {
             document.getElementById('constructionForm').style.display = 'block';
             document.getElementById('outfitsForm').style.display = 'none';
         });
@@ -184,7 +266,6 @@
                 commandItem.className = 'command-item';
                 commandItem.innerHTML = `
                     <span class="command-text">${cmd}</span>
-                                        <span class="command-text">${cmd}</span>
                     <div class="command-actions">
                         <button onclick="copyCommand(${index})">Copiar</button>
                         <button onclick="deleteCommand(${index})">Eliminar</button>
@@ -196,27 +277,32 @@
 
         function copyCommand(index) {
             const tempInput = document.createElement('input');
-            tempInput.value = commands[index];
+            tempInput.value = commands.join('\n'); // Copiar todos los comandos en una sola vez
             document.body.appendChild(tempInput);
             tempInput.select();
             document.execCommand('copy');
             document.body.removeChild(tempInput);
-            alert('Comando copiado: ' + commands[index]);
+            alert('Comandos copiados: \n' + commands.join('\n'));
         }
 
         function deleteCommand(index) {
-            commands.splice(index, 1);
-            localStorage.setItem('commands', JSON.stringify(commands));
-            displayCommands();
+            commands.splice(index, 1); // Eliminar el comando del array
+            localStorage.setItem('commands', JSON.stringify(commands)); // Guardar los comandos actualizados
+            displayCommands(); // Volver a mostrar los comandos
         }
 
         window.onload = function() {
-            const savedCommands = localStorage.getItem('commands');
+            const savedCommands = localStorage.getItem('commands'); // Obtener comandos guardados
             if (savedCommands) {
-                commands.push(...JSON.parse(savedCommands));
-                displayCommands();
+                commands.push(...JSON.parse(savedCommands)); // Cargar los comandos en el array
+                displayCommands(); // Mostrar comandos al cargar la página
             }
         };
     </script>
+    <footer>
+        <p>Hecho por VieraGuti</p>
+    </footer>
 </body>
 </html>
+
+        
