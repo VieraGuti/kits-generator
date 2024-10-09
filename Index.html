@@ -3,144 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Kits - Rust Style</title>
+    <title>Generador de Kits</title>
     <style>
         body {
-            font-family: 'Press Start 2P', sans-serif; /* Estilo gaming */
-            background-color: #1e1e1e; /* Fondo oscuro */
-            color: #fff; /* Texto claro */
-            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #2c2f33;
+            color: #ffffff;
             padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
-
-        h1 {
+        h1, h2 {
             text-align: center;
-            font-size: 2.5em;
-            color: #FF4500; /* Naranja Rust */
-            text-shadow: 2px 2px 4px #000;
+            color: #00ff00; /* Color verde brillante */
         }
-
         label {
             display: block;
-            margin: 10px 0 5px;
+            margin-top: 10px;
         }
-
         input, select, button {
-            width: 100%;
+            width: calc(100% - 20px);
             padding: 10px;
-            margin: 5px 0 10px;
+            margin: 5px 0;
             border: none;
             border-radius: 5px;
-            background-color: #333; /* Fondo de campos */
-            color: #fff;
-            font-size: 1em;
         }
-
         button {
-            background-color: #FF4500; /* Naranja Rust */
+            background-color: #7289da; /* Color azul */
             color: white;
             cursor: pointer;
         }
-
         button:hover {
-            background-color: #E53E00; /* Hover más oscuro */
+            background-color: #5b6eae; /* Color azul más oscuro al pasar el ratón */
         }
-
-        #kit_list {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #292929; /* Cuadro oscuro */
-            border: 2px solid #FF4500; /* Borde naranja */
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7); /* Sombra */
-        }
-
         .kit-item {
-            background-color: #444; /* Fondo de cada kit */
-            padding: 10px;
             margin: 5px 0;
+            background-color: #23272a; /* Color de fondo para los ítems de kit */
+            padding: 10px;
             border-radius: 5px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            border: 1px solid #FF4500; /* Borde de kits */
         }
-
-        .kit-text {
-            flex-grow: 1;
-            margin-right: 10px;
-        }
-
         .kit-actions {
             display: flex;
             gap: 5px;
         }
-
-        footer {
-            text-align: center;
-            color: #EAEAEA;
-            font-size: 0.8em;
-            margin-top: 40px;
-        }
-
-        .download-message {
-            margin-top: 20px;
-            color: #28a745; /* Verde */
-        }
     </style>
+    <script src="Items.js"></script>
 </head>
 <body>
     <h1>Generador de Kits</h1>
-
-    <label for="security_question">¿Cuál es tu cantante favorito? (Solo para VieraGuti)</label>
-    <input type="text" id="security_question" placeholder="Escribe la respuesta...">
-
-    <button onclick="checkSecurity()">Acceder</button>
-
+    <div>
+        <label for="username">Nombre de usuario:</label>
+        <input type="text" id="username" />
+        <button onclick="checkSecurity()">Acceder</button>
+    </div>
+    
     <div id="kit_form" style="display: none;">
-        <label for="kit_name">Nombre del Kit (o seleccionar de KaosBot):</label>
+        <h2>Crear un Kit</h2>
+        
+        <label for="kit_name">Nombre del Kit:</label>
+        <input type="text" id="kit_name" placeholder="Escribe un nombre o selecciona un preset" />
         <select id="preset_kits" onchange="setPresetKit()">
-            <option value="">Selecciona un kit o escribe un nombre</option>
+            <option value="">Selecciona un kit preset</option>
             <option value="Freekit">Freekit</option>
-            <option value="Freekit2">Freekit2</option>
-            <option value="Vipkit">Vipkit</option>
-            <option value="Elitekit1">Elitekit1</option>
-            <option value="Elitekit2">Elitekit2</option>
-            <option value="Elitekit3">Elitekit3</option>
-            <option value="Elitekit4">Elitekit4</option>
-            <option value="Elitekit5">Elitekit5</option>
-            <option value="Elitekit6">Elitekit6</option>
-            <option value="Elitekit7">Elitekit7</option>
-            <option value="Elitekit8">Elitekit8</option>
-            <option value="Elitekit9">Elitekit9</option>
-            <option value="Elitekit10">Elitekit10</option>
-            <option value="Elitekit11">Elitekit11</option>
-            <option value="Elitekit12">Elitekit12</option>
-            <option value="Elitekit13">Elitekit13</option>
-            <option value="Elitekit14">Elitekit14</option>
-            <option value="Elitekit15">Elitekit15</option>
-            <option value="Elitekit16">Elitekit16</option>
-            <option value="Elitekit17">Elitekit17</option>
-            <option value="Elitekit18">Elitekit18</option>
-            <option value="Elitekit19">Elitekit19</option>
-            <option value="Elitekit20">Elitekit20</option>
-            <option value="Elitekit21">Elitekit21</option>
-            <option value="Elitekit22">Elitekit22</option>
+            <option value="freekit2">freekit2</option>
+            <option value="vipkit">vipkit</option>
+            <option value="elitekit1">elitekit1</option>
+            <option value="elitekit2">elitekit2</option>
+            <!-- Agrega más kits predefinidos si es necesario -->
         </select>
-        <input type="text" id="kit_name" placeholder="O escribe un nombre personalizado">
 
         <label for="item_category">Seleccionar categoría:</label>
         <select id="item_category" onchange="updateItemList()">
-            <option value="none">Seleccione una categoría</option>
-            <option value="ammo">Ammo</option>
+            <option value="ammo">Munición</option>
             <option value="weapons">Armas</option>
-            <option value="construction">Items de Construcción</option>
-            <option value="attire">Attire</option>
-            <option value="tools">Tools</option>
-            <option value="medsAndTeas">Meds and Teas</option>
-            <option value="trapsAndMiscellaneous">Traps and Miscellaneous</option>
-            <option value="components">Components</option>
-            <option value="electrical">Electrical</option>
+            <option value="armor">Armadura</option>
+            <!-- Agrega más categorías aquí -->
         </select>
 
         <label for="item_list">Seleccionar ítem:</label>
@@ -150,32 +91,36 @@
         </select>
 
         <label for="quantity">Cantidad:</label>
-        <input type="number" id="quantity" placeholder="Escribe la cantidad" min="1" value="1">
+        <input type="number" id="quantity" value="1" min="1" />
 
         <label for="location">Ubicación:</label>
         <select id="location">
-            <option value="Main">Main</option>
-            <option value="Belt">Belt</option>
-            <option value="Wear">Wear</option>
+            <option value="main">Inventario</option>
+            <option value="wear">Equipado</option>
+            <option value="belt">Cinturón</option>
         </select>
 
-        <button onclick="addKit()">Añadir al Kit</button>
-        <button onclick="downloadKits()">Descargar Kits</button>
-
+        <button onclick="addKit()">Añadir Kit</button>
+        <h3>Kits Generados:</h3>
         <div id="kit_list"></div>
-        <div id="download_message" class="download-message"></div>
+        <button onclick="downloadKits()">Descargar Kits</button>
+        <div id="download_message"></div>
     </div>
 
-    <script src="items.js"></script> <!-- Asegúrate de que este archivo esté en la misma carpeta -->
     <script>
-        const commands = [];
+        let commands = [];
 
         function checkSecurity() {
-            const answer = document.getElementById('security_question').value.trim();
-            if (answer === "Nikone") {
-                                document.getElementById('kit_form').style.display = 'block'; // Mostrar el formulario
-            } else {
+            const username = document.getElementById('username').value.trim();
+            const answer = prompt('¿Cuál es tu cantante favorito?');
+
+            if (username === "VieraGuti" && answer === "Nikone") {
+                document.getElementById('kit_form').style.display = 'block'; // Mostrar el formulario
+            } else if (username === "VieraGuti") {
                 alert('Respuesta incorrecta. Acceso denegado.'); // Mensaje de error
+            } else {
+                alert('Acceso permitido.'); // Para otros usuarios
+                document.getElementById('kit_form').style.display = 'block'; // Permitir acceso a otros
             }
         }
 
@@ -213,8 +158,8 @@
             }
 
             const selectedItem = items[itemId.split('_')[0]].find(item => item.id === itemId);
-            const kitItemText = `${quantity}x ${selectedItem.name} (Ubicación: ${location})`;
-            commands.push(`${kitName}: ${kitItemText}`);
+            const kitItemText = `kit add "${kitName}" "${selectedItem.name}" ${quantity} ${location === "belt" ? "1" : "1"} ${location}`;
+            commands.push(kitItemText);
 
             updateKitList();
         }
@@ -223,35 +168,111 @@
             const kitList = document.getElementById('kit_list');
             kitList.innerHTML = ''; // Limpiar la lista
 
-            commands.forEach(command => {
+            const groupedKits = commands.reduce((acc, command) => {
+                const kitName = command.split('"')[1]; // Obtener el nombre del kit
+                if (!acc[kitName]) {
+                    acc[kitName] = [];
+                }
+                acc[kitName].push(command);
+                return acc;
+            }, {});
+
+            for (const kitName in groupedKits) {
                 const div = document.createElement('div');
                 div.className = 'kit-item';
-                div.textContent = command;
+                div.innerHTML = `
+                    <strong>${kitName}</strong>:<br>
+                    ${groupedKits[kitName].join('<br>')}
+                `;
+
+                const infoButton = document.createElement('button');
+                infoButton.textContent = 'Información';
+                infoButton.onclick = () => showKitInfo(kitName, groupedKits[kitName]);
+
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Editar';
+                editButton.onclick = () => editKit(kitName, groupedKits[kitName]);
+                
+                const copyButton = document.createElement('button');
+                copyButton.textContent = 'Copiar';
+                copyButton.onclick = () => copyKit(kitName);
 
                 const removeButton = document.createElement('button');
                 removeButton.textContent = 'Eliminar';
-                removeButton.onclick = () => {
-                    commands.splice(commands.indexOf(command), 1);
-                    updateKitList(); // Actualizar la lista después de eliminar
-                };
+                removeButton.onclick = () => removeKit(kitName);
 
-                const infoButton = document.createElement('button');
-                infoButton.textContent = '(+info)'; // Botón de información
-                // Aquí puedes agregar un evento onclick para mostrar más información si lo deseas
-
-                div.appendChild(removeButton);
                 div.appendChild(infoButton);
+                div.appendChild(editButton);
+                div.appendChild(copyButton);
+                div.appendChild(removeButton);
                 kitList.appendChild(div);
-            });
+            }
+        }
+
+        function showKitInfo(kitName, commandsList) {
+            const infoText = commandsList.map(cmd => {
+                const parts = cmd.split('"');
+                const itemName = parts[3]; // Nombre del ítem
+                const location = parts[4]; // Ubicación
+                                const quantity = parts[2]; // Cantidad
+                const locMap = {
+                    "main": "Inventario",
+                    "wear": "Equipado",
+                    "belt": "Cinturón"
+                };
+                return `${itemName} (x${quantity}) en ${locMap[location]}`;
+            }).join('\n');
+
+            alert(`Información del kit '${kitName}':\n\n${infoText}`);
+        }
+
+        function editKit(kitName, commandsList) {
+            const newCommands = prompt(`Edita el kit '${kitName}':\n\n${commandsList.join('\n')}`);
+            if (newCommands) {
+                const updatedCommands = newCommands.split('\n').map(cmd => {
+                    const itemParts = cmd.split('"');
+                    if (itemParts.length >= 4) {
+                        const itemName = itemParts[3].trim();
+                        const itemLocation = itemParts[4].trim();
+                        const quantity = itemParts[2].trim();
+                        return `kit add "${kitName}" "${itemName}" ${quantity} ${itemLocation}`;
+                    }
+                    return null;
+                }).filter(cmd => cmd); // Filtrar entradas no válidas
+
+                // Eliminar los comandos viejos
+                commands = commands.filter(cmd => !cmd.startsWith(`kit add "${kitName}"`));
+                commands.push(...updatedCommands);
+                updateKitList();
+            }
+        }
+
+        function copyKit(kitName) {
+            const kitToCopy = commands.filter(cmd => cmd.startsWith(`kit add "${kitName}"`)).join('\n');
+            navigator.clipboard.writeText(kitToCopy)
+                .then(() => {
+                    alert('Kit copiado al portapapeles:\n' + kitToCopy);
+                })
+                .catch(err => {
+                    console.error('Error al copiar: ', err);
+                });
+        }
+
+        function removeKit(kitName) {
+            const confirmation = confirm(`¿Estás seguro de que quieres eliminar el kit '${kitName}'?`);
+            if (confirmation) {
+                commands = commands.filter(cmd => !cmd.startsWith(`kit add "${kitName}"`));
+                updateKitList();
+            }
         }
 
         function downloadKits() {
-            const blob = new Blob([commands.join('\n')], { type: 'text/plain' });
+            const text = commands.join('\n');
+            const blob = new Blob([text], { type: 'text/plain' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = 'kits.txt';
             link.click();
-            document.getElementById('download_message').textContent = 'Kits descargados correctamente.';
         }
     </script>
 </body>
