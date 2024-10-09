@@ -60,20 +60,17 @@
             padding: 10px;
             margin: 5px 0;
             border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             border: 1px solid #FF4500; /* Borde de kits */
-        }
-
-        .kit-text {
-            flex-grow: 1;
-            margin-right: 10px;
         }
 
         .kit-actions {
             display: flex;
             gap: 5px;
+        }
+
+        .info-text {
+            margin-top: 10px;
+            color: #EAEAEA; /* Texto informativo */
         }
 
         footer {
@@ -199,7 +196,7 @@
                 return;
             }
 
-            const command = `Kit add "${kitName}" "${itemId}" "${quantity}" "1" "${location}"`;
+            const command = `Kit add "${kitName}" "${itemId}" "${quantity}" 1 "${location}"`;
             const existingKit = commands.find(kit => kit.name === kitName);
 
             if (existingKit) {
@@ -217,16 +214,18 @@
             kitList.innerHTML = ''; // Limpiar lista existente
 
             commands.forEach(kit => {
-                const kitItem = document.createElement('div');
+                                const kitItem = document.createElement('div');
                 kitItem.className = 'kit-item';
                 kitItem.innerHTML = `
-                                        <strong>${kit.name}</strong>
-                    ${kit.commands.join('<br>')}
+                    <strong>${kit.name}</strong>
+                    <div>${kit.commands.join('<br>')}</div>
                     <div class="kit-actions">
                         <button onclick="copyKits('${kit.name}')">Copiar</button>
                         <button onclick="editKit('${kit.name}')">Editar</button>
                         <button onclick="deleteKit('${kit.name}')">Eliminar</button>
+                        <button onclick="showInfo('${kit.name}')">i</button>
                     </div>
+                    <div id="info_${kit.name}" class="info-text" style="display:none;"></div>
                 `;
                 kitList.appendChild(kitItem);
             });
@@ -264,6 +263,23 @@
                 commands.splice(kitIndex, 1); // Eliminar el kit
                 localStorage.setItem('commands', JSON.stringify(commands));
                 displayKits(); // Actualizar la lista
+            }
+        }
+
+        function showInfo(kitName) {
+            const kit = commands.find(k => k.name === kitName);
+            const infoDiv = document.getElementById(`info_${kitName}`);
+            if (kit) {
+                const infoText = kit.commands.map(command => {
+                    const parts = command.split(' ');
+                    const itemId = parts[2].replace(/"/g, ''); // Obtener ID del ítem
+                    const item = items.flat().find(i => i.id === itemId); // Buscar item en todas las categorías
+                    const itemName = item ? item.name : 'Desconocido'; // Nombre del ítem
+                    return `${parts[1]}: ${parts[2]} x${parts[3]} en ${parts[4]}`; // Formato "Nombre: ID xCantidad en Ubicación"
+                }).join('<br>');
+                
+                infoDiv.innerHTML = `Detalles del Kit:<br>${infoText}`;
+                infoDiv.style.display = infoDiv.style.display === 'none' ? 'block' : 'none'; // Alternar visibilidad
             }
         }
 
