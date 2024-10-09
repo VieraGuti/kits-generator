@@ -4,274 +4,283 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generador de Kits</title>
-
-    <!-- Importar Google Font estilo Rust -->
-    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
-
-    <!-- Estilos personalizados estilo Rust -->
     <style>
         body {
-            font-family: 'Russo One', sans-serif;
-            background-color: #2b2b2b; /* Fondo oscuro */
-            color: #e0e0e0; /* Color de texto claro */
-            padding: 20px;
+            font-family: 'Courier New', monospace; /* Cambia a una fuente de estilo "rust" */
+            background-color: #282828;
+            color: white;
         }
-
-        h1 {
-            color: #ff4500; /* Naranja estilo Rust */
-            text-align: center;
-            text-transform: uppercase;
-            font-size: 2.5em;
-            margin-bottom: 20px;
-        }
-
         .container {
-            max-width: 1000px;
+            width: 80%;
             margin: 0 auto;
-            background-color: #1f1f1f;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            background-color: #333;
+            border-radius: 10px;
         }
-
+        h1 {
+            color: #FF4500;
+        }
         label {
             display: block;
-            font-size: 1.2em;
-            margin-bottom: 8px;
+            margin-top: 10px;
+            margin-bottom: 5px;
         }
-
-        input, select {
+        select, input[type="text"], input[type="number"], button {
             width: 100%;
             padding: 10px;
-            margin-bottom: 20px;
-            background-color: #333;
-            color: #fff;
-            border: 1px solid #555;
-            border-radius: 4px;
-            font-size: 1.1em;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #ff4500;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1.1em;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #e63900;
-        }
-
-        .kit-item {
-            background-color: #333;
-            padding: 10px;
             margin-bottom: 10px;
-            border-left: 5px solid #ff4500;
         }
-
-        .kit-actions button {
-            margin-left: 10px;
-            background-color: #4b4b4b;
+        button {
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            cursor: pointer;
         }
-
-        .kit-actions button:hover {
-            background-color: #606060;
+        button:hover {
+            background-color: #FF5722;
         }
-
         .kit-list {
             margin-top: 20px;
+            padding: 10px;
+            background-color: #222;
+            border-radius: 5px;
+        }
+        .kit-item {
+            padding: 10px;
+            border-bottom: 1px solid #444;
+        }
+        .kit-actions button {
+            width: auto;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .info-modal {
+            background-color: #444;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            display: none; /* Ocultar por defecto */
+        }
+        .info-modal.visible {
+            display: block; /* Mostrar cuando sea necesario */
         }
     </style>
-
-    <!-- Incluir el script de Items.js -->
-    <script src="Items.js"></script>
-    <script>
-        // Variables para almacenar los comandos de los kits
-        let commands = {};
-
-        // Función para cargar items desde Items.js
-        function loadItems(category) {
-            const items = getItemsByCategory(category); // Función de Items.js
-            const itemList = document.getElementById('item_list');
-            itemList.innerHTML = ''; // Limpiar lista
-
-            // Añadir opciones de items
-            items.forEach(item => {
-                const option = document.createElement('option');
-                option.value = item.id;
-                option.textContent = item.name;
-                itemList.appendChild(option);
-            });
-        }
-
-        // Función para añadir ítem al kit
-        function addKit() {
-            const kitName = document.getElementById('kit_name_input').value || document.getElementById('kit_name').value;
-            const item = document.getElementById('item_list').value;
-            const cantidad = 1; // Ajustable
-            const location = 'main'; // Cambiar por wear, belt, main según elección
-            const cmd = `kit add "${kitName}" "${item}" ${cantidad} 1 ${location}`;
-
-            // Añadir comando al kit
-            if (!commands[kitName]) {
-                commands[kitName] = [];
-            }
-            commands[kitName].push(cmd);
-
-            // Mostrar kit en lista
-            renderKitList(kitName);
-        }
-
-        // Función para renderizar la lista del kit
-        function renderKitList(kitName) {
-            const kitList = document.getElementById('kit_list');
-            kitList.innerHTML = ''; // Limpiar lista previa
-
-            commands[kitName].forEach(cmd => {
-                const listItem = document.createElement('div');
-                listItem.className = 'kit-item';
-                listItem.textContent = cmd;
-
-                const actionsDiv = document.createElement('div');
-                actionsDiv.className = 'kit-actions';
-
-                // Botón de editar
-                const editBtn = document.createElement('button');
-                editBtn.textContent = 'Editar';
-                editBtn.onclick = () => editKit(kitName, cmd);
-                actionsDiv.appendChild(editBtn);
-
-                // Botón de eliminar
-                const deleteBtn = document.createElement('button');
-                deleteBtn.textContent = 'Eliminar';
-                deleteBtn.onclick = () => deleteKit(kitName, cmd);
-                actionsDiv.appendChild(deleteBtn);
-
-                // Añadir botones y comando a la lista
-                listItem.appendChild(actionsDiv);
-                kitList.appendChild(listItem);
-            });
-        }
-
-        // Función para editar un kit
-        function editKit(kitName, cmd) {
-            const newCmd = prompt("Edita el comando del kit:", cmd);
-            if (newCmd) {
-                const index = commands[kitName].indexOf(cmd);
-                commands[kitName][index] = newCmd;
-                renderKitList(kitName);
-            }
-        }
-
-        // Función para eliminar un ítem del kit
-        function deleteKit(kitName, cmd) {
-            const confirmDelete = confirm("¿Estás seguro de que quieres eliminar este ítem del kit?");
-            if (confirmDelete) {
-                commands[kitName] = commands[kitName].filter(c => c !== cmd);
-                renderKitList(kitName);
-            }
-        }
-    </script>
 </head>
 <body>
     <div class="container">
         <h1>Generador de Kits</h1>
 
-        <!-- Selección o escritura de nombre del kit -->
-        <label for="kit_name_input">Escribe un nombre para tu kit o selecciona uno de Kaosbot:</label>
-        <input type="text" id="kit_name_input" placeholder="Escribe el nombre del kit...">
-
-        <label for="kit_name">O selecciona un nombre de Kaosbot:</label>
-        <select id="kit_name">
-            <option value="">Selecciona un kit de Kaosbot</option>
-            <option value="Freekit">Freekit</option>
-            <option value="Freekit2">Freekit2</option>
-            <option value="VIPKit">VIPKit</option>
-            <option value="Elitekit1">Elitekit1</option>
-            <option value="Elitekit2">Elitekit2</option>
-            <option value="Elitekit3">Elitekit3</option>
-            <option value="Elitekit4">Elitekit4</option>
-            <option value="Elitekit5">Elitekit5</option>
-            <option value="Elitekit6">Elitekit6</option>
-            <option value="Elitekit7">Elitekit7</option>
-            <option value="Elitekit8">Elitekit8</option>
-            <option value="Elitekit9">Elitekit9</option>
-            <option value="Elitekit10">Elitekit10</option>
-            <option value="Elitekit11">Elitekit11</option>
-            <option value="Elitekit12">Elitekit12</option>
-            <option value="Elitekit13">Elitekit13</option>
-            <option value="Elitekit14">Elitekit14</option>
-            <option value="Elitekit15">Elitekit15</option>
-            <option value="Elitekit16">Elitekit16</option>
-            <option value="Elitekit17">Elitekit17</option>
-            <option value="Elitekit18">Elitekit18</option>
-            <option value="Elitekit19">Elitekit19</option>
-            <option value="Elitekit20">Elitekit20</option>
-            <option value="Elitekit21">Elitekit21</option>
-            <option value="Elitekit22">Elitekit22</option>
+        <!-- Nombre del kit (escribible o seleccionable de kaosbot) -->
+        <label for="kit_name">Escribe el nombre del kit o selecciona uno de kaosbot:</label>
+        <input type="text" id="kit_name" placeholder="Escribe el nombre del kit">
+        <select id="kaosbot_list" onchange="selectKaosbot()">
+            <option value="">Selecciona un kit de kaosbot</option>
+            <option value="freekit">freekit</option>
+            <option value="freekit2">freekit2</option>
+            <option value="vipkit">vipkit</option>
+            <option value="elitekit1">elitekit1</option>
+            <option value="elitekit2">elitekit2</option>
+            <option value="elitekit3">elitekit3</option>
+            <option value="elitekit4">elitekit4</option>
+            <option value="elitekit5">elitekit5</option>
+            <option value="elitekit6">elitekit6</option>
+            <option value="elitekit7">elitekit7</option>
+            <option value="elitekit8">elitekit8</option>
+            <option value="elitekit9">elitekit9</option>
+            <option value="elitekit10">elitekit10</option>
+            <option value="elitekit11">elitekit11</option>
+            <option value="elitekit12">elitekit12</option>
+            <option value="elitekit13">elitekit13</option>
+            <option value="elitekit14">elitekit14</option>
+            <option value="elitekit15">elitekit15</option>
+            <option value="elitekit16">elitekit16</option>
+            <option value="elitekit17">elitekit17</option>
+            <option value="elitekit18">elitekit18</option>
+            <option value="elitekit19">elitekit19</option>
+            <option value="elitekit20">elitekit20</option>
+            <option value="elitekit21">elitekit21</option>
+            <option value="elitekit22">elitekit22</option>
         </select>
 
-        <!-- Selección de categoría de ítem -->
-        <label for="item_category">Selecciona la categoría del ítem:</label>
-        <select id="item_category" onchange="loadItems(this.value)">
+        <!-- Selección de categoría -->
+        <label for="category_list">Selecciona una categoría:</label>
+        <select id="category_list" onchange="filterItemsByCategory()">
             <option value="">Selecciona una categoría</option>
-            <option value="Weapons">Armas</option>
-            <option value="Ammo">Municiones</option>
-            <option value="Clothing">Ropa</option>
-            <option value="Resources">Recursos</option>
-            <option value="Misc">Varios</option>
-            <!-- Añade más categorías si es necesario -->
+            <option value="ammo">Ammo</option>
+            <option value="weapons">Weapons</option>
+            <option value="tools">Tools</option>
+            <!-- Más categorías según Items.js -->
         </select>
 
-                <!-- Selección de ítem -->
+        <!-- Selección de ítem -->
         <label for="item_list">Selecciona un ítem:</label>
         <select id="item_list">
             <option value="">Selecciona un ítem</option>
-            <!-- Los ítems se cargarán aquí dinámicamente según la categoría seleccionada -->
+            <!-- Los ítems filtrados aparecerán aquí dinámicamente -->
+        </select>
+
+        <!-- Cantidad de ítem -->
+        <label for="item_quantity">Cantidad:</label>
+        <input type="number" id="item_quantity" value="1" min="1">
+
+        <!-- Selección de ubicación -->
+        <label for="location_list">Selecciona la ubicación del ítem:</label>
+        <select id="location_list">
+            <option value="main">Inventario</option>
+            <option value="wear">Equipado</option>
+            <option value="belt">Cinturón</option>
         </select>
 
         <!-- Botón para agregar ítem al kit -->
-        <button onclick="addKit()">Añadir ítem al kit</button>
+        <button onclick="addItemToKit()">Agregar ítem al kit</button>
 
-        <!-- Listado de ítems en el kit -->
-        <div class="kit-list" id="kit_list"></div>
-
+        <!-- Mostrar la lista de kits generados -->
+        <div class="kit-list" id="kit_list">
+            <h2>Kits Generados</h2>
+            <!-- Aquí se mostrarán los kits generados -->
+        </div>
     </div>
 
-    <!-- Script para Items.js (ejemplo de cómo podría estar implementado) -->
     <script>
-        // Simulación del archivo Items.js con categorías y ítems
-        function getItemsByCategory(category) {
-            const items = {
-                "Weapons": [
-                    { id: "rifle_ak47", name: "AK-47" },
-                    { id: "pistol_revolver", name: "Revolver" },
-                    { id: "bow_hunting", name: "Arco de caza" }
-                ],
-                "Ammo": [
-                    { id: "ammo_rifle", name: "Munición de rifle" },
-                    { id: "ammo_pistol", name: "Munición de pistola" }
-                ],
-                "Clothing": [
-                    { id: "helmet_metal", name: "Casco de metal" },
-                    { id: "vest_kevlar", name: "Chaleco de Kevlar" }
-                ],
-                "Resources": [
-                    { id: "stone", name: "Piedra" },
-                    { id: "wood", name: "Madera" }
-                ],
-                "Misc": [
-                    { id: "map", name: "Mapa" },
-                    { id: "compass", name: "Brújula" }
-                ]
-            };
-            return items[category] || [];
-        }
-    </script>
+        const commands = {}; // Aquí almacenaremos los kits generados
+        let items = {}; // Para almacenar los ítems disponibles (Items.js)
 
+        // Cargar ítems de Items.js
+        function loadItems() {
+            // Simulamos la carga de ítems de Items.js
+            items = {
+                "ammo": ["rocket", "bullet", "grenade"],
+                "weapons": ["ak47", "mp5", "crossbow"],
+                "tools": ["hatchet", "pickaxe", "hammer"],
+                // Agrega más categorías e ítems según sea necesario
+            };
+        }
+
+        // Filtrar ítems por categoría seleccionada
+        function filterItemsByCategory() {
+            const category = document.getElementById('category_list').value;
+            const itemList = document.getElementById('item_list');
+            itemList.innerHTML = ''; // Limpiar ítems previos
+
+            if (category && items[category]) {
+                items[category].forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item;
+                    option.textContent = item;
+                    itemList.appendChild(option);
+                });
+            }
+        }
+
+        // Seleccionar nombre de kaosbot
+        function selectKaosbot() {
+            const kaosbotName = document.getElementById('kaosbot_list').value;
+            if (kaosbotName) {
+                document.getElementById('kit_name').value = kaosbotName;
+            }
+        }
+
+        // Agregar ítem al kit
+        function addItemToKit() {
+            const kitName = document.getElementById('kit_name').value.trim();
+            const item = document.getElementById('item_list').value;
+            const quantity = document.getElementById('item_quantity').value;
+            const location = document.getElementById('location_list').value;
+
+            if (!kitName || !item) {
+                alert("Debes seleccionar un ítem y escribir el nombre del kit.");
+                return;
+            }
+
+            if (!commands[kitName]) {
+                commands[kitName] = [];
+            }
+
+            // Formato del kit: kit add "nombredelkit" "item" "cantidad" "1" "location"
+            const command = `kit add "${kitName}" "${item}" ${quantity} 1 "${location}"`;
+            commands[kitName].push(command);
+
+            displayKits();
+        }
+
+        // Mostrar los kits generados
+        function displayKits() {
+            const kitList = document.getElementById('kit_list');
+            kitList.innerHTML = '<h2>Kits Generados</h2>';
+
+            for (const kitName in commands) {
+                const kitItem = document.createElement('div');
+                kitItem.className = 'kit-item';
+                kitItem.innerHTML = `
+                    <strong>${kitName}</strong>: 
+                    <div>${commands[kitName].join('<br>')}</div>
+                    <div class="kit-actions">
+                        <button onclick="showInfo('${kitName}')">(+info)</button>
+                        <button onclick="editKit('${kitName}')">Editar</button>
+                        <button onclick="copyKit('${kitName}')">Copiar</button>
+                                                <button onclick="deleteKit('${kitName}')">Eliminar</button>
+                    </div>
+                    <div id="info-${kitName}" class="info-modal"></div>
+                `;
+                kitList.appendChild(kitItem);
+            }
+        }
+
+        // Mostrar información detallada sobre el kit
+        function showInfo(kitName) {
+            const infoModal = document.getElementById(`info-${kitName}`);
+            const itemDetails = commands[kitName];
+            const itemCount = {};
+            
+            // Contar cantidad de ítems y su ubicación
+            itemDetails.forEach(command => {
+                const parts = command.match(/"([^"]+)" "([^"]+" \d+) \d+ "([^"]+)"/);
+                if (parts) {
+                    const item = parts[2];
+                    const location = parts[3];
+                    itemCount[item] = itemCount[item] || { count: 0, location: location };
+                    itemCount[item].count += parseInt(parts[2].match(/\d+/)[0]);
+                }
+            });
+
+            // Mostrar información
+            let infoContent = `<strong>Detalles del Kit:</strong><br>`;
+            for (const item in itemCount) {
+                infoContent += `x${itemCount[item].count} ${item} en ${itemCount[item].location}<br>`;
+            }
+            infoModal.innerHTML = infoContent;
+            infoModal.classList.toggle('visible');
+        }
+
+        // Editar kit seleccionado
+        function editKit(kitName) {
+            const newKitName = prompt("Introduce un nuevo nombre para el kit:", kitName);
+            if (newKitName && newKitName !== kitName) {
+                commands[newKitName] = commands[kitName];
+                delete commands[kitName];
+                displayKits();
+            }
+        }
+
+        // Copiar kit seleccionado
+        function copyKit(kitName) {
+            const newKitName = prompt("Introduce un nuevo nombre para la copia del kit:", `${kitName} copia`);
+            if (newKitName) {
+                commands[newKitName] = [...commands[kitName]];
+                displayKits();
+            }
+        }
+
+        // Eliminar kit seleccionado
+        function deleteKit(kitName) {
+            if (confirm(`¿Estás seguro de que deseas eliminar el kit "${kitName}"?`)) {
+                delete commands[kitName];
+                displayKits();
+            }
+        }
+
+        // Cargar ítems al iniciar la página
+        window.onload = loadItems;
+    </script>
 </body>
 </html>
