@@ -88,9 +88,9 @@
     <h1>Generador de Kits</h1>
 
     <div class="section">
-        <h2>Selecciona una sección:</h2>
-        <select id="sectionSelect" onchange="updateItemList()">
-            <option value="none">Seleccione una sección</option>
+        <h2>Selecciona una categoría:</h2>
+        <select id="categorySelect" onchange="updateItemList()">
+            <option value="none">Seleccione una categoría</option>
             <option value="ammo">Munición</option>
             <option value="weapons">Armas</option>
             <option value="construction">Construcción</option>
@@ -184,7 +184,7 @@
         });
 
         function updateItemList() {
-            const section = document.getElementById('sectionSelect').value;
+            const section = document.getElementById('categorySelect').value;
             const itemSelect = document.getElementById('itemSelect');
 
             // Limpiar las opciones actuales
@@ -208,7 +208,7 @@
             const selectedItemId = itemSelect.value;
             const selectedItemDetails = document.getElementById('itemDetails');
 
-                        const section = document.getElementById('sectionSelect').value;
+                        const section = document.getElementById('categorySelect').value;
 
             if (selectedItemId !== "none") {
                 const selectedItem = items[section].find(item => item.id === selectedItemId);
@@ -258,7 +258,7 @@
                 commands.push(...JSON.parse(savedCommands)); // Cargar los comandos en el array
                 displayCommands(); // Mostrar comandos al cargar la página
             }
-            document.getElementById('sectionSelect').addEventListener('change', updateItemList); // Actualizar lista de ítems al cambiar la sección
+            document.getElementById('categorySelect').addEventListener('change', updateItemList); // Actualizar lista de ítems al cambiar la categoría
         };
     </script>
     <footer>
