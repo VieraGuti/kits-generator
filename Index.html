@@ -94,29 +94,32 @@
 
         /* Estilo para el inventario */
         .inventory {
-            display: none; /* Oculto por defecto */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             margin-top: 20px;
-            background-color: #333;
-            padding: 10px;
-            border-radius: 10px;
             border: 2px solid #FF4500;
+            border-radius: 10px;
+            padding: 10px;
         }
 
-        .inventory-section {
+        .slots {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
             margin-bottom: 10px;
         }
 
-        .inventory-slot {
-            width: 60px;
-            height: 60px;
-            border: 1px solid #FF4500;
-            display: inline-block;
-            position: relative;
-            margin: 2px;
+        .slot {
+            width: 50px;
+            height: 50px;
             background-color: #444;
+            border: 2px solid #FF4500;
+            border-radius: 5px;
+            position: relative;
         }
 
-        .inventory-slot img {
+        .slot img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -126,9 +129,9 @@
             position: absolute;
             bottom: 2px;
             right: 2px;
-            font-size: 0.7em;
-            color: #fff;
             background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            font-size: 0.7em;
             padding: 2px;
             border-radius: 3px;
         }
@@ -169,11 +172,11 @@
 
     <label for="kaosbot_kits">Select a KaosBot name:</label>
     <select id="kaosbot_kits">
-        <option value="none">Select a kit name:</option>
+        <option value="none">Select a kitname:</option>
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
-        <option value="elitekit1">elitekit</option>
+        <option value="elitekit1">elitekit1</option>
         <option value="elitekit2">elitekit2</option>
         <option value="elitekit3">elitekit3</option>
         <option value="elitekit4">elitekit4</option>
@@ -211,56 +214,47 @@
     
     <div id="kit_list"></div>
     <div id="command_list"></div>
-
-    <div id="inventory" class="inventory">
-        <div class="inventory-section">
-            <h3>Wear</h3>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-        </div>
-        <div class="inventory-section">
-            <h3>Main</h3>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-        </div>
-        <div class="inventory-section">
+    
+    <div id="inventory" class="inventory" style="display: none;">
+        <h2>Inventory Preview</h2>
+        <div class="slots" id="belt_slots">
             <h3>Belt</h3>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
+            <!-- Slots de Belt -->
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
         </div>
-        <button onclick="hideInventory()">Hide Inventory</button>
+        <div class="slots" id="main_slots">
+            <h3>Main</h3>
+            <!-- Slots de Main -->
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+        </div>
     </div>
 
     <script src="Items.js"></script>
@@ -338,7 +332,6 @@
                 kitItem.innerHTML = `
                     <strong>${kit.name}</strong>
                     <button onclick="showKitDetails('${kit.name}')">Show kit</button>
-                    <button onclick="showInventory('${kit.name}')">+ Info</button>
                 `;
                 kitListContainer.appendChild(kitItem);
             });
@@ -358,81 +351,58 @@
                     <div>${kit.commands.join('<br>')}</div>
                     <button onclick="copyKits('${kit.name}')">Copy Command</button>
                     <button onclick="toggleKitList()">Hide list</button>
+                    <button onclick="showInfo('${kit.name}')">+Info</button>
+                    <div id="info_${kit.name}" style="display:none;"></div>
                 `;
                 commandList.appendChild(kitDetails);
             }
         }
 
-        // Función para mostrar el inventario
-        function showInventory(kitName) {
+        // Función para mostrar la información de los items en el inventario
+        function showInfo(kitName) {
             const kit = predefinedKits.find(k => k.name === kitName);
-            const inventory = document.getElementById('inventory');
-            inventory.style.display = 'block'; // Mostrar inventario
-            const slots = {
-                "Wear": document.querySelectorAll('.inventory-section:nth-child(1) .inventory-slot'),
-                "Main": document.querySelectorAll('.inventory-section:nth-child(2) .inventory-slot'),
-                "Belt": document.querySelectorAll('.inventory-section:nth-child(3) .inventory-slot')
-            };
+            const infoDiv = document.getElementById(`info_${kitName}`);
+            infoDiv.innerHTML = ''; // Limpiar contenido anterior
+            infoDiv.style.display = 'block'; // Mostrar div de información
 
-            // Limpiar el inventario antes de llenarlo
-            for (const key in slots) {
-                slots[key].forEach(slot => {
-                    slot.innerHTML = ''; // Limpiar slots
-                });
-            }
+            if (kit) {
+                const inventoryDiv = document.createElement('div');
+                inventoryDiv.className = 'inventory-preview';
 
-            // Agregar los items del kit al inventario
-            kit.commands.forEach(command => {
-                const parts = command.match(/"([^"]+)" (\d+) (\d+) "([^"]+)"/); // extraer info
-                if (parts) {
-                    const id = parts[1]; // ID del item
-                    const quantity = parts[2]; // Cantidad
-                    const location = parts[4]; // Ubicación
-                    const imageUrl = `images/${id}.png`; // URL de la imagen
+                // Crear slots para el inventario
+                kit.commands.forEach(command => {
+                    const parts = command.split('"'); // Extraer id
+                    const itemId = parts[1];
+                    const location = parts[3]; // "Wear", "Belt" o "Main"
+                    const quantity = parts[2];
 
-                    // Agregar la imagen al slot correspondiente
+                    const slot = document.createElement('div');
+                    slot.className = 'slot';
+
                     const img = document.createElement('img');
-                    img.src = imageUrl;
-                    img.alt = id;
+                    img.src = `images/${itemId}.png`; // Ruta de la imagen
+                    img.alt = itemId; // Texto alternativo
+                    slot.appendChild(img);
 
-                    const quantityLabel = document.createElement('span');
-                    quantityLabel.className = 'quantity';
-                    quantityLabel.textContent = `x${quantity}`;
+                    const quantityDiv = document.createElement('div');
+                    quantityDiv.className = 'quantity';
+                    quantityDiv.textContent = `x${quantity}`; // Mostrar cantidad
+                    slot.appendChild(quantityDiv);
 
-                    // Determinar dónde agregar el ítem
+                    // Añadir el slot a la sección correspondiente
                     if (location === "Wear") {
-                        for (let i = 0; i < slots["Wear"].length; i++) {
-                            if (slots["Wear"][i].children.length < 1) { // Se asegura de que el slot esté vacío
-                                slots["Wear"][i].appendChild(img);
-                                slots["Wear"][i].appendChild(quantityLabel);
-                                break;
-                            }
-                        }
+                        // Añadir a la sección de Wear
+                        document.getElementById('belt_slots').appendChild(slot);
                     } else if (location === "Main") {
-                        for (let i = 0; i < slots["Main"].length; i++) {
-                            if (slots["Main"][i].children.length < 1) {
-                                slots["Main"][i].appendChild(img);
-                                slots["Main"][i].appendChild(quantityLabel);
-                                break;
-                            }
-                        }
+                        // Añadir a la sección de Main
+                        document.getElementById('main_slots').appendChild(slot);
                     } else if (location === "Belt") {
-                        for (let i = 0; i < slots["Belt"].length; i++) {
-                            if (slots["Belt"][i].children.length < 1) {
-                                slots["Belt"][i].appendChild(img);
-                                slots["Belt"][i].appendChild(quantityLabel);
-                                break;
-                            }
-                        }
+                        // Añadir a la sección de Belt
+                        document.getElementById('belt_slots').appendChild(slot);
                     }
-                }
-            });
-        }
-
-        // Función para ocultar el inventario
-        function hideInventory() {
-            const inventory = document.getElementById('inventory');
-            inventory.style.display = 'none'; // Ocultar inventario
+                });
+                infoDiv.appendChild(inventoryDiv);
+            }
         }
 
         // Función para ocultar la lista
@@ -497,6 +467,9 @@
             displayCommands();
             document.getElementById('item_list').value = 'none'; // Reiniciar la selección de ítems
             showItemDetails(); // Limpiar detalles de ítem
+
+            // Actualizar el inventario en tiempo real
+            updateInventory();
         }
 
         function displayCommands() {
@@ -515,7 +488,7 @@
                         <button onclick="copyCommands('${kit.name}')">Copy</button>
                         <button onclick="editKit('${kit.name}')">Edit</button>
                         <button onclick="deleteKit('${kit.name}')">Delete</button>
-                        <button onclick="showInventory('${kit.name}')">+ Info</button>
+                        <button onclick="showInfo('${kit.name}')">+Info</button>
                     </div>
                 `;
                 commandList.appendChild(kitItem);
