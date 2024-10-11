@@ -82,18 +82,14 @@
 
         /* Estilo para el inventario simulado */
         #inventory {
+            display: none;
             margin-top: 20px;
-            border: 2px solid #FF4500; /* Borde del inventario */
-            padding: 10px; /* Espaciado interno */
-            border-radius: 10px; /* Bordes redondeados */
-            background-color: #292929; /* Fondo del inventario */
         }
 
         .slots {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between; /* Espaciado entre slots */
-            margin-bottom: 10px;
+            margin: 10px 0;
         }
 
         .slot {
@@ -104,7 +100,9 @@
             border: 2px solid #FF4500; /* Borde de los slots */
             border-radius: 5px;
             position: relative; /* Posición relativa para los elementos internos */
-            text-align: center; /* Centrar contenido */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .slot img {
@@ -162,7 +160,7 @@
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
-        <option value="elitekit1">elitekit1</option>
+        <option value="elitekit1">elitekit</option>
         <option value="elitekit2">elitekit2</option>
         <option value="elitekit3">elitekit3</option>
         <option value="elitekit4">elitekit4</option>
@@ -201,17 +199,21 @@
     <div id="kit_list"></div>
     <div id="command_list"></div>
     
-    <div id="inventory" style="display:none;">
+    <div id="inventory">
         <h3>Simulated Inventory</h3>
-        <div class="slots">
+        <div id="wear_section">
             <h4>Wear</h4>
             <div id="wear_slots" class="slots"></div>
+        </div>
+        <div id="main_section">
             <h4>Main</h4>
             <div id="main_slots" class="slots"></div>
+        </div>
+        <div id="belt_section">
             <h4>Belt</h4>
             <div id="belt_slots" class="slots"></div>
         </div>
-        <button onclick="toggleInventory()">Hide Inventory</button>
+        <button onclick="hideInventory()">Hide</button>
     </div>
 
     <script src="Items.js"></script>
@@ -336,7 +338,7 @@
                     const parts = command.split('"');
                     const itemId = parts[1].trim();
                     const location = parts[3].trim();
-                    const quantity = parts[2].trim();
+                    const quantity = parseInt(parts[2].trim(), 10);
 
                     const slot = document.createElement('div');
                     slot.className = 'slot';
@@ -373,12 +375,12 @@
             const kit = predefinedKits.find(k => k.name === kitName);
             if (kit) {
                 const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('\n');
+                tempInput.value = kit.commands.join('\n'); // Asegurarse de que esté separado por líneas
                 document.body.appendChild(tempInput);
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Commands copied: ' + kit.commands.join('\n')); // Mensaje de confirmación
+                alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Mensaje de confirmación
             }
         }
 
@@ -460,7 +462,7 @@
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Commands copied: ' + kit.commands.join('\n')); // Espacios en el mensaje de alerta
+                alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Espacios en el mensaje de alerta
             }
         }
 
@@ -511,17 +513,13 @@
             }
         }
 
-        function toggleInventory() {
+        function hideInventory() {
             const inventory = document.getElementById('inventory');
-            if (inventory.style.display === 'none') {
-                inventory.style.display = 'block';
-            } else {
-                inventory.style.display = 'none';
-            }
+            inventory.style.display = 'none'; // Ocultar el inventario
         }
     </script>
     <footer>
-        <p>Hecho por VieraGuti</p>
+        <p>Made by VieraGuti</p>
     </footer>
 </body>
 </html>
