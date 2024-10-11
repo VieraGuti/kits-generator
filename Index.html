@@ -131,7 +131,7 @@
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
-        <option value="elitekit1">elitekit</option>
+        <option value="elitekit1">elitekit1</option>
         <option value="elitekit2">elitekit2</option>
         <option value="elitekit3">elitekit3</option>
         <option value="elitekit4">elitekit4</option>
@@ -284,7 +284,7 @@
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Comando copiado: ' + kit.commands.join('\n'));
+                alert('Comando copiado:\n' + kit.commands.join('\n'));
             }
         }
 
@@ -368,7 +368,7 @@
         }
 
         function deleteKit(kitName) {
-            if (confirm(`You are going to delete the entire list from "${kitName}". You're sure?`)) {
+            if (confirm(`You are going to delete the entire list from "${kitName}". Are you sure?`)) {
                 const kitIndex = commands.findIndex(k => k.name === kitName);
                 if (kitIndex !== -1) {
                     commands.splice(kitIndex, 1); // Borrar el kit del array
