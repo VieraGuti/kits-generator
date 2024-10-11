@@ -1,247 +1,219 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Kits</title>
-    <style>
-        body {
-            font-family: 'Courier New', monospace; /* Cambiar a una fuente estilo rust */
-            background-color: #292929; /* Fondo oscuro */
-            color: #FFA500; /* Color texto estilo Rust (naranja) */
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-        select, input {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0 15px;
-            border: 1px solid #FFA500;
-            border-radius: 5px;
-            background-color: #3c3c3c; /* Fondo de entrada oscuro */
-            color: #FFA500; /* Color texto de entrada */
-        }
-        button {
-            background-color: #FFA500; /* Color de fondo de botones */
-            color: #292929; /* Color de texto de botones */
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        button:hover {
-            background-color: #FFD700; /* Color al pasar el ratón por encima */
-        }
-        .kit-item {
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #FFA500;
-            border-radius: 5px;
-        }
-        .info-modal {
-            display: none;
-            background-color: rgba(0,0,0,0.8);
-            color: #FFA500;
-            padding: 20px;
-            margin: 10px 0;
-            border-radius: 5px;
-        }
-        .info-modal.visible {
-            display: block;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Kits - Estilo Rust</title>
+  <style>
+    body {
+      background-color: #1e1e1e;
+      font-family: 'Roboto', sans-serif;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1 {
+      color: #f39c12;
+      margin-top: 20px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-around;
+      width: 80%;
+      padding: 20px;
+    }
+
+    .items-list, .command-list {
+      background-color: #2c2c2c;
+      border: 2px solid #333;
+      padding: 20px;
+      border-radius: 8px;
+      width: 45%;
+      height: 300px;
+      overflow-y: auto;
+    }
+
+    .item, .command {
+      padding: 10px;
+      border-bottom: 1px solid #444;
+      cursor: pointer;
+    }
+
+    .item:hover, .command:hover {
+      background-color: #333;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .controls label {
+      margin-top: 10px;
+    }
+
+    .controls input, .controls select {
+      padding: 5px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .copy-btn {
+      margin-top: 20px;
+      background-color: #f39c12;
+      border: none;
+      color: #fff;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .copy-btn:hover {
+      background-color: #e67e22;
+    }
+  </style>
 </head>
 <body>
-    <h1>Generador de Kits</h1>
-    <label for="kit_name">Escribe nombre del kit o selecciona uno de kaosbot:</label>
-    <input type="text" id="kit_name" placeholder="Nombre del kit">
-    <select id="kaosbot_list">
-        <option value="">Seleccionar Kit</option>
-        <option value="freekit">freekit</option>
-        <option value="freekit2">freekit2</option>
-        <option value="vipkit">vipkit</option>
-        <option value="elitekit1">elitekit1</option>
-        <option value="elitekit2">elitekit2</option>
-        <option value="elitekit3">elitekit3</option>
-        <option value="elitekit4">elitekit4</option>
-        <option value="elitekit5">elitekit5</option>
-        <option value="elitekit6">elitekit6</option>
-        <option value="elitekit7">elitekit7</option>
-        <option value="elitekit8">elitekit8</option>
-        <option value="elitekit9">elitekit9</option>
-        <option value="elitekit10">elitekit10</option>
-        <option value="elitekit11">elitekit11</option>
-        <option value="elitekit12">elitekit12</option>
-        <option value="elitekit13">elitekit13</option>
-        <option value="elitekit14">elitekit14</option>
-        <option value="elitekit15">elitekit15</option>
-        <option value="elitekit16">elitekit16</option>
-        <option value="elitekit17">elitekit17</option>
-        <option value="elitekit18">elitekit18</option>
-        <option value="elitekit19">elitekit19</option>
-        <option value="elitekit20">elitekit20</option>
-        <option value="elitekit21">elitekit21</option>
-        <option value="elitekit22">elitekit22</option>
+
+  <h1>Generador de Kits</h1>
+
+  <!-- Controles para ingresar el nombre del kit y las opciones KaosBot -->
+  <div class="controls">
+    <label for="kitName">Nombre del Kit:</label>
+    <input type="text" id="kitName" placeholder="Ej. elpepe">
+
+    <label for="kaosbotList">O seleccionar de la lista KaosBot:</label>
+    <select id="kaosbotList">
+      <option value="">Ninguno</option>
+      <!-- Aquí añadimos todas las opciones de KaosBot -->
+      <option value="freekit">freekit</option>
+      <option value="freekit2">freekit2</option>
+      <option value="vipkit">vipkit</option>
+      <option value="elitekit">elitekit</option>
+      <!-- Añadir todas las opciones hasta elitekit22 -->
+      <option value="elitekit2">elitekit2</option>
+      <option value="elitekit3">elitekit3</option>
+      <option value="elitekit4">elitekit4</option>
+      <option value="elitekit5">elitekit5</option>
+      <option value="elitekit6">elitekit6</option>
+      <option value="elitekit7">elitekit7</option>
+      <option value="elitekit8">elitekit8</option>
+      <option value="elitekit9">elitekit9</option>
+      <option value="elitekit10">elitekit10</option>
+      <option value="elitekit11">elitekit11</option>
+      <option value="elitekit12">elitekit12</option>
+      <option value="elitekit13">elitekit13</option>
+      <option value="elitekit14">elitekit14</option>
+      <option value="elitekit15">elitekit15</option>
+      <option value="elitekit16">elitekit16</option>
+      <option value="elitekit17">elitekit17</option>
+      <option value="elitekit18">elitekit18</option>
+      <option value="elitekit19">elitekit19</option>
+      <option value="elitekit20">elitekit20</option>
+      <option value="elitekit21">elitekit21</option>
+      <option value="elitekit22">elitekit22</option>
     </select>
 
-    <label for="item_list">Selecciona un ítem:</label>
-    <select id="item_list"></select>
-
-    <label for="item_quantity">Escribe una cantidad:</label>
-    <input type="number" id="item_quantity" value="1" min="1">
-
-    <label for="item_location">Selecciona la ubicación:</label>
-    <select id="item_location">
-        <option value="main">Inventario</option>
-        <option value="wear">Equipado</option>
-        <option value="belt">Cinturón</option>
+    <label for="location">Ubicación:</label>
+    <select id="location">
+      <option value="Main">Main (Inventario)</option>
+      <option value="Belt">Belt (Cinturón)</option>
+      <option value="Wear">Wear (Ropa)</option>
     </select>
 
-    <button onclick="addKit()">Agregar Kit</button>
+    <label for="quantity">Cantidad:</label>
+    <input type="number" id="quantity" value="1" min="1">
+  </div>
 
-    <h2>Lista de Kits</h2>
-    <div id="kit_list"></div>
+  <div class="container">
+    <!-- Lista de items -->
+    <div class="items-list">
+      <h2>Items</h2>
+      <!-- Aquí se cargarán los items dinámicamente -->
+    </div>
 
-    <script>
-        let commands = {};
+    <!-- Comandos generados -->
+    <div class="command-list">
+      <h2>Comandos Generados</h2>
+      <!-- Aquí se mostrarán los comandos generados -->
+    </div>
+  </div>
 
-        // Cargar los ítems desde Items.js
-        async function loadItems() {
-            const response = await fetch('Items.js'); // Asegúrate de que el archivo esté disponible en el mismo directorio
-            const items = await response.json();
-            const itemList = document.getElementById('item_list');
+  <button class="copy-btn">Copiar Comandos</button>
 
-            // Añadir opciones de ítems a la lista
-            for (const category in items) {
-                items[category].forEach(item => {
-                    const option = document.createElement('option');
-                    option.value = item.id;
-                    option.textContent = item.name; // Asumiendo que Items.js tiene 'id' y 'name'
-                    itemList.appendChild(option);
-                });
-            }
-        }
+  <script>
+    const items = window.items;
 
-        // Agregar un kit
-        function addKit() {
-            const kitNameInput = document.getElementById('kit_name');
-            const selectedKit = document.getElementById('kaosbot_list').value;
-            const kitName = kitNameInput.value || selectedKit;
+    const itemContainer = document.querySelector('.items-list');
+    const commandList = document.querySelector('.command-list');
+    const copyBtn = document.querySelector('.copy-btn');
 
-            const itemId = document.getElementById('item_list').value;
-            const quantity = document.getElementById('item_quantity').value;
-            const location = document.getElementById('item_location').value;
+    // Cargar dinámicamente los items desde el archivo items.js
+    Object.keys(items).forEach(category => {
+      const categoryTitle = document.createElement('h3');
+      categoryTitle.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+      itemContainer.appendChild(categoryTitle);
 
-            if (kitName && itemId && quantity) {
-                const cmd = `kit add "${kitName}" "${itemId}" "${quantity}" 1 "${location}"`;
-                
-                // Agrupar kits con el mismo nombre
-                commands[kitName] = commands[kitName] || [];
-                commands[kitName].push(cmd);
+      items[category].forEach(item => {
+        const itemElement = document.createElement('div');
+        itemElement.classList.add('item');
+        itemElement.textContent = `${item.name} (ID: ${item.id})`;
+        itemElement.dataset.id = item.id;
+        itemContainer.appendChild(itemElement);
 
-                // Mostrar la lista de kits
-                displayKits();
-                kitNameInput.value = ''; // Limpiar entrada de nombre del kit
-                document.getElementById('item_quantity').value = 1; // Resetear cantidad
-            } else {
-                alert("Por favor, completa todos los campos.");
-            }
-        }
+        itemElement.addEventListener('click', () => {
+          const itemId = itemElement.dataset.id;
+          const kitName = document.querySelector('#kitName').value;
+          const kaosbotOption = document.querySelector('#kaosbotList').value;
+          const location = document.querySelector('#location').value;
+          const quantity = document.querySelector('#quantity').value || 1;
 
-        // Mostrar la lista de kits
-        function displayKits() {
-            const kitList = document.getElementById('kit_list');
-            kitList.innerHTML = ''; // Limpiar lista existente
+          // Determinar si usar el nombre del kit o la opción de KaosBot
+          const finalKitName = kaosbotOption ? kaosbotOption : kitName;
 
-            for (const kitName in commands) {
-                const kitItem = document.createElement('div');
-                kitItem.className = 'kit-item';
-                kitItem.innerHTML = `
-                    <strong>${kitName}</strong>
-                    <div>${commands[kitName].join('<br>')}</div>
-                    <div class="kit-actions">
-                        <button onclick="showInfo('${kitName}')">(+info)</button>
-                        <button onclick="editKit('${kitName}')">Editar</button>
-                        <button onclick="copyKit('${kitName}')">Copiar</button>
-                        <button onclick="deleteKit('${kitName}')">Eliminar</button>
-                    </div>
-                    <div id="info-${kitName}" class="info-modal"></div>
-                `;
-                kitList.appendChild(kitItem);
-            }
-        }
+          if (!finalKitName) {
+            alert('Por favor, ingresa un nombre para el kit o selecciona una opción de KaosBot.');
+            return;
+          }
 
-        // Mostrar información del kit
-        function showInfo(kitName) {
-            const infoModal = document.getElementById(`info-${kitName}`);
-            const itemDetails = commands[kitName];
-            const itemCount = {};
+          // Formato del comando
+          const command = `kit add "${finalKitName}" "${itemId}" ${quantity} 1 ${location}`;
 
-            // Contar cantidad de ítems y su ubicación
-            itemDetails.forEach(command => {
-                const parts = command.match(/"([^"]+)" "([^"]+)" "(\d+)" \d+ "([^"]+)"/);
-                if (parts) {
-                    const item = parts[2];
-                    const location = parts[4];
-                    const quantity = parseInt(parts[3]);
+          // Crear un nuevo elemento para mostrar el comando generado
+          const commandElement = document.createElement('div');
+          commandElement.classList.add('command');
+          commandElement.textContent = command;
+          commandList.appendChild(commandElement);
+        });
+      });
+    });
 
-                    if (!itemCount[item]) {
-                        itemCount[item] = { count: 0, location: location };
-                    }
-                    itemCount[item].count += quantity;
-                }
-            });
+    // Función para copiar comandos
+    copyBtn.addEventListener('click', () => {
+      const commands = document.querySelectorAll('.command');
+      let commandText = '';
+      commands.forEach(command => {
+        commandText += command.textContent + '\n';
+      });
 
-            // Mostrar información
-            let infoContent = `<strong>Detalles del Kit:</strong><br>`;
-            for (const item in itemCount) {
-                const locationText = itemCount[item].location === 'wear' ? 'Equipado' :
-                                     itemCount[item].location === 'belt' ? 'Cinturón' : 
-                                     'Inventario';
-                infoContent += `x${itemCount[item].count} ${item} en ${locationText}<br>`;
-            }
-            infoModal.innerHTML = infoContent;
-                        infoModal.classList.toggle('visible'); // Alternar la visibilidad del modal
-        }
+      // Copiar al portapapeles
+      navigator.clipboard.writeText(commandText).then(() => {
+        alert('Comandos copiados al portapapeles.');
+      }).catch(err => {
+        console.error('Error al copiar', err);
+      });
+    });
+  </script>
 
-        // Función para editar un kit
-        function editKit(kitName) {
-            const newKitName = prompt("Nuevo nombre para el kit (actual: " + kitName + "):", kitName);
-            if (newKitName) {
-                commands[newKitName] = commands[kitName]; // Copiar comandos al nuevo nombre
-                delete commands[kitName]; // Eliminar el kit original
-                displayKits(); // Actualizar la lista de kits
-            }
-        }
-
-        // Función para copiar un kit
-        function copyKit(kitName) {
-            const newKitName = prompt("Nombre para el nuevo kit (copia de " + kitName + "):", kitName + "_copia");
-            if (newKitName) {
-                commands[newKitName] = [...commands[kitName]]; // Copiar la lista de comandos
-                displayKits(); // Actualizar la lista de kits
-            }
-        }
-
-        // Función para eliminar un kit
-        function deleteKit(kitName) {
-            if (confirm("¿Estás seguro de que deseas eliminar el kit " + kitName + "?")) {
-                delete commands[kitName]; // Eliminar el kit
-                displayKits(); // Actualizar la lista de kits
-            }
-        }
-
-        // Cargar ítems al iniciar
-        loadItems();
-    </script>
+  <script src="/mnt/data/Items.js"></script>
 </body>
 </html>
-
-            
