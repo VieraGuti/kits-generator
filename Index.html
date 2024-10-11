@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kits Generator Rust</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Press Start 2P', sans-serif; /* Estilo gaming */
-            background-color: #1e1e1e; /* Fondo oscuro */
-            color: #fff; /* Texto claro */
+            font-family: 'Orbitron', sans-serif; /* Nueva fuente */
+            background-color: #1a1a1a; /* Fondo oscuro */
+            color: #e0e0e0; /* Texto claro */
             margin: 0;
             padding: 20px;
         }
 
         h1 {
             text-align: center;
-            font-size: 2.5em;
+            font-size: 2.8em; /* Tamaño de fuente más grande */
             color: #FF4500; /* Naranja Rust */
             text-shadow: 2px 2px 4px #000;
         }
@@ -23,15 +24,16 @@
         label {
             display: block;
             margin: 10px 0 5px;
+            font-size: 1.1em; /* Tamaño de fuente de etiqueta */
         }
 
         input, select, button {
             width: 100%;
-            padding: 10px;
+            padding: 12px; /* Espaciado más grande */
             margin: 5px 0 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #333; /* Fondo de campos */
+            border: 2px solid #FF4500; /* Borde de botón */
+            border-radius: 8px; /* Bordes redondeados */
+            background-color: #292929; /* Fondo de campos */
             color: #fff;
             font-size: 1em;
         }
@@ -40,6 +42,7 @@
             background-color: #FF4500; /* Naranja Rust */
             color: white;
             cursor: pointer;
+            transition: background-color 0.3s; /* Transición suave */
         }
 
         button:hover {
@@ -48,16 +51,16 @@
 
         #command_list, #kit_list {
             margin-top: 20px;
-            padding: 10px;
-            background-color: #292929; /* Cuadro oscuro */
+            padding: 15px; /* Espaciado más grande */
+            background-color: #444; /* Fondo de lista */
             border: 2px solid #FF4500; /* Borde naranja */
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7); /* Sombra */
         }
 
         .kit-item {
-            background-color: #444; /* Fondo de cada comando */
-            padding: 10px;
+            background-color: #555; /* Fondo de cada comando */
+            padding: 12px;
             margin: 5px 0;
             border-radius: 5px;
             display: flex;
@@ -74,7 +77,7 @@
         footer {
             text-align: center;
             color: #EAEAEA;
-            font-size: 0.8em;
+            font-size: 0.9em; /* Tamaño de fuente en pie de página */
             margin-top: 40px;
         }
 
@@ -117,7 +120,6 @@
     <label for="item_list">Select an item:</label>
     <select id="item_list" onchange="showItemDetails()">
         <option value="none">Select an item</option>
-        <!-- Aquí se añadirán dinámicamente las opciones -->
     </select>
 
     <img id="item_image" class="item-image" src="" alt="Imagen del ítem" style="display:none;" />
@@ -127,11 +129,11 @@
 
     <label for="kaosbot_kits">Select a KaosBot name:</label>
     <select id="kaosbot_kits">
-        <option value="none">Select a kitname:</option>
+        <option value="none">Select a kit name:</option>
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
-        <option value="elitekit1">elitekit</option>
+        <option value="elitekit1">elitekit1</option>
         <option value="elitekit2">elitekit2</option>
         <option value="elitekit3">elitekit3</option>
         <option value="elitekit4">elitekit4</option>
@@ -262,7 +264,7 @@
                 kitDetails.innerHTML = `
                     <strong>${kit.name}</strong>
                     <div>${kit.commands.join('<br>')}</div>
-                    <button onclick="copyKits('${kit.name}')">Copy Command</button>
+                    <button onclick="copyKits('${kit.name}')">Copy Comando</button>
                     <button onclick="toggleKitList()">Hide list</button>
                 `;
                 commandList.appendChild(kitDetails);
@@ -279,12 +281,12 @@
             const kit = predefinedKits.find(k => k.name === kitName);
             if (kit) {
                 const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('\n');
+                tempInput.value = kit.commands.join('\n'); // Asegurarse de que esté separado por líneas
                 document.body.appendChild(tempInput);
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Espacios en el mensaje de alerta
+                alert('Comando copiado: \n' + kit.commands.join('\n')); // Mensaje de confirmación
             }
         }
 
@@ -346,27 +348,13 @@
                         ${kit.commands.join('<br>')}
                     </div>
                     <div class="kit-actions">
-                        <button onclick="copyCommands('${kit.name}')">Copy</button>
+                        <button onclick="copyKits('${kit.name}')">Copy</button>
                         <button onclick="editKit('${kit.name}')">Edit</button>
                         <button onclick="deleteKit('${kit.name}')">Delete</button>
                     </div>
                 `;
                 commandList.appendChild(kitItem);
             });
-        }
-
-        // Nueva función para copiar todos los comandos de un kit
-        function copyCommands(kitName) {
-            const kit = commands.find(k => k.name === kitName);
-            if (kit) {
-                const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('\n');
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Espacios en el mensaje de alerta
-            }
         }
 
         function editKit(kitName) {
