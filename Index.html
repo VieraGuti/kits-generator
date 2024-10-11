@@ -91,6 +91,14 @@
             max-width: 100px;
             margin: 10px 0;
         }
+
+        .copied-message {
+            display: none;
+            color: #28a745;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -120,14 +128,14 @@
         <!-- Aquí se añadirán dinámicamente las opciones -->
     </select>
 
-    <img id="item_image" class="item-image" src="" alt="Item Image" style="display:none;" />
+    <img id="item_image" class="item-image" src="" alt="Imagen del ítem" style="display:none;" />
 
     <label for="kit_name">Enter the kit name or choose KaosBot:</label>
     <input type="text" id="kit_name" placeholder="Write the name of the kit">
 
     <label for="kaosbot_kits">Select a KaosBot name:</label>
     <select id="kaosbot_kits">
-        <option value="none">Select a kit name:</option>
+        <option value="none">Select a kitname:</option>
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
@@ -169,6 +177,7 @@
     
     <div id="kit_list"></div>
     <div id="command_list"></div>
+    <div class="copied-message" id="copied-message">Copied!</div> <!-- Mensaje de copiado -->
 
     <script src="Items.js"></script>
     <script>
@@ -262,7 +271,7 @@
                 kitDetails.innerHTML = `
                     <strong>${kit.name}</strong>
                     <div>${kit.commands.join('<br>')}</div>
-                    <button onclick="copyKits('${kit.name}')">Copy Command</button>
+                    <button onclick="copyKits('${kit.name}')">Copy Comando</button>
                     <button onclick="toggleKitList()">Hide list</button>
                 `;
                 commandList.appendChild(kitDetails);
@@ -278,13 +287,17 @@
         function copyKits(kitName) {
             const kit = predefinedKits.find(k => k.name === kitName);
             if (kit) {
-                const tempInput = document.createElement('textarea'); // Usar textarea para copiar múltiples líneas
+                const tempInput = document.createElement('input');
                 tempInput.value = kit.commands.join('\n');
                 document.body.appendChild(tempInput);
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Comando copiado: \n' + kit.commands.join('\n'));
+                const copiedMessage = document.getElementById('copied-message');
+                copiedMessage.style.display = 'block'; // Mostrar mensaje de copiado
+                setTimeout(() => {
+                    copiedMessage.style.display = 'none'; // Ocultar después de 2 segundos
+                }, 2000);
             }
         }
 
@@ -346,13 +359,26 @@
                         ${kit.commands.join('<br>')}
                     </div>
                     <div class="kit-actions">
-                        <button onclick="copyKits('${kit.name}')">Copy</button>
+                        <button onclick="copyCommands('${kit.name}')">Copy</button>
                         <button onclick="editKit('${kit.name}')">Edit</button>
                         <button onclick="deleteKit('${kit.name}')">Delete</button>
                     </div>
                 `;
                 commandList.appendChild(kitItem);
             });
+        }
+
+        function copyCommands(kitName) {
+            const kit = commands.find(k => k.name === kitName);
+            if (kit) {
+                const tempInput = document.createElement('textarea');
+                tempInput.value = kit.commands.join('\n');
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                alert('Comandos copiados: ' + kit.commands.join('\n'));
+            }
         }
 
         function editKit(kitName) {
