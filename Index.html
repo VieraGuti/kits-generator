@@ -92,35 +92,55 @@
             margin: 10px 0;
         }
 
-        /* Estilo para el inventario */
-        #inventory {
-            display: none;
+        /* Estilos para el inventario */
+        .inventory {
+            display: none; /* Ocultar por defecto */
             margin-top: 20px;
+            padding: 10px;
+            border: 2px solid #FF4500;
+            border-radius: 10px;
+            background-color: #292929;
         }
-        
+
+        .inventory-section {
+            margin-bottom: 15px;
+        }
+
+        .inventory-section h3 {
+            margin-bottom: 5px;
+        }
+
+        .slots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
         .slot {
+            width: 50px; /* Tamaño de cada slot */
+            height: 50px; /* Tamaño de cada slot */
+            background-color: #555;
             border: 1px solid #FF4500;
-            width: 50px;
-            height: 50px;
-            display: inline-block;
-            margin: 5px;
             position: relative;
-            background-color: #444; /* Fondo de los slots */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slot img {
+            max-width: 100%;
+            max-height: 100%;
         }
 
         .quantity {
             position: absolute;
             bottom: 0;
             right: 0;
-            font-size: 0.7em;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
+            font-size: 12px;
+            color: #ffffff;
+            background: rgba(0, 0, 0, 0.7);
             padding: 2px;
             border-radius: 3px;
-        }
-
-        .inventory-section {
-            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -201,61 +221,22 @@
     <div id="kit_list"></div>
     <div id="command_list"></div>
 
-    <!-- Inventario Simulado -->
-    <div id="inventory">
-        <h2>Inventario</h2>
+    <!-- Sección de inventario -->
+    <div class="inventory" id="inventory">
+        <h2>Inventory View</h2>
         <div class="inventory-section">
             <h3>Wear</h3>
-            <div id="wear_slots">
-                <div id="wear_slot_1" class="slot"></div>
-                <div id="wear_slot_2" class="slot"></div>
-                <div id="wear_slot_3" class="slot"></div>
-                <div id="wear_slot_4" class="slot"></div>
-                <div id="wear_slot_5" class="slot"></div>
-                <div id="wear_slot_6" class="slot"></div>
-                <div id="wear_slot_7" class="slot"></div>
-            </div>
+            <div id="wear_slots" class="slots"></div>
         </div>
         <div class="inventory-section">
             <h3>Main</h3>
-            <div id="main_slots">
-                <div id="main_slot_1" class="slot"></div>
-                <div id="main_slot_2" class="slot"></div>
-                <div id="main_slot_3" class="slot"></div>
-                <div id="main_slot_4" class="slot"></div>
-                <div id="main_slot_5" class="slot"></div>
-                <div id="main_slot_6" class="slot"></div>
-                <div id="main_slot_7" class="slot"></div>
-                <div id="main_slot_8" class="slot"></div>
-                <div id="main_slot_9" class="slot"></div>
-                <div id="main_slot_10" class="slot"></div>
-                <div id="main_slot_11" class="slot"></div>
-                <div id="main_slot_12" class="slot"></div>
-                <div id="main_slot_13" class="slot"></div>
-                <div id="main_slot_14" class="slot"></div>
-                <div id="main_slot_15" class="slot"></div>
-                <div id="main_slot_16" class="slot"></div>
-                <div id="main_slot_17" class="slot"></div>
-                <div id="main_slot_18" class="slot"></div>
-                <div id="main_slot_19" class="slot"></div>
-                <div id="main_slot_20" class="slot"></div>
-                <div id="main_slot_21" class="slot"></div>
-                <div id="main_slot_22" class="slot"></div>
-                <div id="main_slot_23" class="slot"></div>
-                <div id="main_slot_24" class="slot"></div>
-            </div>
+            <div id="main_slots" class="slots"></div>
         </div>
         <div class="inventory-section">
             <h3>Belt</h3>
-            <div id="belt_slots">
-                <div id="belt_slot_1" class="slot"></div>
-                <div id="belt_slot_2" class="slot"></div>
-                <div id="belt_slot_3" class="slot"></div>
-                <div id="belt_slot_4" class="slot"></div>
-                <div id="belt_slot_5" class="slot"></div>
-                <div id="belt_slot_6" class="slot"></div>
-            </div>
+            <div id="belt_slots" class="slots"></div>
         </div>
+        <button onclick="hideInventory()">Hide</button>
     </div>
 
     <script src="Items.js"></script>
@@ -377,85 +358,6 @@
             }
         }
 
-        // Función para mostrar el inventario del kit
-        function showInventory(kitName) {
-            const kit = predefinedKits.find(k => k.name === kitName);
-            const inventorySlots = {
-                Main: {},
-                Wear: {},
-                Belt: {}
-            };
-            
-            if (kit) {
-                kit.commands.forEach(command => {
-                    const parts = command.match(/"(.*?)"/g);
-                    if (parts && parts.length > 0) {
-                        const itemId = parts[1].replace(/"/g, '');
-                        const quantity = parseInt(parts[2]);
-                        const location = parts[3].replace(/"/g, '');
-
-                        if (!inventorySlots[location][itemId]) {
-                            inventorySlots[location][itemId] = 0;
-                        }
-                        inventorySlots[location][itemId] += quantity;
-                    }
-                });
-            }
-
-            updateInventoryDisplay(inventorySlots);
-        }
-
-        function updateInventoryDisplay(inventorySlots) {
-            const wearSlots = document.getElementById('wear_slots');
-            const mainSlots = document.getElementById('main_slots');
-            const beltSlots = document.getElementById('belt_slots');
-
-            wearSlots.innerHTML = '';
-            mainSlots.innerHTML = '';
-            beltSlots.innerHTML = '';
-
-            // Mostrar Wear
-            for (let i = 1; i <= 7; i++) {
-                const slot = document.createElement('div');
-                const itemId = Object.keys(inventorySlots.Wear)[i - 1];
-                if (itemId) {
-                    const imgSrc = `images/${itemId}.png`;
-                    const quantity = inventorySlots.Wear[itemId];
-                    slot.innerHTML = `<img src="${imgSrc}" style="width:100%;height:100%;"><span class="quantity">x${quantity}</span>`;
-                }
-                slot.className = 'slot';
-                wearSlots.appendChild(slot);
-            }
-
-            // Mostrar Main
-            for (let i = 1; i <= 24; i++) {
-                const slot = document.createElement('div');
-                const itemId = Object.keys(inventorySlots.Main)[i - 1];
-                if (itemId) {
-                    const imgSrc = `images/${itemId}.png`;
-                    const quantity = inventorySlots.Main[itemId];
-                    slot.innerHTML = `<img src="${imgSrc}" style="width:100%;height:100%;"><span class="quantity">x${quantity}</span>`;
-                }
-                slot.className = 'slot';
-                mainSlots.appendChild(slot);
-            }
-
-            // Mostrar Belt
-            for (let i = 1; i <= 6; i++) {
-                const slot = document.createElement('div');
-                const itemId = Object.keys(inventorySlots.Belt)[i - 1];
-                if (itemId) {
-                    const imgSrc = `images/${itemId}.png`;
-                    const quantity = inventorySlots.Belt[itemId];
-                    slot.innerHTML = `<img src="${imgSrc}" style="width:100%;height:100%;"><span class="quantity">x${quantity}</span>`;
-                }
-                slot.className = 'slot';
-                beltSlots.appendChild(slot);
-            }
-
-            document.getElementById('inventory').style.display = 'block';
-        }
-
         function showItemDetails() {
             const itemList = document.getElementById('item_list');
             const selectedCategory = document.getElementById('item_category').value;
@@ -497,6 +399,7 @@
 
             localStorage.setItem('commands', JSON.stringify(commands));
             displayCommands();
+            updateInventoryDisplay(); // Actualizar el inventario en tiempo real
             document.getElementById('item_list').value = 'none'; // Reiniciar la selección de ítems
             showItemDetails(); // Limpiar detalles de ítem
         }
@@ -536,6 +439,51 @@
                 document.body.removeChild(tempInput);
                 alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Espacios en el mensaje de alerta
             }
+        }
+
+        function showInventory(kitName) {
+            const inventory = document.getElementById('inventory');
+            inventory.style.display = 'block'; // Mostrar inventario
+            const kit = commands.find(k => k.name === kitName);
+
+            // Limpiar los slots
+            document.getElementById('wear_slots').innerHTML = '';
+            document.getElementById('main_slots').innerHTML = '';
+            document.getElementById('belt_slots').innerHTML = '';
+
+            if (kit) {
+                kit.commands.forEach(command => {
+                    const parts = command.split('"');
+                    const itemId = parts[1];
+                    const quantity = parts[2].trim(); // Cantidad
+
+                    const location = parts[4].replace('"', ''); // Lugar
+
+                    // Crear la representación visual del ítem
+                    let slotDiv;
+                    if (location === 'Wear') {
+                        slotDiv = document.createElement('div');
+                        slotDiv.className = 'slot';
+                        slotDiv.innerHTML = `<img src="images/${itemId}.png" alt="${itemId}"><div class="quantity">x${quantity}</div>`;
+                        document.getElementById('wear_slots').appendChild(slotDiv);
+                    } else if (location === 'Main') {
+                        slotDiv = document.createElement('div');
+                        slotDiv.className = 'slot';
+                        slotDiv.innerHTML = `<img src="images/${itemId}.png" alt="${itemId}"><div class="quantity">x${quantity}</div>`;
+                        document.getElementById('main_slots').appendChild(slotDiv);
+                    } else if (location === 'Belt') {
+                        slotDiv = document.createElement('div');
+                        slotDiv.className = 'slot';
+                        slotDiv.innerHTML = `<img src="images/${itemId}.png" alt="${itemId}"><div class="quantity">x${quantity}</div>`;
+                        document.getElementById('belt_slots').appendChild(slotDiv);
+                    }
+                });
+            }
+        }
+
+        function hideInventory() {
+            const inventory = document.getElementById('inventory');
+            inventory.style.display = 'none'; // Ocultar inventario
         }
 
         function editKit(kitName) {
