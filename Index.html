@@ -155,6 +155,7 @@
     <button onclick="generateCommand()">Generar Comando</button>
     
     <div id="kit_list"></div>
+    <div id="command_list"></div> <!-- Añadido para mostrar comandos generados -->
 
     <script src="Items.js"></script>
     <script>
@@ -253,8 +254,6 @@
                     <strong>${kit.name}</strong>
                     <div>${kit.commands.join('<br>')}</div>
                     <button onclick="copyKits('${kit.name}')">Copiar Comando</button>
-                    <button onclick="deleteKit('${kit.name}')">Borrar Kit</button>
-                    <button onclick="toggleKitDetails('${kit.name}')">Ocultar Detalles</button>
                 `;
                 commandList.appendChild(kitDetails);
             }
@@ -318,7 +317,7 @@
         }
 
         function displayCommands() {
-            const commandList = document.getElementById('kit_list');
+            const commandList = document.getElementById('command_list'); // Cambiado para mostrar en command_list
             commandList.innerHTML = ''; // Limpiar lista existente
 
             commands.forEach((kit) => {
