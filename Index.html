@@ -91,14 +91,6 @@
             max-width: 100px;
             margin: 10px 0;
         }
-
-        .copied-message {
-            display: none;
-            color: #28a745;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
@@ -177,7 +169,6 @@
     
     <div id="kit_list"></div>
     <div id="command_list"></div>
-    <div class="copied-message" id="copied-message">Copied!</div> <!-- Mensaje de copiado -->
 
     <script src="Items.js"></script>
     <script>
@@ -270,8 +261,8 @@
                 kitDetails.className = 'kit-item';
                 kitDetails.innerHTML = `
                     <strong>${kit.name}</strong>
-                    <div>${kit.commands.join('<br><br>')}</div> <!-- Espacio entre comandos -->
-                    <button onclick="copyKits('${kit.name}')">Copy Comando</button>
+                    <div>${kit.commands.join('<br>')}</div>
+                    <button onclick="copyKits('${kit.name}')">Copy Command</button>
                     <button onclick="toggleKitList()">Hide list</button>
                 `;
                 commandList.appendChild(kitDetails);
@@ -288,16 +279,12 @@
             const kit = predefinedKits.find(k => k.name === kitName);
             if (kit) {
                 const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('\n');
+                tempInput.value = kit.commands.join('\n') + '\n'; // Añadir saltos de línea
                 document.body.appendChild(tempInput);
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                const copiedMessage = document.getElementById('copied-message');
-                copiedMessage.style.display = 'block'; // Mostrar mensaje de copiado
-                setTimeout(() => {
-                    copiedMessage.style.display = 'none'; // Ocultar después de 2 segundos
-                }, 2000);
+                alert('Comando copiado: ' + kit.commands.join('\n'));
             }
         }
 
@@ -356,29 +343,16 @@
                 kitItem.innerHTML = `
                     <strong>${kit.name}</strong>
                     <div>
-                        ${kit.commands.join('<br><br>')} <!-- Espacio entre comandos -->
+                        ${kit.commands.join('<br><br>')} <!-- Añadido espacio entre comandos -->
                     </div>
                     <div class="kit-actions">
-                        <button onclick="copyCommands('${kit.name}')">Copy</button>
+                        <button onclick="copyKits('${kit.name}')">Copy</button>
                         <button onclick="editKit('${kit.name}')">Edit</button>
                         <button onclick="deleteKit('${kit.name}')">Delete</button>
                     </div>
                 `;
                 commandList.appendChild(kitItem);
             });
-        }
-
-        function copyCommands(kitName) {
-            const kit = commands.find(k => k.name === kitName);
-            if (kit) {
-                const tempInput = document.createElement('textarea');
-                tempInput.value = kit.commands.join('\n');
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                alert('Comandos copiados: ' + kit.commands.join('\n'));
-            }
         }
 
         function editKit(kitName) {
@@ -416,7 +390,7 @@
         function updateItemList() {
             const category = document.getElementById('item_category').value;
             const itemList = document.getElementById('item_list');
-            itemList.innerHTML = '<option value="none">Select an item</option>'; // Reiniciar lista de ítems
+            itemList.innerHTML = '<option value="none">Seleccione un ítem</option>'; // Reiniciar lista de ítems
 
             if (category !== 'none') {
                 items[category].forEach(item => {
