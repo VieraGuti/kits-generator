@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Kits - Rust </title>
+    <title>Generador de Comandos - Rust Style</title>
     <style>
         body {
             font-family: 'Press Start 2P', sans-serif; /* Estilo gaming */
@@ -253,6 +253,8 @@
                     <strong>${kit.name}</strong>
                     <div>${kit.commands.join('<br>')}</div>
                     <button onclick="copyKits('${kit.name}')">Copiar Comando</button>
+                    <button onclick="deleteKit('${kit.name}')">Borrar Kit</button>
+                    <button onclick="toggleKitDetails('${kit.name}')">Ocultar Detalles</button>
                 `;
                 commandList.appendChild(kitDetails);
             }
@@ -268,6 +270,13 @@
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
                 alert('Comando copiado: ' + kit.commands.join('\n'));
+            }
+        }
+
+        function deleteKit(kitName) {
+            if (confirm(`Vas a borrar toda la lista del "${kitName}". ¿Estás seguro?`)) {
+                predefinedKits = predefinedKits.filter(k => k.name !== kitName);
+                loadKits(); // Actualizar la lista de kits después de la eliminación
             }
         }
 
@@ -339,14 +348,6 @@
                     localStorage.setItem('commands', JSON.stringify(commands));
                     displayCommands();
                 }
-            }
-        }
-
-        function deleteKit(kitName) {
-            if (confirm(`Vas a borrar toda la lista del "${kitName}". ¿Estás seguro?`)) {
-                commands = commands.filter(k => k.name !== kitName);
-                localStorage.setItem('commands', JSON.stringify(commands));
-                displayCommands();
             }
         }
 
