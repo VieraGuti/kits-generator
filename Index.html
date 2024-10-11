@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Kits - Rust</title>
+    <title>Generador de Comandos - Rust Style</title>
     <style>
         body {
             font-family: 'Press Start 2P', sans-serif; /* Estilo gaming */
@@ -66,6 +66,12 @@
             border: 1px solid #FF4500; /* Borde de comandos */
         }
 
+        .item-image {
+            width: 50px; /* Ajusta el tamaño de la imagen según sea necesario */
+            height: 50px; /* Ajusta el tamaño de la imagen según sea necesario */
+            margin-right: 10px; /* Espacio entre la imagen y el texto */
+        }
+
         footer {
             text-align: center;
             color: #EAEAEA;
@@ -118,7 +124,7 @@
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
-        <option value="elitekit1">elitekit</option>
+        <option value="elitekit1">elitekit1</option>
         <option value="elitekit2">elitekit2</option>
         <option value="elitekit3">elitekit3</option>
         <option value="elitekit4">elitekit4</option>
@@ -160,7 +166,7 @@
     <script src="Items.js"></script>
     <script>
         const commands = []; // Lista de comandos generados por el usuario
-        const predefinedKits = [
+        let predefinedKits = [ // Cambiado a 'let' para permitir la modificación
             {
                 name: "Fullequip",
                 commands: [
@@ -254,7 +260,7 @@
                     <strong>${kit.name}</strong>
                     <div>${kit.commands.join('<br>')}</div>
                     <button onclick="copyKits('${kit.name}')">Copiar Comando</button>
-                    <button onclick="deleteKit('${kit.name}')">Borrar Kit</button> <!-- Botón para borrar -->
+                    <!-- No se añade opción de borrar para los kits de VieraGuti -->
                 `;
                 commandList.appendChild(kitDetails);
             }
@@ -273,12 +279,10 @@
             }
         }
 
-        function deleteKit(kitName) {
+        function deleteUserKit(kitName) {
             if (confirm(`Vas a borrar el kit "${kitName}". ¿Estás seguro?`)) {
-                // Filtrar el kit eliminado
-                predefinedKits = predefinedKits.filter(k => k.name !== kitName);
-                loadKits(); // Volver a cargar la lista de kits
-                displayCommands(); // Actualizar la lista de comandos generados
+                commands = commands.filter(k => k.name !== kitName);
+                displayCommands(); // Volver a mostrar la lista de comandos
             }
         }
 
@@ -290,6 +294,14 @@
             if (!selectedItem) return;
 
             // Aquí puedes mostrar detalles del ítem si es necesario, como su imagen
+            const itemDetails = document.createElement('div');
+            itemDetails.innerHTML = `
+                <img class="item-image" src="images/${selectedItem.id}.png" alt="${selectedItem.name}">
+                <strong>${selectedItem.name}</strong>
+            `;
+            const detailsContainer = document.getElementById('item_details');
+            detailsContainer.innerHTML = ''; // Limpiar detalles anteriores
+            detailsContainer.appendChild(itemDetails);
         }
 
         function generateCommand() {
@@ -330,7 +342,7 @@
                     <div class="kit-actions">
                         <button onclick="copyKits('${kit.name}')">Copiar</button>
                         <button onclick="editKit('${kit.name}')">Editar</button>
-                        <button onclick="deleteKit('${kit.name}')">Borrar</button>
+                        <button onclick="deleteUserKit('${kit.name}')">Borrar</button> <!-- Opción de borrar solo para el usuario -->
                     </div>
                 `;
                 commandList.appendChild(kitItem);
