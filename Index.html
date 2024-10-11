@@ -66,6 +66,17 @@
             border: 1px solid #FF4500; /* Borde de comandos */
         }
 
+        .item-image {
+            max-width: 50px; /* Ancho máximo de las imágenes */
+            max-height: 50px; /* Alto máximo de las imágenes */
+            margin-right: 10px; /* Espaciado entre imagen y texto */
+        }
+
+        .item-details {
+            display: flex;
+            align-items: center;
+        }
+
         footer {
             text-align: center;
             color: #EAEAEA;
@@ -108,6 +119,9 @@
         <option value="none">Seleccione un ítem</option>
         <!-- Aquí se añadirán dinámicamente las opciones -->
     </select>
+
+    <img id="item_image" src="" alt="" style="display: none;"/> <!-- Imagen del ítem -->
+    <div id="item_details"></div> <!-- Detalles del ítem seleccionado -->
 
     <label for="kit_name">Escribe el nombre del kit o elige KaosBot:</label>
     <input type="text" id="kit_name" placeholder="Escribe el nombre del kit">
@@ -272,19 +286,27 @@
             }
         }
 
-        function deleteKit(kitName) {
-            if (confirm(`Vas a borrar toda la lista del "${kitName}". ¿Estás seguro?`)) {
-                predefinedKits = predefinedKits.filter(k => k.name !== kitName);
-                loadKits(); // Actualizar la lista de kits después de la eliminación
-            }
-        }
-
         function showItemDetails() {
             const itemList = document.getElementById('item_list');
             const selectedCategory = document.getElementById('item_category').value;
 
             const selectedItem = items[selectedCategory].find(item => item.id === itemList.value);
-            if (!selectedItem) return;
+            const itemImage = document.getElementById('item_image');
+            const itemDetails = document.getElementById('item_details');
+
+            if (selectedItem) {
+                itemImage.src = `images/${selectedItem.id}.png`; // Ruta de la imagen
+                itemImage.alt = selectedItem.name;
+                itemImage.style.display = 'block'; // Mostrar la imagen
+
+                itemDetails.innerHTML = `
+                    <strong>Nombre:</strong> ${selectedItem.name} <br>
+                    <strong>ID:</strong> ${selectedItem.id}
+                `;
+            } else {
+                itemImage.style.display = 'none'; // Ocultar la imagen
+                itemDetails.innerHTML = ''; // Limpiar detalles
+            }
         }
 
         function generateCommand() {
@@ -347,6 +369,14 @@
                     localStorage.setItem('commands', JSON.stringify(commands));
                     displayCommands();
                 }
+            }
+        }
+
+        function deleteKit(kitName) {
+            if (confirm(`Vas a borrar toda la lista del "${kitName}". ¿Estás seguro?`)) {
+                commands = commands.filter(k => k.name !== kitName);
+                localStorage.setItem('commands', JSON.stringify(commands));
+                displayCommands();
             }
         }
 
