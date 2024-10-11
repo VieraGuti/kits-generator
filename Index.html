@@ -4,19 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kits Generator Rust</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Orbitron', sans-serif; /* Nueva fuente */
-            background-color: #1a1a1a; /* Fondo oscuro */
-            color: #e0e0e0; /* Texto claro */
+            font-family: 'Press Start 2P', sans-serif; /* Estilo gaming */
+            background-color: #1e1e1e; /* Fondo oscuro */
+            color: #fff; /* Texto claro */
             margin: 0;
             padding: 20px;
         }
 
         h1 {
             text-align: center;
-            font-size: 2.8em; /* Tamaño de fuente más grande */
+            font-size: 2.5em;
             color: #FF4500; /* Naranja Rust */
             text-shadow: 2px 2px 4px #000;
         }
@@ -24,16 +23,15 @@
         label {
             display: block;
             margin: 10px 0 5px;
-            font-size: 1.1em; /* Tamaño de fuente de etiqueta */
         }
 
         input, select, button {
             width: 100%;
-            padding: 12px; /* Espaciado más grande */
+            padding: 10px;
             margin: 5px 0 10px;
-            border: 2px solid #FF4500; /* Borde de botón */
-            border-radius: 8px; /* Bordes redondeados */
-            background-color: #292929; /* Fondo de campos */
+            border: none;
+            border-radius: 5px;
+            background-color: #333; /* Fondo de campos */
             color: #fff;
             font-size: 1em;
         }
@@ -42,7 +40,6 @@
             background-color: #FF4500; /* Naranja Rust */
             color: white;
             cursor: pointer;
-            transition: background-color 0.3s; /* Transición suave */
         }
 
         button:hover {
@@ -51,16 +48,16 @@
 
         #command_list, #kit_list {
             margin-top: 20px;
-            padding: 15px; /* Espaciado más grande */
-            background-color: #444; /* Fondo de lista */
+            padding: 10px;
+            background-color: #292929; /* Cuadro oscuro */
             border: 2px solid #FF4500; /* Borde naranja */
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7); /* Sombra */
         }
 
         .kit-item {
-            background-color: #555; /* Fondo de cada comando */
-            padding: 12px;
+            background-color: #444; /* Fondo de cada comando */
+            padding: 10px;
             margin: 5px 0;
             border-radius: 5px;
             display: flex;
@@ -77,7 +74,7 @@
         footer {
             text-align: center;
             color: #EAEAEA;
-            font-size: 0.9em; /* Tamaño de fuente en pie de página */
+            font-size: 0.8em;
             margin-top: 40px;
         }
 
@@ -95,45 +92,45 @@
             margin: 10px 0;
         }
 
-        /* Estilo del inventario */
+        /* Estilos del inventario */
         .inventory {
-            display: none; /* Oculto por defecto */
+            display: none; /* Ocultado por defecto */
             margin-top: 20px;
-            border: 1px solid #FF4500;
             padding: 10px;
-            border-radius: 8px;
-            background-color: #333;
+            border: 2px solid #FF4500;
+            background-color: #292929;
+            border-radius: 10px;
         }
 
         .inventory-section {
-            margin: 10px 0;
+            margin-bottom: 15px;
         }
 
         .inventory-slot {
             display: inline-block;
             width: 50px;
             height: 50px;
-            margin: 5px;
             border: 1px solid #FF4500;
-            border-radius: 4px;
+            border-radius: 5px;
             position: relative;
-            background-color: #444;
+            margin-right: 5px;
+            background-color: #444; /* Color del fondo del slot */
         }
 
         .inventory-slot img {
             width: 100%;
             height: 100%;
-            border-radius: 4px;
+            object-fit: cover; /* Ajustar la imagen al contenedor */
         }
 
         .quantity {
             position: absolute;
-            bottom: 0;
-            right: 0;
-            background-color: rgba(0, 0, 0, 0.7);
+            bottom: 5px;
+            right: 5px;
+            font-size: 10px; /* Tamaño de texto más pequeño para la cantidad */
             color: #fff;
-            font-size: 10px;
-            padding: 2px 5px;
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo semitransparente */
+            padding: 2px;
             border-radius: 3px;
         }
     </style>
@@ -215,6 +212,49 @@
     <div id="kit_list"></div>
     <div id="command_list"></div>
 
+    <!-- Sección de Inventario -->
+    <div id="inventory" class="inventory">
+        <h2>Simulated Inventory</h2>
+        <div class="inventory-section">
+            <h3>Wear</h3>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+        </div>
+        <div class="inventory-section">
+            <h3>Main</h3>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+        </div>
+        <div class="inventory-section">
+            <h3>Belt</h3>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+        </div>
+    </div>
+
     <script src="Items.js"></script>
     <script>
         const commands = [];
@@ -290,6 +330,7 @@
                 kitItem.innerHTML = `
                     <strong>${kit.name}</strong>
                     <button onclick="showKitDetails('${kit.name}')">Show kit</button>
+                    <button onclick="showInventory('${kit.name}')">+ Info</button>
                 `;
                 kitListContainer.appendChild(kitItem);
             });
@@ -307,11 +348,51 @@
                 kitDetails.innerHTML = `
                     <strong>${kit.name}</strong>
                     <div>${kit.commands.join('<br>')}</div>
-                    <button onclick="copyKits('${kit.name}')">Copy Comando</button>
+                    <button onclick="copyKits('${kit.name}')">Copy Command</button>
                     <button onclick="toggleKitList()">Hide list</button>
-                    <button onclick="toggleInventory('${kit.name}')">+ Info</button>
                 `;
                 commandList.appendChild(kitDetails);
+            }
+        }
+
+        // Función para mostrar el inventario
+        function showInventory(kitName) {
+            const kit = predefinedKits.find(k => k.name === kitName);
+            const inventory = document.getElementById('inventory');
+            inventory.innerHTML = ''; // Limpiar contenido anterior
+            inventory.style.display = 'block'; // Mostrar el inventario
+
+            if (kit) {
+                kit.commands.forEach(command => {
+                    const parts = command.split('"');
+                    const itemID = parts[1].trim(); // Obtener el ID del ítem
+                    const quantity = parts[2].trim(); // Obtener la cantidad
+
+                    // Crear un slot en el inventario
+                    const inventorySlot = document.createElement('div');
+                    inventorySlot.className = 'inventory-slot';
+
+                    // Crear la imagen del ítem
+                    const img = document.createElement('img');
+                    img.src = `images/${itemID}.png`;
+                    img.alt = itemID;
+                    inventorySlot.appendChild(img);
+
+                    // Añadir cantidad
+                    const quantityLabel = document.createElement('div');
+                    quantityLabel.className = 'quantity';
+                    quantityLabel.innerText = `x${quantity}`;
+                    inventorySlot.appendChild(quantityLabel);
+
+                    // Añadir el slot al inventario correspondiente
+                    if (parts[3].includes('Wear')) {
+                        document.querySelector('.inventory-section:nth-child(1)').appendChild(inventorySlot); // Wear
+                    } else if (parts[3].includes('Main')) {
+                        document.querySelector('.inventory-section:nth-child(2)').appendChild(inventorySlot); // Main
+                    } else if (parts[3].includes('Belt')) {
+                        document.querySelector('.inventory-section:nth-child(3)').appendChild(inventorySlot); // Belt
+                    }
+                });
             }
         }
 
@@ -325,102 +406,144 @@
             const kit = predefinedKits.find(k => k.name === kitName);
             if (kit) {
                 const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('\n'); // Asegurarse de que esté separado por líneas
+                tempInput.value = kit.commands.join('\n');
                 document.body.appendChild(tempInput);
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Comando copiado: \n' + kit.commands.join('\n')); // Mensaje de confirmación
+                alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Espacios en el mensaje de alerta
             }
         }
 
-        // Función para mostrar/ocultar el inventario
-        function toggleInventory(kitName) {
-            const inventorySection = document.getElementById('inventory');
-            inventorySection.style.display = inventorySection.style.display === 'none' ? 'block' : 'none';
+        function showItemDetails() {
+            const itemList = document.getElementById('item_list');
+            const selectedCategory = document.getElementById('item_category').value;
 
-            // Mostrar el inventario basado en el kit seleccionado
-            if (inventorySection.style.display === 'block') {
-                showInventory(kitName);
+            const selectedItem = items[selectedCategory].find(item => item.id === itemList.value);
+            const itemImage = document.getElementById('item_image');
+            
+            if (selectedItem) {
+                const imageUrl = `images/${selectedItem.id}.png`;
+                itemImage.src = imageUrl;
+                itemImage.style.display = 'block'; // Mostrar la imagen
+            } else {
+                itemImage.style.display = 'none'; // Ocultar si no hay imagen
             }
         }
 
-        // Función para mostrar el inventario basado en los comandos
-        function showInventory(kitName) {
-            const inventorySlots = document.querySelectorAll('.inventory-slot');
-            inventorySlots.forEach(slot => slot.innerHTML = ''); // Limpiar slots
+        function generateCommand() {
+            const kitName = document.getElementById('kit_name').value || document.getElementById('kaosbot_kits').value;
+            const shortName = document.getElementById('item_list').value;
+            const quantity = document.getElementById('quantity').value;
+            const location = document.getElementById('location').value;
 
-            const kit = predefinedKits.find(k => k.name === kitName);
+            if (!kitName || shortName === "none" || !quantity) {
+                alert('Please complete all fields.');
+                return;
+            }
+
+            const command = `Kit add "${kitName}" "${shortName}" ${quantity} 1 "${location}"`;
+            const existingKit = commands.find(kit => kit.name === kitName);
+
+            if (existingKit) {
+                existingKit.commands.push(command);
+            } else {
+                commands.push({
+                    name: kitName,
+                    commands: [command]
+                });
+            }
+
+            localStorage.setItem('commands', JSON.stringify(commands));
+            displayCommands();
+            document.getElementById('item_list').value = 'none'; // Reiniciar la selección de ítems
+            showItemDetails(); // Limpiar detalles de ítem
+        }
+
+        function displayCommands() {
+            const commandList = document.getElementById('command_list'); // Cambiado para mostrar en command_list
+            commandList.innerHTML = ''; // Limpiar lista existente
+
+            commands.forEach((kit) => {
+                const kitItem = document.createElement('div');
+                kitItem.className = 'kit-item';
+                kitItem.innerHTML = `
+                    <strong>${kit.name}</strong>
+                    <div>
+                        ${kit.commands.join('<br>')}
+                    </div>
+                    <div class="kit-actions">
+                        <button onclick="copyCommands('${kit.name}')">Copy</button>
+                        <button onclick="editKit('${kit.name}')">Edit</button>
+                        <button onclick="deleteKit('${kit.name}')">Delete</button>
+                        <button onclick="showInventory('${kit.name}')">+ Info</button>
+                    </div>
+                `;
+                commandList.appendChild(kitItem);
+            });
+        }
+
+        // Nueva función para copiar todos los comandos de un kit
+        function copyCommands(kitName) {
+            const kit = commands.find(k => k.name === kitName);
             if (kit) {
-                kit.commands.forEach(command => {
-                    const parts = command.split('"');
-                    const itemId = parts[1]; // ID del item
-                    const quantity = parts[2].trim(); // Cantidad
-                    const location = parts[3].replace(/[^A-Za-z]/g, '').trim(); // Ubicación
+                const tempInput = document.createElement('input');
+                tempInput.value = kit.commands.join('\n');
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Espacios en el mensaje de alerta
+            }
+        }
 
-                    let index = 0;
+        function editKit(kitName) {
+            const kit = commands.find(k => k.name === kitName);
+            if (kit) {
+                const newCommands = prompt('Edit kit commands:', kit.commands.join('\n'));
+                if (newCommands) {
+                    kit.commands = newCommands.split('\n');
+                    localStorage.setItem('commands', JSON.stringify(commands));
+                    displayCommands();
+                }
+            }
+        }
 
-                    // Asignar el item al slot correspondiente
-                    if (location === 'Wear') {
-                        index = Array.from(document.querySelectorAll('.inventory-section h3')).findIndex(h => h.innerText === 'Wear');
-                        inventorySlots[index].innerHTML += `
-                            <div class="inventory-slot">
-                                <img src="images/${itemId}.png" alt="${itemId}">
-                                <span class="quantity">x${quantity}</span>
-                            </div>
-                        `;
-                    } else if (location === 'Main') {
-                        index = 1; // Main es el segundo grupo
-                        inventorySlots[index].innerHTML += `
-                            <div class="inventory-slot">
-                                <img src="images/${itemId}.png" alt="${itemId}">
-                                <span class="quantity">x${quantity}</span>
-                            </div>
-                        `;
-                    } else if (location === 'Belt') {
-                        index = 2; // Belt es el tercer grupo
-                        inventorySlots[index].innerHTML += `
-                            <div class="inventory-slot">
-                                <img src="images/${itemId}.png" alt="${itemId}">
-                                <span class="quantity">x${quantity}</span>
-                            </div>
-                        `;
-                    }
+        function deleteKit(kitName) {
+            if (confirm(`You are going to delete the entire list from "${kitName}". You're sure?`)) {
+                const kitIndex = commands.findIndex(k => k.name === kitName);
+                if (kitIndex !== -1) {
+                    commands.splice(kitIndex, 1); // Borrar el kit del array
+                    localStorage.setItem('commands', JSON.stringify(commands));
+                    displayCommands();
+                }
+            }
+        }
+
+        window.onload = function() {
+            const savedCommands = localStorage.getItem('commands');
+            if (savedCommands) {
+                commands.push(...JSON.parse(savedCommands));
+                displayCommands();
+            }
+        };
+
+        // Cargar los ítems en la lista del dropdown según la categoría seleccionada
+        function updateItemList() {
+            const category = document.getElementById('item_category').value;
+            const itemList = document.getElementById('item_list');
+            itemList.innerHTML = '<option value="none">Seleccione un ítem</option>'; // Reiniciar lista de ítems
+
+            if (category !== 'none') {
+                items[category].forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = item.name;
+                    itemList.appendChild(option);
                 });
             }
         }
     </script>
-
-    <!-- Sección de Inventario -->
-    <div id="inventory" class="inventory">
-        <h2>Inventario Simulado</h2>
-        <div class="inventory-section">
-            <h3>Wear</h3>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-        </div>
-        <div class="inventory-section">
-            <h3>Main</h3>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-        </div>
-        <div class="inventory-section">
-            <h3>Belt</h3>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-        </div>
-    </div>
-
     <footer>
         <p>Hecho por VieraGuti</p>
     </footer>
