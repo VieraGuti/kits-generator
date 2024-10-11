@@ -270,7 +270,7 @@
                 kitDetails.className = 'kit-item';
                 kitDetails.innerHTML = `
                     <strong>${kit.name}</strong>
-                    <div>${kit.commands.join('<br>')}</div>
+                    <div>${kit.commands.join('<br><br>')}</div> <!-- Espacio entre comandos -->
                     <button onclick="copyKits('${kit.name}')">Copy Comando</button>
                     <button onclick="toggleKitList()">Hide list</button>
                 `;
@@ -356,7 +356,7 @@
                 kitItem.innerHTML = `
                     <strong>${kit.name}</strong>
                     <div>
-                        ${kit.commands.join('<br>')}
+                        ${kit.commands.join('<br><br>')} <!-- Espacio entre comandos -->
                     </div>
                     <div class="kit-actions">
                         <button onclick="copyCommands('${kit.name}')">Copy</button>
