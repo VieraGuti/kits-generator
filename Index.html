@@ -80,32 +80,19 @@
             margin-top: 40px;
         }
 
-        /* Estilo para los botones de sección */
-        .section-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        /* Estilo para la imagen del ítem */
-        .item-image {
-            max-width: 100px;
-            margin: 10px 0;
-        }
-
         /* Estilo para el inventario simulado */
         #inventory {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             margin-top: 20px;
+            border: 2px solid #FF4500; /* Borde del inventario */
+            padding: 10px; /* Espaciado interno */
+            border-radius: 10px; /* Bordes redondeados */
+            background-color: #292929; /* Fondo del inventario */
         }
 
         .slots {
             display: flex;
             flex-wrap: wrap;
-            width: 400px; /* Ajustar el ancho según sea necesario */
+            justify-content: space-between; /* Espaciado entre slots */
             margin-bottom: 10px;
         }
 
@@ -117,6 +104,7 @@
             border: 2px solid #FF4500; /* Borde de los slots */
             border-radius: 5px;
             position: relative; /* Posición relativa para los elementos internos */
+            text-align: center; /* Centrar contenido */
         }
 
         .slot img {
@@ -216,14 +204,14 @@
     <div id="inventory" style="display:none;">
         <h3>Simulated Inventory</h3>
         <div class="slots">
-            <h4>Belt</h4>
-            <div id="belt_slots" class="slots"></div>
-            <h4>Main</h4>
-            <div id="main_slots" class="slots"></div>
             <h4>Wear</h4>
             <div id="wear_slots" class="slots"></div>
+            <h4>Main</h4>
+            <div id="main_slots" class="slots"></div>
+            <h4>Belt</h4>
+            <div id="belt_slots" class="slots"></div>
         </div>
-        <button onclick="hideInventory()">Hide</button>
+        <button onclick="toggleInventory()">Hide Inventory</button>
     </div>
 
     <script src="Items.js"></script>
@@ -375,12 +363,6 @@
             }
         }
 
-        // Función para ocultar el inventario
-        function hideInventory() {
-            const inventory = document.getElementById('inventory');
-            inventory.style.display = 'none';
-        }
-
         // Función para ocultar la lista
         function toggleKitList() {
             toggleKits(); // Mostrar solo la lista de nombres
@@ -443,7 +425,6 @@
             displayCommands();
             document.getElementById('item_list').value = 'none'; // Reiniciar la selección de ítems
             showItemDetails(); // Limpiar detalles de ítem
-            updateInventory(); // Actualizar inventario en tiempo real
         }
 
         function displayCommands() {
@@ -491,7 +472,6 @@
                     kit.commands = newCommands.split('\n');
                     localStorage.setItem('commands', JSON.stringify(commands));
                     displayCommands();
-                    updateInventory(); // Actualizar el inventario después de editar
                 }
             }
         }
@@ -503,7 +483,6 @@
                     commands.splice(kitIndex, 1); // Borrar el kit del array
                     localStorage.setItem('commands', JSON.stringify(commands));
                     displayCommands();
-                    updateInventory(); // Actualizar el inventario después de eliminar
                 }
             }
         }
@@ -532,48 +511,13 @@
             }
         }
 
-        // Función para actualizar el inventario en tiempo real
-        function updateInventory() {
-            const wearSlots = document.getElementById('wear_slots');
-            const mainSlots = document.getElementById('main_slots');
-            const beltSlots = document.getElementById('belt_slots');
-
-            // Limpiar los slots antes de mostrar
-            wearSlots.innerHTML = '';
-            mainSlots.innerHTML = '';
-            beltSlots.innerHTML = '';
-
-            // Procesar los comandos generados
-            commands.forEach(kit => {
-                kit.commands.forEach(command => {
-                    const parts = command.split('"');
-                    const itemId = parts[1].trim();
-                    const location = parts[3].trim();
-                    const quantity = parts[2].trim();
-
-                    const slot = document.createElement('div');
-                    slot.className = 'slot';
-                    const img = document.createElement('img');
-                    img.src = `images/${itemId}.png`; // Cambiar a la ruta correcta
-                    img.alt = itemId;
-
-                    const quantityLabel = document.createElement('div');
-                    quantityLabel.className = 'quantity';
-                    quantityLabel.innerText = `x${quantity}`; // Mostrar cantidad
-
-                    slot.appendChild(img);
-                    slot.appendChild(quantityLabel);
-
-                    // Asignar slots según la ubicación
-                    if (location === 'Wear') {
-                        wearSlots.appendChild(slot);
-                    } else if (location === 'Main') {
-                        mainSlots.appendChild(slot);
-                    } else if (location === 'Belt') {
-                        beltSlots.appendChild(slot);
-                    }
-                });
-            });
+        function toggleInventory() {
+            const inventory = document.getElementById('inventory');
+            if (inventory.style.display === 'none') {
+                inventory.style.display = 'block';
+            } else {
+                inventory.style.display = 'none';
+            }
         }
     </script>
     <footer>
