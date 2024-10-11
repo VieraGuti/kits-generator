@@ -131,7 +131,7 @@
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
-        <option value="elitekit1">elitekit1</option>
+        <option value="elitekit1">elitekit</option>
         <option value="elitekit2">elitekit2</option>
         <option value="elitekit3">elitekit3</option>
         <option value="elitekit4">elitekit4</option>
@@ -279,12 +279,12 @@
             const kit = predefinedKits.find(k => k.name === kitName);
             if (kit) {
                 const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('\n') + '\n'; // Añadir saltos de línea
+                tempInput.value = kit.commands.join('\n');
                 document.body.appendChild(tempInput);
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Comando copiado: ' + kit.commands.join('\n'));
+                alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Espacios en el mensaje de alerta
             }
         }
 
@@ -343,16 +343,30 @@
                 kitItem.innerHTML = `
                     <strong>${kit.name}</strong>
                     <div>
-                        ${kit.commands.join('<br><br>')} <!-- Añadido espacio entre comandos -->
+                        ${kit.commands.join('<br>')}
                     </div>
                     <div class="kit-actions">
-                        <button onclick="copyKits('${kit.name}')">Copy</button>
+                        <button onclick="copyCommands('${kit.name}')">Copy</button>
                         <button onclick="editKit('${kit.name}')">Edit</button>
                         <button onclick="deleteKit('${kit.name}')">Delete</button>
                     </div>
                 `;
                 commandList.appendChild(kitItem);
             });
+        }
+
+        // Nueva función para copiar todos los comandos de un kit
+        function copyCommands(kitName) {
+            const kit = commands.find(k => k.name === kitName);
+            if (kit) {
+                const tempInput = document.createElement('input');
+                tempInput.value = kit.commands.join('\n');
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Espacios en el mensaje de alerta
+            }
         }
 
         function editKit(kitName) {
