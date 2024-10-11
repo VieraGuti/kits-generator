@@ -46,17 +46,16 @@
             background-color: #E53E00; /* Hover más oscuro */
         }
 
-        #command_list, #kit_list, #community_kits {
+        #command_list, #kit_list {
             margin-top: 20px;
             padding: 10px;
             background-color: #292929; /* Cuadro oscuro */
             border: 2px solid #FF4500; /* Borde naranja */
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7); /* Sombra */
-            display: none; /* Ocultar inicialmente */
         }
 
-        .kit-item, .community-kit-item {
+        .kit-item {
             background-color: #444; /* Fondo de cada comando */
             padding: 10px;
             margin: 5px 0;
@@ -88,7 +87,6 @@
 
     <div class="section-buttons">
         <button onclick="toggleKits()">VieraGuti Kits</button>
-        <button onclick="toggleCommunityKits()">Kits de Comunidad</button>
     </div>
 
     <label for="item_category">Seleccionar categoría:</label>
@@ -156,54 +154,10 @@
 
     <button onclick="generateCommand()">Generar Comando</button>
     
-    <div id="command_list"></div>
     <div id="kit_list"></div>
-    <div id="community_kits"></div>
 
+    <script src="Items.js"></script>
     <script>
-        // Definición de los items como si fueran el contenido de items.js
-        const items = {
-            ammo: [
-                { id: "ammo.rifle", name: "Rifle Ammo" },
-                { id: "ammo.pistol", name: "Pistol Ammo" },
-                { id: "ammo.shotgun", name: "Shotgun Ammo" }
-            ],
-            weapons: [
-                { id: "rifle.ak", name: "AK-47" },
-                { id: "pistol.semiauto", name: "Semi-Auto Pistol" }
-            ],
-            construction: [
-                { id: "wood.plank", name: "Wood Plank" },
-                { id: "stone", name: "Stone" }
-            ],
-            attire: [
-                { id: "hoodie", name: "Hoodie" },
-                { id: "pants", name: "Pants" }
-            ],
-            tools: [
-                { id: "axe.salvaged", name: "Salvaged Axe" },
-                { id: "hammer", name: "Hammer" }
-            ],
-            medsAndTeas: [
-                { id: "syringe.medical", name: "Medical Syringe" },
-                { id: "bandage", name: "Bandage" }
-            ],
-            trapsAndMiscellaneous: [
-                { id: "trap.bear", name: "Bear Trap" },
-                { id: "trap.turret", name: "Turret" }
-            ],
-            components: [
-                { id: "metal.fragments", name: "Metal Fragments" },
-                { id: "highqual.metal", name: "High Quality Metal" }
-            ],
-            electrical: [
-                { id: "electric.surge", name: "Electric Surge" },
-                               { id: "electric.generator", name: "Electric Generator" },
-                { id: "wire", name: "Wire" },
-                { id: "solar.panel", name: "Solar Panel" }
-            ]
-        };
-
         const commands = [];
         const predefinedKits = [
             {
@@ -266,36 +220,55 @@
             }
         ];
 
-        function loadCommunityKits() {
-            const communityKitsContainer = document.getElementById('community_kits');
-            communityKitsContainer.innerHTML = ''; // Limpiar contenido anterior
+        function loadKits() {
+            const kitListContainer = document.getElementById('kit_list');
+            kitListContainer.innerHTML = ''; // Limpiar contenido anterior
 
             predefinedKits.forEach(kit => {
                 const kitItem = document.createElement('div');
-                kitItem.className = 'community-kit-item';
+                kitItem.className = 'kit-item';
                 kitItem.innerHTML = `
                     <strong>${kit.name}</strong>
-                    <div class="kit-actions">
-                        <button onclick="copyKits('${kit.name}')">Copiar</button>
-                        <button onclick="showKitDetails('${kit.name}')">Información</button>
-                    </div>
-                    <div class="kit-details" id="details-${kit.name.replace(/ /g, '_')}">
-                        ${kit.commands.join('<br>')}
-                    </div>
+                    <button onclick="showKitDetails('${kit.name}')">Mostrar Kit</button>
                 `;
-                communityKitsContainer.appendChild(kitItem);
+                kitListContainer.appendChild(kitItem);
             });
         }
 
         function toggleKits() {
             const kitList = document.getElementById('kit_list');
             kitList.style.display = kitList.style.display === 'none' ? 'block' : 'none';
-            loadCommunityKits(); // Cargar los kits de la comunidad al mostrar
+            loadKits(); // Cargar los kits de VieraGuti al mostrar
         }
 
-        function toggleCommunityKits() {
-            const communityKits = document.getElementById('community_kits');
-            communityKits.style.display = communityKits.style.display === 'none' ? 'block' : 'none';
+        function showKitDetails(kitName) {
+            const kit = predefinedKits.find(k => k.name === kitName);
+            const commandList = document.getElementById('kit_list');
+            commandList.innerHTML = ''; // Limpiar lista existente
+
+            if (kit) {
+                const kitDetails = document.createElement('div');
+                kitDetails.className = 'kit-item';
+                kitDetails.innerHTML = `
+                    <strong>${kit.name}</strong>
+                    <div>${kit.commands.join('<br>')}</div>
+                    <button onclick="copyKits('${kit.name}')">Copiar Comando</button>
+                `;
+                commandList.appendChild(kitDetails);
+            }
+        }
+
+        function copyKits(kitName) {
+            const kit = predefinedKits.find(k => k.name === kitName);
+            if (kit) {
+                const tempInput = document.createElement('input');
+                tempInput.value = kit.commands.join('\n');
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                alert('Comando copiado: ' + kit.commands.join('\n'));
+            }
         }
 
         function showItemDetails() {
@@ -357,19 +330,6 @@
             });
         }
 
-        function copyKits(kitName) {
-            const kit = commands.find(k => k.name === kitName);
-            if (kit) {
-                const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('\n');
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                alert('Comando copiado: ' + kit.commands.join('\n'));
-            }
-        }
-
         function editKit(kitName) {
             const kit = commands.find(k => k.name === kitName);
             if (kit) {
@@ -413,11 +373,9 @@
                 });
             }
         }
-
     </script>
     <footer>
         <p>Hecho por VieraGuti</p>
     </footer>
 </body>
 </html>
-
