@@ -234,10 +234,12 @@
             const beltSlots = document.getElementById('belt_slots');
             const hideBtn = document.getElementById('hideInventoryBtn');
 
+            // Limpiar los slots
             wearSlots.innerHTML = '';
             mainSlots.innerHTML = '';
             beltSlots.innerHTML = '';
 
+            // Mostrar inventario y procesar los comandos para añadir ítems en los slots
             if (kit) {
                 kit.commands.forEach(command => {
                     const parts = command.split('"');
@@ -247,9 +249,8 @@
 
                     const slot = document.createElement('div');
                     slot.className = 'slot';
-
                     const img = document.createElement('img');
-                    img.src = `images/${itemId}.png`; 
+                    img.src = `images/${itemId}.png`;
                     img.alt = itemId;
 
                     const quantityLabel = document.createElement('div');
@@ -280,7 +281,166 @@
             hideBtn.style.display = 'none';
         }
 
-        // Otras funciones como generateCommand, copyKits, etc., van aquí...
+        // Función para mostrar los detalles del kit
+        function showKitDetails(kitName) {
+            const kit = predefinedKits.find(k => k.name === kitName);
+            const commandList = document.getElementById('kit_list');
+            commandList.innerHTML = '';
+
+            if (kit) {
+                const kitDetails = document.createElement('div');
+                kitDetails.className = 'kit-item';
+                kitDetails.innerHTML = `
+                    <strong>${kit.name}</strong>
+                    <div>${kit.commands.join('<br>')}</div>
+                    <button onclick="copyKits('${kit.name}')">Copy Command</button>
+                    <button onclick="toggleKitList()">Hide list</button>
+                `;
+                commandList.appendChild(kitDetails);
+            }
+        }
+
+        function copyKits(kitName) {
+            const kit = predefinedKits.find(k => k.name === kitName);
+            if (kit) {
+                const tempInput = document.createElement('input');
+                tempInput.value = kit.commands.join('\n');
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                alert('Commands copied: ' + kit.commands.join('\n'));
+            }
+        }
+
+        // Función para mostrar los detalles del ítem seleccionado
+        function showItemDetails() {
+            const itemList = document.getElementById('item_list');
+            const selectedCategory = document.getElementById('item_category').value;
+
+            const selectedItem = items[selectedCategory].find(item => item.id === itemList.value);
+            const itemImage = document.getElementById('item_image');
+            
+            if (selectedItem) {
+                const imageUrl = `images/${selectedItem.id}.png`;
+                itemImage.src = imageUrl;
+                itemImage.style.display = 'block';
+            } else {
+                itemImage.style.display = 'none';
+            }
+        }
+
+        function generateCommand() {
+            const kitName = document.getElementById('kit_name').value || document.getElementById('kaosbot_kits').value;
+            const shortName = document.getElementById('item_list').value;
+            const quantity = document.getElementById('quantity').value;
+            const location = document.getElementById('location').value;
+
+            if (!kitName || shortName === "none" || !quantity) {
+                alert('Please complete all fields.');
+                return;
+            }
+
+            const command = `Kit add "${kitName}" "${shortName}" ${quantity} 1 "${location}"`;
+            const existingKit = commands.find(kit => kit.name === kitName);
+
+            if (existingKit) {
+                existingKit.commands.push(command);
+            } else {
+                commands.push({
+                    name: kitName,
+                    commands: [command]
+                });
+            }
+
+            localStorage.setItem('commands', JSON.stringify(commands));
+            displayCommands();
+            document.getElementById('item_list').value = 'none';
+            showItemDetails();
+        }
+
+        function displayCommands() {
+            const commandList = document.getElementById('command_list');
+            commandList.innerHTML = '';
+
+            commands.forEach((kit) => {
+                const kitItem = document.createElement('div');
+                kitItem.className = 'kit-item';
+                kitItem.innerHTML = `
+                    <strong>${kit.name}</strong>
+                    <div>
+                        ${kit.commands.join('<br>')}
+                    </div>
+                    <div class="kit-actions">
+                        <button onclick="copyCommands('${kit.name}')">Copy</button>
+                        <button onclick="editKit('${kit.name}')">Edit</button>
+                        <button onclick="deleteKit('${kit.name}')">Delete</button>
+                        <button onclick="showKitInfo('${kit.name}')">+Info</button>
+                    </div>
+                `;
+                commandList.appendChild(kitItem);
+            });
+        }
+
+        function copyCommands(kitName) {
+            const kit = commands.find(k => k.name === kitName);
+            if (kit) {
+                const tempInput = document.createElement('input');
+                tempInput.value = kit.commands.join('\n');
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                alert('Commands copied: ' + kit.commands.join('\n'));
+            }
+        }
+
+        function editKit(kitName) {
+            const kit = commands.find(k => k.name === kitName);
+            if (kit) {
+                const newCommands = prompt('Edit kit commands:', kit.commands.join('\n'));
+                if (newCommands) {
+                    kit.commands = newCommands.split('\n');
+                    localStorage.setItem('commands', JSON.stringify(commands));
+                    displayCommands();
+                }
+            }
+        }
+
+        function deleteKit(kitName) {
+            if (confirm(`You are going to delete the entire list from "${kitName}". You're sure?`)) {
+                const kitIndex = commands.findIndex(k => k.name === kitName);
+                if (kitIndex !== -1) {
+                    commands.splice(kitIndex, 1);
+                    localStorage.setItem('commands', JSON.stringify(commands));
+                    displayCommands();
+                }
+            }
+        }
+
+        window.onload = function() {
+            const savedCommands = localStorage.getItem('commands');
+            if (savedCommands) {
+                commands.push(...JSON.parse(savedCommands));
+                displayCommands();
+            }
+        };
+
+        // Cargar los ítems en la lista del dropdown según la categoría seleccionada
+        function updateItemList() {
+            const category = document.getElementById('item_category').value;
+            const itemList = document.getElementById('item_list');
+            itemList.innerHTML = '<option value="none">Seleccione un ítem</option>';
+
+            if (category !== 'none') {
+                items[category].forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = item.name;
+                    itemList.appendChild(option);
+                });
+            }
+        }
     </script>
     <footer>
         <p>Hecho por VieraGuti</p>
