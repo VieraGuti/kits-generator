@@ -100,7 +100,7 @@
         <button onclick="toggleKits()">VieraGuti Kits</button>
     </div>
 
-    <label for="item_category">Seleccionar categoría:</label>
+    <label for="item_category">Select category:</label>
     <select id="item_category" onchange="updateItemList()">
         <option value="none">Select a category</option>
         <option value="ammo">Ammo</option>
@@ -125,7 +125,7 @@
     <label for="kit_name">Enter the kit name or choose KaosBot:</label>
     <input type="text" id="kit_name" placeholder="Write the name of the kit">
 
-    <label for="kaosbot_kits">Select a KaosBot Kit:</label>
+    <label for="kaosbot_kits">Select a KaosBot name:</label>
     <select id="kaosbot_kits">
         <option value="none">Select a kitname:</option>
         <option value="freekit">freekit</option>
@@ -311,7 +311,7 @@
             const location = document.getElementById('location').value;
 
             if (!kitName || shortName === "none" || !quantity) {
-                alert('Por favor, completa todos los campos.');
+                alert('Please complete all fields.');
                 return;
             }
 
@@ -346,9 +346,9 @@
                         ${kit.commands.join('<br>')}
                     </div>
                     <div class="kit-actions">
-                        <button onclick="copyKits('${kit.name}')">Copiar</button>
-                        <button onclick="editKit('${kit.name}')">Editar</button>
-                        <button onclick="deleteKit('${kit.name}')">Borrar</button>
+                        <button onclick="copyKits('${kit.name}')">Copy</button>
+                        <button onclick="editKit('${kit.name}')">Edit</button>
+                        <button onclick="deleteKit('${kit.name}')">Delete</button>
                     </div>
                 `;
                 commandList.appendChild(kitItem);
@@ -358,7 +358,7 @@
         function editKit(kitName) {
             const kit = commands.find(k => k.name === kitName);
             if (kit) {
-                const newCommands = prompt('Edita los comandos del kit:', kit.commands.join('\n'));
+                const newCommands = prompt('Edit kit commands:', kit.commands.join('\n'));
                 if (newCommands) {
                     kit.commands = newCommands.split('\n');
                     localStorage.setItem('commands', JSON.stringify(commands));
@@ -368,7 +368,7 @@
         }
 
         function deleteKit(kitName) {
-            if (confirm(`Vas a borrar toda la lista del "${kitName}". ¿Estás seguro?`)) {
+            if (confirm(`You are going to delete the entire list from "${kitName}". You're sure?`)) {
                 const kitIndex = commands.findIndex(k => k.name === kitName);
                 if (kitIndex !== -1) {
                     commands.splice(kitIndex, 1); // Borrar el kit del array
