@@ -118,7 +118,7 @@
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
-        <option value="elitekit">elitekit1</option>
+        <option value="elitekit1">elitekit</option>
         <option value="elitekit2">elitekit2</option>
         <option value="elitekit3">elitekit3</option>
         <option value="elitekit4">elitekit4</option>
@@ -159,7 +159,7 @@
 
     <script src="Items.js"></script>
     <script>
-        const commands = [];
+        const commands = []; // Lista de comandos generados por el usuario
         const predefinedKits = [
             {
                 name: "Fullequip",
@@ -277,8 +277,8 @@
             if (confirm(`Vas a borrar el kit "${kitName}". ¿Estás seguro?`)) {
                 // Filtrar el kit eliminado
                 predefinedKits = predefinedKits.filter(k => k.name !== kitName);
-                displayCommands(); // Actualizar la lista de comandos después de la eliminación
                 loadKits(); // Volver a cargar la lista de kits
+                displayCommands(); // Actualizar la lista de comandos generados
             }
         }
 
@@ -289,7 +289,7 @@
             const selectedItem = items[selectedCategory].find(item => item.id === itemList.value);
             if (!selectedItem) return;
 
-            // Mostrar detalles de ítem aquí si es necesario
+            // Aquí puedes mostrar detalles del ítem si es necesario, como su imagen
         }
 
         function generateCommand() {
@@ -304,16 +304,10 @@
             }
 
             const command = `Kit add "${kitName}" "${shortName}" ${quantity} 1 "${location}"`;
-            const existingKit = commands.find(kit => kit.name === kitName);
-
-            if (existingKit) {
-                existingKit.commands.push(command);
-            } else {
-                commands.push({
-                    name: kitName,
-                    commands: [command]
-                });
-            }
+            commands.push({
+                name: kitName,
+                commands: [command]
+            });
 
             localStorage.setItem('commands', JSON.stringify(commands));
             displayCommands();
