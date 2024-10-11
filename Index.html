@@ -66,17 +66,6 @@
             border: 1px solid #FF4500; /* Borde de comandos */
         }
 
-        .item-image {
-            max-width: 50px; /* Ancho máximo de las imágenes */
-            max-height: 50px; /* Alto máximo de las imágenes */
-            margin-right: 10px; /* Espaciado entre imagen y texto */
-        }
-
-        .item-details {
-            display: flex;
-            align-items: center;
-        }
-
         footer {
             text-align: center;
             color: #EAEAEA;
@@ -120,9 +109,6 @@
         <!-- Aquí se añadirán dinámicamente las opciones -->
     </select>
 
-    <img id="item_image" src="" alt="" style="display: none;"/> <!-- Imagen del ítem -->
-    <div id="item_details"></div> <!-- Detalles del ítem seleccionado -->
-
     <label for="kit_name">Escribe el nombre del kit o elige KaosBot:</label>
     <input type="text" id="kit_name" placeholder="Escribe el nombre del kit">
 
@@ -132,7 +118,7 @@
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
-        <option value="elitekit1">elitekit1</option>
+        <option value="elitekit">elitekit1</option>
         <option value="elitekit2">elitekit2</option>
         <option value="elitekit3">elitekit3</option>
         <option value="elitekit4">elitekit4</option>
@@ -268,6 +254,7 @@
                     <strong>${kit.name}</strong>
                     <div>${kit.commands.join('<br>')}</div>
                     <button onclick="copyKits('${kit.name}')">Copiar Comando</button>
+                    <button onclick="deleteKit('${kit.name}')">Borrar Kit</button> <!-- Botón para borrar -->
                 `;
                 commandList.appendChild(kitDetails);
             }
@@ -286,27 +273,23 @@
             }
         }
 
+        function deleteKit(kitName) {
+            if (confirm(`Vas a borrar el kit "${kitName}". ¿Estás seguro?`)) {
+                // Filtrar el kit eliminado
+                predefinedKits = predefinedKits.filter(k => k.name !== kitName);
+                displayCommands(); // Actualizar la lista de comandos después de la eliminación
+                loadKits(); // Volver a cargar la lista de kits
+            }
+        }
+
         function showItemDetails() {
             const itemList = document.getElementById('item_list');
             const selectedCategory = document.getElementById('item_category').value;
 
             const selectedItem = items[selectedCategory].find(item => item.id === itemList.value);
-            const itemImage = document.getElementById('item_image');
-            const itemDetails = document.getElementById('item_details');
+            if (!selectedItem) return;
 
-            if (selectedItem) {
-                itemImage.src = `images/${selectedItem.id}.png`; // Ruta de la imagen
-                itemImage.alt = selectedItem.name;
-                itemImage.style.display = 'block'; // Mostrar la imagen
-
-                itemDetails.innerHTML = `
-                    <strong>Nombre:</strong> ${selectedItem.name} <br>
-                    <strong>ID:</strong> ${selectedItem.id}
-                `;
-            } else {
-                itemImage.style.display = 'none'; // Ocultar la imagen
-                itemDetails.innerHTML = ''; // Limpiar detalles
-            }
+            // Mostrar detalles de ítem aquí si es necesario
         }
 
         function generateCommand() {
@@ -369,14 +352,6 @@
                     localStorage.setItem('commands', JSON.stringify(commands));
                     displayCommands();
                 }
-            }
-        }
-
-        function deleteKit(kitName) {
-            if (confirm(`Vas a borrar toda la lista del "${kitName}". ¿Estás seguro?`)) {
-                commands = commands.filter(k => k.name !== kitName);
-                localStorage.setItem('commands', JSON.stringify(commands));
-                displayCommands();
             }
         }
 
