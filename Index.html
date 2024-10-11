@@ -120,14 +120,14 @@
         <!-- Aquí se añadirán dinámicamente las opciones -->
     </select>
 
-    <img id="item_image" class="item-image" src="" alt="Imagen del ítem" style="display:none;" />
+    <img id="item_image" class="item-image" src="" alt="Item Image" style="display:none;" />
 
     <label for="kit_name">Enter the kit name or choose KaosBot:</label>
     <input type="text" id="kit_name" placeholder="Write the name of the kit">
 
     <label for="kaosbot_kits">Select a KaosBot name:</label>
     <select id="kaosbot_kits">
-        <option value="none">Select a kitname:</option>
+        <option value="none">Select a kit name:</option>
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
@@ -262,7 +262,7 @@
                 kitDetails.innerHTML = `
                     <strong>${kit.name}</strong>
                     <div>${kit.commands.join('<br>')}</div>
-                    <button onclick="copyKits('${kit.name}')">Copy Comando</button>
+                    <button onclick="copyKits('${kit.name}')">Copy Command</button>
                     <button onclick="toggleKitList()">Hide list</button>
                 `;
                 commandList.appendChild(kitDetails);
@@ -278,13 +278,13 @@
         function copyKits(kitName) {
             const kit = predefinedKits.find(k => k.name === kitName);
             if (kit) {
-                const tempInput = document.createElement('input');
+                const tempInput = document.createElement('textarea'); // Usar textarea para copiar múltiples líneas
                 tempInput.value = kit.commands.join('\n');
                 document.body.appendChild(tempInput);
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Comando copiado:\n' + kit.commands.join('\n'));
+                alert('Comando copiado: \n' + kit.commands.join('\n'));
             }
         }
 
@@ -368,7 +368,7 @@
         }
 
         function deleteKit(kitName) {
-            if (confirm(`You are going to delete the entire list from "${kitName}". Are you sure?`)) {
+            if (confirm(`You are going to delete the entire list from "${kitName}". You're sure?`)) {
                 const kitIndex = commands.findIndex(k => k.name === kitName);
                 if (kitIndex !== -1) {
                     commands.splice(kitIndex, 1); // Borrar el kit del array
@@ -390,7 +390,7 @@
         function updateItemList() {
             const category = document.getElementById('item_category').value;
             const itemList = document.getElementById('item_list');
-            itemList.innerHTML = '<option value="none">Seleccione un ítem</option>'; // Reiniciar lista de ítems
+            itemList.innerHTML = '<option value="none">Select an item</option>'; // Reiniciar lista de ítems
 
             if (category !== 'none') {
                 items[category].forEach(item => {
