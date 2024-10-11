@@ -23,6 +23,7 @@ const items = {
     weapons: [
         { id: 'weapon.mod.burstmodule', name: 'Burst Module', image: 'images/weapons/weapon.mod.burstmodule' },
         { id: 'weapon.mod.extendedmags', name: 'Extended Magazine', image: 'images/weapons/weapon.mod.extendedmags' },
+        { id: 'weapon.mod.small.scope', name: 'Scope x4', image: 'images/weapons/weapon.mod.small.scope' },
         { id: 'weapon.mod.holosight', name: 'Holosight', image: 'images/weapons/weapon.mod.holosight' },
         { id: 'weapon.mod.muzzleboost', name: 'Muzzle Boost', image: 'images/weapons/weapon.mod.muzzleboost' },
         { id: 'weapon.mod.muzzlebrake', name: 'Muzzle Brake', image: 'images/weapons/weapon.mod.muzzlebrake' },
@@ -211,6 +212,8 @@ const items = {
     ],
     medsAndTeas: [
         { id: 'antiradpills', name: 'Anti-Radiation Pills', image: 'images/medsAndTeas/antiradpills' },
+        { id: 'blueberries', name: 'Blueberries', image: 'images/medsAndTeas/blueberries' },
+        { id: 'pumpkin', name: 'Pumpkin', image: 'images/medsAndTeas/pumpkin' },
         { id: 'bandage', name: 'Bandage', image: 'images/medsAndTeas/bandage' },
         { id: 'largemedkit', name: 'Large Medkit', image: 'images/medsAndTeas/largemedkit' },
         { id: 'syringe.medical', name: 'Medical Syringe', image: 'images/medsAndTeas/syringe.medical' },
