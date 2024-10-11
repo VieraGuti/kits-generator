@@ -46,7 +46,7 @@
             background-color: #E53E00; /* Hover más oscuro */
         }
 
-        #command_list, #kit_list, #inventory {
+        #command_list, #kit_list {
             margin-top: 20px;
             padding: 10px;
             background-color: #292929; /* Cuadro oscuro */
@@ -71,40 +71,6 @@
             gap: 5px;
         }
 
-        .inventory {
-            display: flex;
-            flex-direction: column;
-            margin-top: 10px;
-        }
-
-        .inventory-section {
-            margin: 10px 0;
-        }
-
-        .inventory-slot {
-            width: 50px;
-            height: 50px;
-            border: 1px solid #FF4500;
-            margin: 2px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .inventory-slot img {
-            width: 100%;
-            height: 100%;
-        }
-
-        .quantity {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            color: #FF4500;
-            font-size: 0.6em;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 2px;
-        }
-
         footer {
             text-align: center;
             color: #EAEAEA;
@@ -125,6 +91,48 @@
             max-width: 100px;
             margin: 10px 0;
         }
+
+        /* Estilo para el inventario */
+        .inventory {
+            display: none; /* Oculto por defecto */
+            margin-top: 20px;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #FF4500;
+        }
+
+        .inventory-section {
+            margin-bottom: 10px;
+        }
+
+        .inventory-slot {
+            width: 60px;
+            height: 60px;
+            border: 1px solid #FF4500;
+            display: inline-block;
+            position: relative;
+            margin: 2px;
+            background-color: #444;
+        }
+
+        .inventory-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .quantity {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            font-size: 0.7em;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 2px;
+            border-radius: 3px;
+        }
+
     </style>
 </head>
 <body>
@@ -203,8 +211,8 @@
     
     <div id="kit_list"></div>
     <div id="command_list"></div>
-    <div id="inventory" style="display: none;">
-        <h2>Inventory</h2>
+
+    <div id="inventory" class="inventory">
         <div class="inventory-section">
             <h3>Wear</h3>
             <div class="inventory-slot"></div>
@@ -233,6 +241,15 @@
             <div class="inventory-slot"></div>
             <div class="inventory-slot"></div>
             <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
         </div>
         <div class="inventory-section">
             <h3>Belt</h3>
@@ -243,7 +260,7 @@
             <div class="inventory-slot"></div>
             <div class="inventory-slot"></div>
         </div>
-        <button onclick="hideInventory()">Back</button>
+        <button onclick="hideInventory()">Hide Inventory</button>
     </div>
 
     <script src="Items.js"></script>
@@ -321,6 +338,7 @@
                 kitItem.innerHTML = `
                     <strong>${kit.name}</strong>
                     <button onclick="showKitDetails('${kit.name}')">Show kit</button>
+                    <button onclick="showInventory('${kit.name}')">+ Info</button>
                 `;
                 kitListContainer.appendChild(kitItem);
             });
@@ -340,7 +358,6 @@
                     <div>${kit.commands.join('<br>')}</div>
                     <button onclick="copyKits('${kit.name}')">Copy Command</button>
                     <button onclick="toggleKitList()">Hide list</button>
-                    <button onclick="showInventory('${kit.name}')">+ Info</button> <!-- Botón + Info -->
                 `;
                 commandList.appendChild(kitDetails);
             }
@@ -348,85 +365,68 @@
 
         // Función para mostrar el inventario
         function showInventory(kitName) {
-            const kit = commands.find(k => k.name === kitName) || predefinedKits.find(k => k.name === kitName);
+            const kit = predefinedKits.find(k => k.name === kitName);
             const inventory = document.getElementById('inventory');
-            const inventorySlots = document.querySelectorAll('.inventory-slot');
             inventory.style.display = 'block'; // Mostrar inventario
-            const itemsInInventory = {};
+            const slots = {
+                "Wear": document.querySelectorAll('.inventory-section:nth-child(1) .inventory-slot'),
+                "Main": document.querySelectorAll('.inventory-section:nth-child(2) .inventory-slot'),
+                "Belt": document.querySelectorAll('.inventory-section:nth-child(3) .inventory-slot')
+            };
 
-            // Inicializar los slots de inventario
-            inventorySlots.forEach(slot => {
-                slot.innerHTML = ''; // Limpiar contenido anterior
-            });
-
-            if (kit) {
-                kit.commands.forEach(command => {
-                    const parts = command.split('"'); // Extraer partes del comando
-                    const itemId = parts[1]; // ID del ítem
-                    const location = parts[3]; // Localización (Wear, Main, Belt)
-
-                    if (!itemsInInventory[itemId]) {
-                        itemsInInventory[itemId] = { quantity: 0, location: location };
-                    }
-
-                    itemsInInventory[itemId].quantity += parseInt(parts[2]); // Sumar cantidad
+            // Limpiar el inventario antes de llenarlo
+            for (const key in slots) {
+                slots[key].forEach(slot => {
+                    slot.innerHTML = ''; // Limpiar slots
                 });
+            }
 
-                // Mostrar ítems en sus ubicaciones correctas
-                for (const [id, { quantity, location }] of Object.entries(itemsInInventory)) {
-                    const imageUrl = `images/${id}.png`;
-                    const slots = {
-                        "Wear": document.querySelectorAll('.inventory-slot')[0], // 7 slots
-                        "Main": document.querySelectorAll('.inventory-slot')[1], // 24 slots
-                        "Belt": document.querySelectorAll('.inventory-slot')[2] // 6 slots
-                    };
+            // Agregar los items del kit al inventario
+            kit.commands.forEach(command => {
+                const parts = command.match(/"([^"]+)" (\d+) (\d+) "([^"]+)"/); // extraer info
+                if (parts) {
+                    const id = parts[1]; // ID del item
+                    const quantity = parts[2]; // Cantidad
+                    const location = parts[4]; // Ubicación
+                    const imageUrl = `images/${id}.png`; // URL de la imagen
 
-                    // Lógica para llenar los slots en función de la ubicación
+                    // Agregar la imagen al slot correspondiente
+                    const img = document.createElement('img');
+                    img.src = imageUrl;
+                    img.alt = id;
+
+                    const quantityLabel = document.createElement('span');
+                    quantityLabel.className = 'quantity';
+                    quantityLabel.textContent = `x${quantity}`;
+
+                    // Determinar dónde agregar el ítem
                     if (location === "Wear") {
-                        for (let i = 0; i < 7; i++) {
-                            if (slots["Wear"].children.length < 7) {
-                                const img = document.createElement('img');
-                                img.src = imageUrl;
-                                img.alt = id;
-                                const quantityLabel = document.createElement('span');
-                                quantityLabel.className = 'quantity';
-                                quantityLabel.textContent = `x${quantity}`;
-                                slots["Wear"].appendChild(img);
-                                img.appendChild(quantityLabel);
+                        for (let i = 0; i < slots["Wear"].length; i++) {
+                            if (slots["Wear"][i].children.length < 1) { // Se asegura de que el slot esté vacío
+                                slots["Wear"][i].appendChild(img);
+                                slots["Wear"][i].appendChild(quantityLabel);
                                 break;
                             }
                         }
                     } else if (location === "Main") {
-                        for (let i = 0; i < 24; i++) {
-                            if (slots["Main"].children.length < 24) {
-                                const img = document.createElement('img');
-                                img.src = imageUrl;
-                                img.alt = id;
-                                const quantityLabel = document.createElement('span');
-                                quantityLabel.className = 'quantity';
-                                quantityLabel.textContent = `x${quantity}`;
-                                slots["Main"].appendChild(img);
-                                img.appendChild(quantityLabel);
+                        for (let i = 0; i < slots["Main"].length; i++) {
+                            if (slots["Main"][i].children.length < 1) {
+                                slots["Main"][i].appendChild(img);
+                                slots["Main"][i].appendChild(quantityLabel);
                                 break;
                             }
                         }
                     } else if (location === "Belt") {
-                        for (let i = 0; i < 6; i++) {
-                            if (slots["Belt"].children.length < 6) {
-                                const img = document.createElement('img');
-                                img.src = imageUrl;
-                                img.alt = id;
-                                const quantityLabel = document.createElement('span');
-                                quantityLabel.className = 'quantity';
-                                quantityLabel.textContent = `x${quantity}`;
-                                slots["Belt"].appendChild(img);
-                                img.appendChild(quantityLabel);
+                        for (let i = 0; i < slots["Belt"].length; i++) {
+                            if (slots["Belt"][i].children.length < 1) {
+                                slots["Belt"][i].appendChild(img);
+                                slots["Belt"][i].appendChild(quantityLabel);
                                 break;
                             }
                         }
                     }
                 }
-            }
+            });
         }
 
         // Función para ocultar el inventario
@@ -515,6 +515,7 @@
                         <button onclick="copyCommands('${kit.name}')">Copy</button>
                         <button onclick="editKit('${kit.name}')">Edit</button>
                         <button onclick="deleteKit('${kit.name}')">Delete</button>
+                        <button onclick="showInventory('${kit.name}')">+ Info</button>
                     </div>
                 `;
                 commandList.appendChild(kitItem);
