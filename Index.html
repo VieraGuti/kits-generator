@@ -86,10 +86,44 @@
             margin: 20px 0;
         }
 
-        /* Estilo para la imagen del ítem */
-        .item-image {
-            max-width: 100px;
-            margin: 10px 0;
+        /* Estilo para los slots del inventario */
+        .slots {
+            display: grid;
+            gap: 5px;
+        }
+
+        .slot {
+            width: 50px; /* Ancho de cada slot */
+            height: 50px; /* Alto de cada slot */
+            background-color: #FF4500; /* Color de los slots */
+            border: 2px solid #FF4500; /* Borde de los slots */
+            border-radius: 5px;
+            position: relative; /* Posición relativa para los elementos internos */
+        }
+
+        .slot img {
+            width: 100%; /* Hacer que la imagen ocupe todo el slot */
+            height: auto; /* Mantener la relación de aspecto */
+        }
+
+        .quantity {
+            position: absolute;
+            bottom: 2px; /* Alinear al fondo */
+            right: 2px; /* Alinear a la derecha */
+            font-size: 0.7em; /* Tamaño de fuente más pequeño */
+            color: white; /* Color del texto */
+            background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+            border-radius: 3px; /* Bordes redondeados */
+            padding: 2px; /* Espaciado interno */
+        }
+
+        #simulated_inventory {
+            margin-top: 20px;
+            display: none; /* Oculto por defecto */
+            background-color: #292929; /* Fondo del inventario simulado */
+            padding: 10px;
+            border: 2px solid #FF4500; /* Borde naranja */
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -170,6 +204,64 @@
     <div id="kit_list"></div>
     <div id="command_list"></div>
 
+    <!-- Sección del Inventario Simulado -->
+    <div id="simulated_inventory">
+        <h3>Visual:</h3>
+        <div id="wear_inventory">
+            <h4>Wear:</h4>
+            <div class="slots" style="grid-template-columns: repeat(7, 1fr);">
+                <div class="slot" id="wear_slot_1"></div>
+                <div class="slot" id="wear_slot_2"></div>
+                <div class="slot" id="wear_slot_3"></div>
+                <div class="slot" id="wear_slot_4"></div>
+                <div class="slot" id="wear_slot_5"></div>
+                <div class="slot" id="wear_slot_6"></div>
+                <div class="slot" id="wear_slot_7"></div>
+            </div>
+        </div>
+        <div id="main_inventory">
+            <h4>Main:</h4>
+            <div class="slots" style="grid-template-columns: repeat(6, 1fr);">
+                <div class="slot" id="main_slot_1"></div>
+                <div class="slot" id="main_slot_2"></div>
+                <div class="slot" id="main_slot_3"></div>
+                <div class="slot" id="main_slot_4"></div>
+                <div class="slot" id="main_slot_5"></div>
+                <div class="slot" id="main_slot_6"></div>
+                <div class="slot" id="main_slot_7"></div>
+                <div class="slot" id="main_slot_8"></div>
+                <div class="slot" id="main_slot_9"></div>
+                <div class="slot" id="main_slot_10"></div>
+                <div class="slot" id="main_slot_11"></div>
+                <div class="slot" id="main_slot_12"></div>
+                <div class="slot" id="main_slot_13"></div>
+                <div class="slot" id="main_slot_14"></div>
+                <div class="slot" id="main_slot_15"></div>
+                <div class="slot" id="main_slot_16"></div>
+                <div class="slot" id="main_slot_17"></div>
+                <div class="slot" id="main_slot_18"></div>
+                <div class="slot" id="main_slot_19"></div>
+                <div class="slot" id="main_slot_20"></div>
+                <div class="slot" id="main_slot_21"></div>
+                <div class="slot" id="main_slot_22"></div>
+                <div class="slot" id="main_slot_23"></div>
+                <div class="slot" id="main_slot_24"></div>
+            </div>
+        </div>
+        <div id="belt_inventory">
+            <h4>Belt:</h4>
+            <div class="slots" style="grid-template-columns: repeat(6, 1fr);">
+                <div class="slot" id="belt_slot_1"></div>
+                <div class="slot" id="belt_slot_2"></div>
+                <div class="slot" id="belt_slot_3"></div>
+                <div class="slot" id="belt_slot_4"></div>
+                <div class="slot" id="belt_slot_5"></div>
+                <div class="slot" id="belt_slot_6"></div>
+            </div>
+        </div>
+        <button onclick="hideInventory()">Hide Inventory</button>
+    </div>
+
     <script src="Items.js"></script>
     <script>
         const commands = [];
@@ -245,6 +337,7 @@
                 kitItem.innerHTML = `
                     <strong>${kit.name}</strong>
                     <button onclick="showKitDetails('${kit.name}')">Show kit</button>
+                    <button onclick="showKitInfo('${kit.name}')">+Info</button>
                 `;
                 kitListContainer.appendChild(kitItem);
             });
@@ -269,9 +362,73 @@
             }
         }
 
-        // Función para ocultar la lista
-        function toggleKitList() {
-            toggleKits(); // Mostrar solo la lista de nombres
+        // Función para mostrar la información del kit en los slots
+        function showKitInfo(kitName) {
+            const kit = predefinedKits.find(k => k.name === kitName);
+            if (kit) {
+                kit.commands.forEach(command => {
+                    const parts = command.split('"');
+                    const itemId = parts[3].trim();
+                    const quantity = parseInt(parts[2].trim());
+                    const location = parts[4].trim();
+
+                    updateInventorySlots(location, itemId, quantity);
+                });
+            }
+            document.getElementById('simulated_inventory').style.display = 'block'; // Mostrar el inventario simulado
+        }
+
+        // Función para actualizar los slots del inventario
+        function updateInventorySlots(location, itemId, quantity) {
+            const slotId = location.toLowerCase() + "_slot_"; // Obtener la parte base del ID
+            let slotsCount;
+            if (location === "Wear") {
+                slotsCount = 7;
+            } else if (location === "Main") {
+                slotsCount = 24;
+            } else if (location === "Belt") {
+                slotsCount = 6;
+            }
+
+            for (let i = 1; i <= slotsCount; i++) {
+                const slotElement = document.getElementById(slotId + i);
+                if (slotElement) {
+                    const existingItem = slotElement.querySelector('img');
+                    if (existingItem && existingItem.dataset.id === itemId) {
+                        // Actualizar cantidad existente
+                        const quantityLabel = slotElement.querySelector('.quantity');
+                        const currentQuantity = parseInt(quantityLabel.innerText.replace('x', ''));
+                        quantityLabel.innerText = 'x' + (currentQuantity + quantity);
+                        return; // Salir de la función ya que se ha actualizado
+                    } else if (!existingItem && !existingItem.dataset.id) {
+                        // Si no hay imagen, agregarla
+                        const img = document.createElement('img');
+                        img.src = `images/${itemId}.png`; // Ruta de la imagen
+                        img.dataset.id = itemId; // Guardar el ID del ítem
+                        slotElement.appendChild(img);
+                        
+                        const quantityLabel = document.createElement('div');
+                        quantityLabel.className = 'quantity';
+                        quantityLabel.innerText = 'x' + quantity; // Mostrar la cantidad
+                        slotElement.appendChild(quantityLabel);
+                        return; // Salir de la función ya que se ha agregado
+                    }
+                }
+            }
+        }
+
+        function hideInventory() {
+            document.getElementById('simulated_inventory').style.display = 'none'; // Ocultar el inventario simulado
+            // Reiniciar el inventario si es necesario
+            resetInventorySlots();
+        }
+
+        function resetInventorySlots() {
+            // Reiniciar los slots de inventario
+            const slots = document.querySelectorAll('.slot');
+            slots.forEach(slot => {
+                slot.innerHTML = ''; // Limpiar el contenido de cada slot
+            });
         }
 
         // Función para copiar el comando
