@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kits Generator Rust</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Arial', sans-serif; /* Cambiar fuente a Arial */
+            font-family: 'Press Start 2P', sans-serif; /* Estilo gaming */
             background-color: #1e1e1e; /* Fondo oscuro */
             color: #fff; /* Texto claro */
             margin: 0;
@@ -30,8 +29,8 @@
             width: 100%;
             padding: 10px;
             margin: 5px 0 10px;
-            border: 2px solid #FF4500; /* Borde de botón */
-            border-radius: 5px; /* Bordes redondeados */
+            border: none;
+            border-radius: 5px;
             background-color: #333; /* Fondo de campos */
             color: #fff;
             font-size: 1em;
@@ -41,7 +40,6 @@
             background-color: #FF4500; /* Naranja Rust */
             color: white;
             cursor: pointer;
-            transition: background-color 0.3s; /* Transición suave */
         }
 
         button:hover {
@@ -88,48 +86,10 @@
             margin: 20px 0;
         }
 
-        /* Estilo para el inventario simulado */
-        #inventory {
-            display: none;
-            margin-top: 20px;
-        }
-
-        .slots {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .slot-row {
-            display: flex;
-            margin-bottom: 10px;
-        }
-
-        .slot {
-            width: 50px; /* Ancho de cada slot */
-            height: 50px; /* Alto de cada slot */
-            margin: 5px;
-            background-color: #FF4500; /* Color de fondo de los slots */
-            border: 2px solid #FF4500; /* Borde de los slots */
-            border-radius: 5px;
-            position: relative; /* Posición relativa para los elementos internos */
-        }
-
-        .slot img {
-            width: 100%; /* Hacer que la imagen ocupe todo el slot */
-            height: auto; /* Mantener la relación de aspecto */
-        }
-
-        .quantity {
-            position: absolute;
-            bottom: 2px; /* Alinear al fondo */
-            right: 2px; /* Alinear a la derecha */
-            font-size: 0.7em; /* Tamaño de fuente más pequeño */
-            color: white; /* Color del texto */
-            background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
-            border-radius: 3px; /* Bordes redondeados */
-            padding: 2px; /* Espaciado interno */
+        /* Estilo para la imagen del ítem */
+        .item-image {
+            max-width: 100px;
+            margin: 10px 0;
         }
     </style>
 </head>
@@ -171,7 +131,7 @@
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
-        <option value="elitekit1">elitekit1</option>
+        <option value="elitekit1">elitekit</option>
         <option value="elitekit2">elitekit2</option>
         <option value="elitekit3">elitekit3</option>
         <option value="elitekit4">elitekit4</option>
@@ -209,23 +169,6 @@
     
     <div id="kit_list"></div>
     <div id="command_list"></div>
-    
-    <div id="inventory">
-        <h3>Simulated Inventory</h3>
-        <div class="slots">
-            <h4>Wear:</h4>
-            <div class="slot-row" id="wear_slots"></div>
-        </div>
-        <div class="slots">
-            <h4>Main:</h4>
-            <div class="slot-row" id="main_slots"></div>
-        </div>
-        <div class="slots">
-            <h4>Belt:</h4>
-            <div class="slot-row" id="belt_slots"></div>
-        </div>
-        <button onclick="toggleInventory()">Hide Inventory</button>
-    </div>
 
     <script src="Items.js"></script>
     <script>
@@ -302,7 +245,6 @@
                 kitItem.innerHTML = `
                     <strong>${kit.name}</strong>
                     <button onclick="showKitDetails('${kit.name}')">Show kit</button>
-                    <button onclick="showKitInfo('${kit.name}')">+Info</button>
                 `;
                 kitListContainer.appendChild(kitItem);
             });
@@ -327,54 +269,6 @@
             }
         }
 
-        // Función para mostrar la información del kit
-        function showKitInfo(kitName) {
-            const kit = predefinedKits.find(k => k.name === kitName);
-            const wearSlots = document.getElementById('wear_slots');
-            const mainSlots = document.getElementById('main_slots');
-            const beltSlots = document.getElementById('belt_slots');
-
-            // Limpiar los slots antes de mostrar
-            wearSlots.innerHTML = '';
-            mainSlots.innerHTML = '';
-            beltSlots.innerHTML = '';
-
-            // Procesar los comandos para mostrar en los slots
-            if (kit) {
-                kit.commands.forEach(command => {
-                    const parts = command.split('"');
-                    const itemId = parts[1].trim();
-                    const location = parts[3].trim();
-                    const quantity = parts[2].trim();
-
-                    const slot = document.createElement('div');
-                    slot.className = 'slot';
-                    const img = document.createElement('img');
-                    img.src = `images/${itemId}.png`; // Cambiar a la ruta correcta
-                    img.alt = itemId;
-
-                    const quantityLabel = document.createElement('div');
-                    quantityLabel.className = 'quantity';
-                    quantityLabel.innerText = `x${quantity}`; // Mostrar cantidad
-
-                    slot.appendChild(img);
-                    slot.appendChild(quantityLabel);
-
-                    // Asignar slots según la ubicación
-                    if (location === 'Wear') {
-                        wearSlots.appendChild(slot);
-                    } else if (location === 'Main') {
-                        mainSlots.appendChild(slot);
-                    } else if (location === 'Belt') {
-                        beltSlots.appendChild(slot);
-                    }
-                });
-            }
-
-            // Mostrar el inventario
-            document.getElementById('inventory').style.display = 'block';
-        }
-
         // Función para ocultar la lista
         function toggleKitList() {
             toggleKits(); // Mostrar solo la lista de nombres
@@ -385,12 +279,12 @@
             const kit = predefinedKits.find(k => k.name === kitName);
             if (kit) {
                 const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('<br>'); // Asegurarse de que esté separado por líneas
+                tempInput.value = kit.commands.join('\n');
                 document.body.appendChild(tempInput);
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Commands copied:\n' + kit.commands.join('<br>')); // Mensaje de confirmación
+                alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Espacios en el mensaje de alerta
             }
         }
 
@@ -455,7 +349,6 @@
                         <button onclick="copyCommands('${kit.name}')">Copy</button>
                         <button onclick="editKit('${kit.name}')">Edit</button>
                         <button onclick="deleteKit('${kit.name}')">Delete</button>
-                        <button onclick="showKitInfo('${kit.name}')">+Info</button>
                     </div>
                 `;
                 commandList.appendChild(kitItem);
@@ -467,12 +360,12 @@
             const kit = commands.find(k => k.name === kitName);
             if (kit) {
                 const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('<br>');
+                tempInput.value = kit.commands.join('\n');
                 document.body.appendChild(tempInput);
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Commands copied:\n' + kit.commands.join('\n')); // Mensaje de confirmación
+                alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Espacios en el mensaje de alerta
             }
         }
 
@@ -521,11 +414,6 @@
                     itemList.appendChild(option);
                 });
             }
-        }
-
-        function toggleInventory() {
-            const inventory = document.getElementById('inventory');
-            inventory.style.display = inventory.style.display === 'none' ? 'block' : 'none';
         }
     </script>
     <footer>
