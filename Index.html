@@ -96,17 +96,20 @@
 
         /* Estilo para el inventario simulado */
         #inventory {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: none;
             margin-top: 20px;
         }
 
         .slots {
             display: flex;
-            flex-wrap: wrap;
-            width: 400px; /* Ajustar el ancho según sea necesario */
-            margin-bottom: 10px;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .slot-row {
+            display: flex;
+            justify-content: center;
         }
 
         .slot {
@@ -170,11 +173,11 @@
 
     <label for="kaosbot_kits">Select a KaosBot name:</label>
     <select id="kaosbot_kits">
-        <option value="none">Select a kitname:</option>
+        <option value="none">Select a kit name:</option>
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
-        <option value="elitekit1">elitekit</option>
+        <option value="elitekit1">elitekit1</option>
         <option value="elitekit2">elitekit2</option>
         <option value="elitekit3">elitekit3</option>
         <option value="elitekit4">elitekit4</option>
@@ -212,16 +215,16 @@
     
     <div id="kit_list"></div>
     <div id="command_list"></div>
-
-    <div id="inventory" style="display:none;">
+    
+    <div id="inventory">
         <h3>Simulated Inventory</h3>
         <div class="slots">
             <h4>Wear</h4>
-            <div id="wear_slots" class="slots"></div>
+            <div id="wear_slots" class="slot-row"></div>
             <h4>Main</h4>
-            <div id="main_slots" class="slots"></div>
+            <div id="main_slots" class="slot-row"></div>
             <h4>Belt</h4>
-            <div id="belt_slots" class="slots"></div>
+            <div id="belt_slots" class="slot-row"></div>
         </div>
         <button onclick="toggleInventory()">Hide Inventory</button>
     </div>
@@ -347,8 +350,8 @@
                 kit.commands.forEach(command => {
                     const parts = command.split('"');
                     const itemId = parts[1].trim();
-                    const quantity = parseInt(parts[2].trim(), 10);
                     const location = parts[3].trim();
+                    const quantity = parseInt(parts[2].trim());
 
                     const slot = document.createElement('div');
                     slot.className = 'slot';
@@ -372,16 +375,6 @@
                         beltSlots.appendChild(slot);
                     }
                 });
-            }
-        }
-
-        // Función para ocultar el inventario
-        function toggleInventory() {
-            const inventory = document.getElementById('inventory');
-            if (inventory.style.display === 'none') {
-                inventory.style.display = 'block';
-            } else {
-                inventory.style.display = 'none';
             }
         }
 
@@ -445,8 +438,38 @@
 
             localStorage.setItem('commands', JSON.stringify(commands));
             displayCommands();
+            updateInventory(command); // Actualizar inventario en tiempo real
             document.getElementById('item_list').value = 'none'; // Reiniciar la selección de ítems
             showItemDetails(); // Limpiar detalles de ítem
+        }
+
+        function updateInventory(command) {
+            const parts = command.split('"');
+            const itemId = parts[1].trim();
+            const location = parts[3].trim();
+            const quantity = parseInt(parts[2].trim());
+
+            const slot = document.createElement('div');
+            slot.className = 'slot';
+            const img = document.createElement('img');
+            img.src = `images/${itemId}.png`; // Cambiar a la ruta correcta
+            img.alt = itemId;
+
+            const quantityLabel = document.createElement('div');
+            quantityLabel.className = 'quantity';
+            quantityLabel.innerText = `x${quantity}`; // Mostrar cantidad
+
+            slot.appendChild(img);
+            slot.appendChild(quantityLabel);
+
+            // Asignar slots según la ubicación
+            if (location === 'Wear') {
+                document.getElementById('wear_slots').appendChild(slot);
+            } else if (location === 'Main') {
+                document.getElementById('main_slots').appendChild(slot);
+            } else if (location === 'Belt') {
+                document.getElementById('belt_slots').appendChild(slot);
+            }
         }
 
         function displayCommands() {
@@ -482,7 +505,7 @@
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Commands copied: ' + kit.commands.join('\n')); // Espacios en el mensaje de alerta
+                alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Espacios en el mensaje de alerta
             }
         }
 
@@ -531,6 +554,11 @@
                     itemList.appendChild(option);
                 });
             }
+        }
+
+        function toggleInventory() {
+            const inventory = document.getElementById('inventory');
+            inventory.style.display = (inventory.style.display === 'block') ? 'none' : 'block';
         }
     </script>
     <footer>
