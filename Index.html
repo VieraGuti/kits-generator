@@ -3,229 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kits Generator Rust</title>
+    <title>Kits Generator</title>
     <style>
         body {
-            font-family: 'Press Start 2P', sans-serif; /* Estilo gaming */
-            background-color: #1e1e1e; /* Fondo oscuro */
-            color: #fff; /* Texto claro */
+            font-family: Arial, sans-serif;
+            background-color: #2c3e50;
+            color: white;
             margin: 0;
             padding: 20px;
         }
-
-        h1 {
-            text-align: center;
-            font-size: 2.5em;
-            color: #FF4500; /* Naranja Rust */
-            text-shadow: 2px 2px 4px #000;
-        }
-
-        label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #333; /* Fondo de campos */
-            color: #fff;
-            font-size: 1em;
-        }
-
-        button {
-            background-color: #FF4500; /* Naranja Rust */
-            color: white;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #E53E00; /* Hover más oscuro */
-        }
-
-        #command_list, #kit_list, #inventory {
+        #inventory {
+            display: grid;
+            grid-template-columns: repeat(6, 60px); /* 6 columnas para Main */
+            grid-template-rows: repeat(4, 60px); /* 4 filas para Main */
+            gap: 5px;
             margin-top: 20px;
-            padding: 10px;
-            background-color: #292929; /* Cuadro oscuro */
-            border: 2px solid #FF4500; /* Borde naranja */
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7); /* Sombra */
         }
-
-        .kit-item, .inventory-item {
-            background-color: #444; /* Fondo de cada comando */
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #FF4500; /* Borde de comandos */
+        .inventory-slot {
+            background-color: orange;
+            border: 2px solid #e67e22;
+            position: relative;
+            cursor: pointer; /* Cambiar cursor para indicar que es interactivo */
         }
-
-        .kit-actions {
-            display: flex;
+        .inventory-item {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            color: black;
+            font-size: 14px;
+        }
+        #inventory-wear {
+            display: grid;
+            grid-template-columns: repeat(7, 60px); /* 7 columnas para Wear */
             gap: 5px;
         }
-
-        footer {
-            text-align: center;
-            color: #EAEAEA;
-            font-size: 0.8em;
-            margin-top: 40px;
-        }
-
-        /* Estilo para los botones de sección */
-        .section-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        /* Estilo para la imagen del ítem */
-        .item-image {
-            max-width: 100px;
-            margin: 10px 0;
-        }
-
-        .inventory {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .inventory-grid {
+        #inventory-belt {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
-            margin-top: 10px;
+            grid-template-columns: repeat(6, 60px); /* 6 columnas para Belt */
+            gap: 5px;
         }
-
-        .slot {
-            width: 50px;
-            height: 50px;
-            border: 2px solid #FF4500;
-            background-color: #333;
-            position: relative;
-        }
-
-        .slot img {
-            width: 100%;
-            height: 100%;
-        }
-
-        .quantity {
-            position: absolute;
-            bottom: 2px;
-            right: 2px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 2px;
-            font-size: 0.7em;
+        #command_list {
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <h1>Kits Generator</h1>
-
-    <div class="section-buttons">
-        <button onclick="toggleKits()">VieraGuti Kits</button>
-    </div>
-
-    <label for="item_category">Select category:</label>
-    <select id="item_category" onchange="updateItemList()">
-        <option value="none">Select a category</option>
-        <option value="ammo">Ammo</option>
-        <option value="weapons">Weapons</option>
-        <option value="construction">Construction Items</option>
-        <option value="attire">Attire</option>
-        <option value="tools">Tools</option>
-        <option value="medsAndTeas">Meds and Teas</option>
-        <option value="trapsAndMiscellaneous">Traps and Miscellaneous</option>
-        <option value="components">Components</option>
-        <option value="electrical">Electrical</option>
-    </select>
-
-    <label for="item_list">Select an item:</label>
-    <select id="item_list" onchange="showItemDetails()">
-        <option value="none">Select an item</option>
-        <!-- Aquí se añadirán dinámicamente las opciones -->
-    </select>
-
-    <img id="item_image" class="item-image" src="" alt="Imagen del ítem" style="display:none;" />
-
-    <label for="kit_name">Enter the kit name or choose KaosBot:</label>
-    <input type="text" id="kit_name" placeholder="Write the name of the kit">
-
-    <label for="kaosbot_kits">Select a KaosBot name:</label>
-    <select id="kaosbot_kits">
-        <option value="none">Select a kitname:</option>
-        <option value="freekit">freekit</option>
-        <option value="freekit2">freekit2</option>
-        <option value="vipkit">vipkit</option>
-        <option value="elitekit1">elitekit1</option>
-        <option value="elitekit2">elitekit2</option>
-        <option value="elitekit3">elitekit3</option>
-        <option value="elitekit4">elitekit4</option>
-        <option value="elitekit5">elitekit5</option>
-        <option value="elitekit6">elitekit6</option>
-        <option value="elitekit7">elitekit7</option>
-        <option value="elitekit8">elitekit8</option>
-        <option value="elitekit9">elitekit9</option>
-        <option value="elitekit10">elitekit10</option>
-        <option value="elitekit11">elitekit11</option>
-        <option value="elitekit12">elitekit12</option>
-        <option value="elitekit13">elitekit13</option>
-        <option value="elitekit14">elitekit14</option>
-        <option value="elitekit15">elitekit15</option>
-        <option value="elitekit16">elitekit16</option>
-        <option value="elitekit17">elitekit17</option>
-        <option value="elitekit18">elitekit18</option>
-        <option value="elitekit19">elitekit19</option>
-        <option value="elitekit20">elitekit20</option>
-        <option value="elitekit21">elitekit21</option>
-        <option value="elitekit22">elitekit22</option>
-    </select>
-
-    <label for="quantity">Quantity:</label>
-    <input type="number" id="quantity" placeholder="Write the amount" min="1" value="1">
-
-    <label for="location">Location:</label>
-    <select id="location">
-        <option value="Main">Main</option>
-        <option value="Wear">Wear</option>
-        <option value="Belt">Belt</option>
-    </select>
-
-    <button onclick="generateCommand()">Add kit</button>
-    
     <div id="kit_list"></div>
-    <div id="command_list"></div>
     
-    <h2>Inventory</h2>
-    <div id="inventory"></div>
+    <h2>Comandos Generados</h2>
+    <div id="command_list"></div>
 
-    <script src="Items.js"></script>
+    <h2>Inventario</h2>
+    <h3>Wear</h3>
+    <div id="inventory-wear"></div>
+    <h3>Main</h3>
+    <div id="inventory"></div>
+    <h3>Belt</h3>
+    <div id="inventory-belt"></div>
+
+    <h2>Crear Comando</h2>
+    <input type="text" id="kit_name" placeholder="Nombre del kit">
+    <input type="number" id="quantity" placeholder="Cantidad" min="1" value="1">
+    <button onclick="generateCommand()">Generar Comando</button>
+
+    <img id="item_image" src="" alt="Item Image" style="display:none;">
+
     <script>
         const commands = [];
         const predefinedKits = [
             {
                 name: "Fullequip",
                 commands: [
-                    'Kit add "Fullequip" "metal.facemask" 1 1 "Wear"',
-                    'Kit add "Fullequip" "hoodie" 1 1 "Wear"',
-                    'Kit add "Fullequip" "metal.plate.torso" 1 1 "Wear"',
-                    'Kit add "Fullequip" "pants" 1 1 "Wear"',
-                    'Kit add "Fullequip" "roadsign.kilt" 1 1 "Wear"',
-                    'Kit add "Fullequip" "tactical.gloves" 1 1 "Wear"',
-                    'Kit add "Fullequip" "shoes.boots" 1 1 "Wear"',
-                    'Kit add "Fullequip" "rifle.ak" 1 1 "Belt"',
-                    'Kit add "Fullequip" "weapon.mod.holosight" 1 1 "Main"',
-                    'Kit add "Fullequip" "weapon.mod.lasersight" 1 1 "Main"',
+                    'Kit add "Fullequip" "weapon.mod.muzzlebrake" 1 1 "Main"',
                     'Kit add "Fullequip" "supply.signal" 1 1 "Main"',
                     'Kit add "Fullequip" "cakefiveyear" 1 1 "Main"'
                 ]
@@ -248,57 +98,54 @@
             }
         ];
 
-        function toggleKits() {
-            const kitList = document.getElementById('kit_list');
-            kitList.innerHTML = ''; // Limpiar contenido anterior
-            predefinedKits.forEach(kit => {
-                const kitDiv = document.createElement('div');
-                kitDiv.className = 'kit-item';
-                kitDiv.innerHTML = `<strong>${kit.name}</strong>
-                                    <div class="kit-actions">
-                                        <button onclick="loadKit('${kit.name}')">Load Kit</button>
-                                        <button onclick="deleteKit('${kit.name}')">Delete Kit</button>
-                                    </div>`;
-                kitList.appendChild(kitDiv);
+        // Cargar el inventario inicial
+        function loadInventory() {
+            // Aquí debes agregar la lógica para cargar los ítems del inventario según tus requerimientos
+            // Por ejemplo, supongamos que hay algunos ítems:
+            const inventoryItems = [
+                { id: "weapon.mod.muzzlebrake", name: "Muzzle Brake", category: "Main" },
+                { id: "supply.signal", name: "Supply Signal", category: "Main" },
+                { id: "cakefiveyear", name: "Cake 5 Year", category: "Main" },
+                { id: "flippers", name: "Flippers", category: "Wear" },
+                { id: "diving.suit", name: "Diving Suit", category: "Wear" },
+                { id: "swim.mask", name: "Swim Mask", category: "Wear" },
+                { id: "harpoon", name: "Harpoon", category: "Belt" },
+            ];
+
+            inventoryItems.forEach(item => {
+                addToInventory(item.id, item.name, item.category);
             });
         }
 
-        function loadKit(kitName) {
-            const kit = predefinedKits.find(k => k.name === kitName);
-            if (kit) {
-                kit.commands.forEach(cmd => {
-                    commands.push(cmd);
-                    displayCommand(cmd);
-                });
-            }
+        // Función para agregar ítems al inventario
+        function addToInventory(itemId, itemName, category) {
+            const inventoryDiv = (category === 'Wear') ? document.getElementById('inventory-wear') :
+                                  (category === 'Main') ? document.getElementById('inventory') :
+                                  document.getElementById('inventory-belt');
+
+            const inventorySlot = document.createElement('div');
+            inventorySlot.className = 'inventory-slot';
+            inventorySlot.innerHTML = `<strong>${itemName}</strong><div class="inventory-item">0</div>`;
+            inventorySlot.onclick = () => addItemToKit(itemId, itemName); // Añadir evento de clic
+            inventoryDiv.appendChild(inventorySlot);
         }
 
-        function deleteKit(kitName) {
-            if (confirm(`¿Estás seguro de que deseas eliminar el kit ${kitName}?`)) {
-                const kitIndex = predefinedKits.findIndex(k => k.name === kitName);
-                if (kitIndex > -1) {
-                    predefinedKits.splice(kitIndex, 1);
-                    alert(`Kit ${kitName} eliminado.`);
-                }
-            }
-        }
-
-        function generateCommand() {
-            const kitName = document.getElementById('kit_name').value || document.getElementById('kaosbot_kits').value;
-            const itemId = document.getElementById('item_list').value;
+        // Función para agregar ítem al kit
+        function addItemToKit(itemId, itemName) {
+            const kitName = document.getElementById('kit_name').value;
             const quantity = document.getElementById('quantity').value;
-            const location = document.getElementById('location').value;
 
-            if (kitName && itemId && quantity > 0) {
-                const command = `Kit add "${kitName}" "${itemId}" ${quantity} "1" "${location}"`;
+            if (kitName && quantity > 0) {
+                const command = `Kit add "${kitName}" "${itemId}" ${quantity} "1" "Main"`;
                 commands.push(command);
                 displayCommand(command);
-                updateInventory(itemId, quantity, location);
+                updateInventoryDisplay(itemId, quantity); // Opcional: Actualizar visualización del inventario
             } else {
                 alert("Por favor, completa todos los campos correctamente.");
             }
         }
 
+        // Función para mostrar el comando generado
         function displayCommand(command) {
             const commandList = document.getElementById('command_list');
             const commandDiv = document.createElement('div');
@@ -307,46 +154,15 @@
             commandList.appendChild(commandDiv);
         }
 
-        function updateItemList() {
-            const itemList = document.getElementById('item_list');
-            const category = document.getElementById('item_category').value;
-            itemList.innerHTML = '<option value="none">Select an item</option>'; // Resetear opciones
-
-            if (category !== 'none') {
-                const items = window.items[category] || [];
-                items.forEach(item => {
-                    const option = document.createElement('option');
-                    option.value = item.id;
-                    option.textContent = item.name;
-                    itemList.appendChild(option);
-                });
-            }
-        }
-
-        function showItemDetails() {
-            const itemList = document.getElementById('item_list');
-            const selectedItem = window.items[itemList.value];
-            const itemImage = document.getElementById('item_image');
-            if (selectedItem) {
-                itemImage.src = selectedItem.image;
-                itemImage.style.display = 'block';
-            } else {
-                itemImage.style.display = 'none';
-            }
-        }
-
-        function updateInventory(itemId, quantity, location) {
-            const inventoryDiv = document.getElementById('inventory');
-            const inventoryItem = document.createElement('div');
-            inventoryItem.className = 'inventory-item';
-            inventoryItem.innerHTML = `<strong>${itemId}</strong> - ${quantity} in ${location}`;
-            inventoryDiv.appendChild(inventoryItem);
+        // Función para actualizar la visualización del inventario (opcional)
+        function updateInventoryDisplay(itemId, quantity) {
+            // Aquí puedes implementar lógica para actualizar la cantidad visualizada
+            // en el inventario, si es necesario
         }
 
         // Inicialización
         function init() {
-            // Cargar categorías y items desde items.js
-            updateItemList();
+            loadInventory(); // Cargar el inventario
         }
 
         window.onload = init;
