@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kits Generator Rust</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Orbitron', sans-serif; /* Estilo gaming */
+            font-family: Arial, sans-serif; /* Cambiar a Arial */
             background-color: #1e1e1e; /* Fondo oscuro */
             color: #fff; /* Texto claro */
             margin: 0;
@@ -88,28 +87,20 @@
             margin: 20px 0;
         }
 
-        /* Estilo para la imagen del ítem */
-        .item-image {
-            max-width: 100px;
-            margin: 10px 0;
-        }
-
         /* Estilo para el inventario simulado */
         #inventory {
-            display: none;
+            display: none; /* Ocultar inicialmente */
+            flex-direction: column;
+            align-items: center;
             margin-top: 20px;
         }
 
         .slots {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        .slot-row {
-            display: flex;
-            justify-content: center;
+            flex-wrap: wrap;
+            justify-content: center; /* Centrar los slots */
+            width: 400px; /* Ajustar el ancho según sea necesario */
+            margin-bottom: 10px;
         }
 
         .slot {
@@ -120,6 +111,9 @@
             border: 2px solid #FF4500; /* Borde de los slots */
             border-radius: 5px;
             position: relative; /* Posición relativa para los elementos internos */
+            display: flex; /* Hacer que los slots sean flexibles */
+            align-items: center; /* Centrar verticalmente el contenido */
+            justify-content: center; /* Centrar horizontalmente el contenido */
         }
 
         .slot img {
@@ -173,7 +167,7 @@
 
     <label for="kaosbot_kits">Select a KaosBot name:</label>
     <select id="kaosbot_kits">
-        <option value="none">Select a kit name:</option>
+        <option value="none">Select a kitname:</option>
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
@@ -220,13 +214,13 @@
         <h3>Simulated Inventory</h3>
         <div class="slots">
             <h4>Wear</h4>
-            <div id="wear_slots" class="slot-row"></div>
+            <div id="wear_slots" class="slots"></div>
             <h4>Main</h4>
-            <div id="main_slots" class="slot-row"></div>
+            <div id="main_slots" class="slots"></div>
             <h4>Belt</h4>
-            <div id="belt_slots" class="slot-row"></div>
+            <div id="belt_slots" class="slots"></div>
         </div>
-        <button onclick="toggleInventory()">Hide Inventory</button>
+        <button onclick="hideInventory()">Hide Inventory</button>
     </div>
 
     <script src="Items.js"></script>
@@ -351,7 +345,7 @@
                     const parts = command.split('"');
                     const itemId = parts[1].trim();
                     const location = parts[3].trim();
-                    const quantity = parseInt(parts[2].trim());
+                    const quantity = parts[2].trim();
 
                     const slot = document.createElement('div');
                     slot.className = 'slot';
@@ -376,6 +370,24 @@
                     }
                 });
             }
+        }
+
+        // Función para ocultar el inventario
+        function hideInventory() {
+            const inventory = document.getElementById('inventory');
+            inventory.style.display = 'none'; // Ocultar inventario
+            clearInventory(); // Limpiar el inventario
+        }
+
+        // Función para limpiar el inventario
+        function clearInventory() {
+            const wearSlots = document.getElementById('wear_slots');
+            const mainSlots = document.getElementById('main_slots');
+            const beltSlots = document.getElementById('belt_slots');
+
+            wearSlots.innerHTML = '';
+            mainSlots.innerHTML = '';
+            beltSlots.innerHTML = '';
         }
 
         // Función para ocultar la lista
@@ -438,38 +450,8 @@
 
             localStorage.setItem('commands', JSON.stringify(commands));
             displayCommands();
-            updateInventory(command); // Actualizar inventario en tiempo real
             document.getElementById('item_list').value = 'none'; // Reiniciar la selección de ítems
             showItemDetails(); // Limpiar detalles de ítem
-        }
-
-        function updateInventory(command) {
-            const parts = command.split('"');
-            const itemId = parts[1].trim();
-            const location = parts[3].trim();
-            const quantity = parseInt(parts[2].trim());
-
-            const slot = document.createElement('div');
-            slot.className = 'slot';
-            const img = document.createElement('img');
-            img.src = `images/${itemId}.png`; // Cambiar a la ruta correcta
-            img.alt = itemId;
-
-            const quantityLabel = document.createElement('div');
-            quantityLabel.className = 'quantity';
-            quantityLabel.innerText = `x${quantity}`; // Mostrar cantidad
-
-            slot.appendChild(img);
-            slot.appendChild(quantityLabel);
-
-            // Asignar slots según la ubicación
-            if (location === 'Wear') {
-                document.getElementById('wear_slots').appendChild(slot);
-            } else if (location === 'Main') {
-                document.getElementById('main_slots').appendChild(slot);
-            } else if (location === 'Belt') {
-                document.getElementById('belt_slots').appendChild(slot);
-            }
         }
 
         function displayCommands() {
@@ -554,11 +536,6 @@
                     itemList.appendChild(option);
                 });
             }
-        }
-
-        function toggleInventory() {
-            const inventory = document.getElementById('inventory');
-            inventory.style.display = (inventory.style.display === 'block') ? 'none' : 'block';
         }
     </script>
     <footer>
