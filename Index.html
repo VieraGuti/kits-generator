@@ -3,117 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventario Rust</title>
+    <title>Kits Generator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: white;
+            padding: 20px;
+        }
+        h1, h2 {
+            margin: 0;
+            padding: 10px 0;
+        }
+        button {
+            padding: 10px 15px;
+            margin-top: 10px;
+            background-color: orange;
+            border: none;
+            cursor: pointer;
+        }
+        .inventory {
+            display: none; /* Oculto por defecto */
+            margin-top: 20px;
+            border: 2px solid orange;
+            padding: 10px;
         }
         .slot {
-            width: 60px;
-            height: 60px;
+            width: 40px;
+            height: 40px;
             border: 2px solid orange;
             display: inline-block;
-            margin: 5px;
+            margin: 2px;
             position: relative;
-            background-color: black;
+            background-color: rgba(255, 165, 0, 0.2); /* Color con transparencia */
         }
-        img {
+        .slot img {
             width: 100%;
             height: 100%;
+            display: none; /* Oculto por defecto */
+        }
+        .quantity {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            font-size: 12px;
+            color: black;
+        }
+        .kit-section {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid orange;
         }
     </style>
 </head>
 <body>
-    <h1>Inventario Rust</h1>
 
-    <label for="categorySelect">Seleccionar categoría:</label>
-    <select id="categorySelect" onchange="loadItemsByCategory(this.value)">
-        <option value="">-- Selecciona una categoría --</option>
-        <option value="attire">Ropa</option>
-        <option value="tools">Herramientas</option>
-        <option value="medsAndTeas">Medicinas y Tés</option>
+    <h1>Kits Generator</h1>
+    <h2>VieraGuti Kits</h2>
+
+    <label for="categorySelect">Select category:</label>
+    <select id="categorySelect">
+        <option value="ammo">Ammo</option>
+        <!-- Otras categorías pueden ser añadidas aquí -->
     </select>
 
-    <label for="itemSelect">Seleccionar ítem:</label>
-    <select id="itemSelect" onchange="selectItem(this.value)">
-        <option value="">-- Selecciona un ítem --</option>
-        <!-- Se llenará dinámicamente -->
+    <label for="itemSelect">Select an item:</label>
+    <select id="itemSelect">
+        <option value="">Seleccione un ítem</option>
+        <option value="ammo.rifle">Rifle Ammo</option>
+        <option value="ammo.grenadelauncher.he">HE Grenade Ammo</option>
+        <option value="ammo.rocket.fire">Fire Rocket Ammo</option>
+        <!-- Agregar más ítems según sea necesario -->
     </select>
 
-    <h3>Ítem Seleccionado:</h3>
-    <img id="itemImage" src="" alt="Imagen del ítem" style="display:none;">
+    <label for="kitName">Enter the kit name or choose KaosBot:</label>
+    <input type="text" id="kitName" placeholder="Write the name of the kit">
+    
+    <label for="kaosBotName">Select a KaosBot name:</label>
+    <select id="kaosBotName">
+        <option value="elitekit15">elitekit15</option>
+        <!-- Otros nombres de KaosBot pueden ser añadidos aquí -->
+    </select>
 
-    <h3>Inventario</h3>
-    <div id="inventory">
-        <div class="slot" onclick="addItemToSlot('slot1')"></div>
-        <div class="slot" onclick="addItemToSlot('slot2')"></div>
-        <div class="slot" onclick="addItemToSlot('slot3')"></div>
-        <div class="slot" onclick="addItemToSlot('slot4')"></div>
-        <div class="slot" onclick="addItemToSlot('slot5')"></div>
-        <div class="slot" onclick="addItemToSlot('slot6')"></div>
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" value="1">
+
+    <label for="location">Location:</label>
+    <select id="location">
+        <option value="Main">Main</option>
+        <option value="Wear">Wear</option>
+        <option value="Belt">Belt</option>
+    </select>
+
+    <button id="addKitBtn">Add kit</button>
+
+    <div class="kit-section" id="kitList">
+        <h3>Kits Added:</h3>
+        <div id="kitsOutput"></div>
+        <button id="copyKitsBtn">Copy</button>
+        <button id="editKitsBtn">Edit</button>
+        <button id="deleteKitsBtn">Delete</button>
+    </div>
+
+    <button id="toggleInventoryBtn">Show Inventory</button>
+
+    <div class="inventory" id="inventory">
+        <h3>Inventario</h3>
+        <div class="section">
+            <h4>Wear</h4>
+            <div class="slot" id="wear-slot1"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="wear-slot2"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="wear-slot3"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="wear-slot4"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="wear-slot5"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="wear-slot6"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="wear-slot7"><img src="" alt="item"><span class="quantity"></span></div>
+        </div>
+        <div class="section">
+            <h4>Main</h4>
+            <!-- Main slots aquí -->
+            <div class="slot" id="main-slot1"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot2"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot3"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot4"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot5"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot6"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot7"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot8"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot9"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot10"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot11"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot12"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot13"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot14"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot15"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot16"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot17"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot18"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot19"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot20"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot21"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot22"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot23"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="main-slot24"><img src="" alt="item"><span class="quantity"></span></div>
+        </div>
+        <div class="section">
+            <h4>Belt</h4>
+            <div class="slot" id="belt-slot1"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="belt-slot2"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="belt-slot3"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="belt-slot4"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="belt-slot5"><img src="" alt="item"><span class="quantity"></span></div>
+            <div class="slot" id="belt-slot6"><img src="" alt="item"><span class="quantity"></span></div>
+        </div>
     </div>
 
     <script>
-        const items = {
-            attire: [
-                { id: 'jacket.snow', name: 'Snow Jacket', image: 'images/attire/jacket.snow' },
-                { id: 'tactical.gloves', name: 'Tactical Gloves', image: 'images/attire/tactical.gloves' },
-                // más ítems
-            ],
-            tools: [
-                { id: 'tool.binoculars', name: 'Binoculars', image: 'images/tools/tool.binoculars' },
-                { id: 'cakefiveyear', name: 'Birthday Cake', image: 'images/tools/cakefiveyear' },
-                // más ítems
-            ],
-            medsAndTeas: [
-                { id: 'antiradpills', name: 'Anti-Radiation Pills', image: 'images/medsAndTeas/antiradpills' },
-                { id: 'bandage', name: 'Bandage', image: 'images/medsAndTeas/bandage' },
-                // más ítems
-            ]
+        const kits = [];
+        const kitsOutput = document.getElementById('kitsOutput');
+        const inventory = document.getElementById('inventory');
+        const toggleInventoryBtn = document.getElementById('toggleInventoryBtn');
+
+        document.getElementById('addKitBtn').onclick = function() {
+            const kitName = document.getElementById('kitName').value || document.getElementById('kaosBotName').value;
+            const item = document.getElementById('itemSelect').value;
+            const quantity = document.getElementById('quantity').value;
+            const location = document.getElementById('location').value;
+
+            if (kitName && item && quantity) {
+                const kitCommand = `Kit add "${kitName}" "${item}" "${quantity}" "1" "${location}"`;
+                kits.push(kitCommand);
+                updateKitsOutput();
+                clearInputs();
+                updateInventory(item, quantity);
+            } else {
+                alert('Por favor, completa todos los campos requeridos.');
+            }
         };
 
-        let selectedItemId;
+        function updateKitsOutput() {
+            kitsOutput.innerHTML = kits.join('<br>');
+        }
 
-        function loadItemsByCategory(category) {
-            const itemSelect = document.getElementById('itemSelect');
-            itemSelect.innerHTML = '<option value="">-- Selecciona un ítem --</option>'; // Resetear opciones
+        function clearInputs() {
+            document.getElementById('kitName').value = '';
+            document.getElementById('itemSelect').value = '';
+            document.getElementById('quantity').value = 1;
+            document.getElementById('location').value = 'Main';
+        }
 
-            if (category && items[category]) {
-                items[category].forEach(item => {
-                    const option = document.createElement('option');
-                    option.value = item.id;
-                    option.textContent = item.name;
-                    itemSelect.appendChild(option);
-                });
+        function updateInventory(itemId, quantity) {
+            // Aquí puedes agregar lógica para actualizar la visualización del inventario
+            // Supongamos que tienes un objeto que asocia los IDs de los ítems con sus imágenes
+            const itemImages = {
+                "ammo.rifle": "path/to/rifle_ammo_image.png",
+                "ammo.grenadelauncher.he": "path/to/grenade_ammo_image.png",
+                "ammo.rocket.fire": "path/to/fire_rocket_image.png",
+                // Otras imágenes pueden ser añadidas aquí
+            };
+
+            if (itemImages[itemId]) {
+                for (let i = 1; i <= 7; i++) {
+                    const wearSlot = document.getElementById(`wear-slot${i}`);
+                    if (wearSlot.children[0].src === "") { // Si el slot está vacío
+                        wearSlot.children[0].src = itemImages[itemId];
+                        wearSlot.children[1].textContent = quantity; // Añadir cantidad
+                        break;
+                    }
+                }
+                // Agregar lógica similar para Main y Belt
             }
         }
 
-        function selectItem(itemId) {
-            selectedItemId = itemId;
-            const item = findItemById(itemId);
-            if (item) {
-                const itemImage = document.getElementById('itemImage');
-                itemImage.src = item.image;
-                itemImage.style.display = 'block';
+        toggleInventoryBtn.onclick = function() {
+            if (inventory.style.display === "none") {
+                inventory.style.display = "block";
+                toggleInventoryBtn.textContent = "Hide Inventory";
+            } else {
+                inventory.style.display = "none";
+                toggleInventoryBtn.textContent = "Show Inventory";
             }
-        }
-
-        function findItemById(itemId) {
-            for (const category in items) {
-                const item = items[category].find(i => i.id === itemId);
-                if (item) return item;
-            }
-            return null;
-        }
-
-        function addItemToSlot(slotId) {
-            const slot = document.getElementById(slotId);
-            const item = findItemById(selectedItemId);
-
-            if (item) {
-                slot.innerHTML = `<img src="${item.image}" alt="${item.name}">`;
-            }
-        }
+        };
     </script>
 </body>
 </html>
