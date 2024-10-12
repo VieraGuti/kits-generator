@@ -91,6 +91,55 @@
             max-width: 100px;
             margin: 10px 0;
         }
+
+        /* Estilo para la cuadrícula de inventario */
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .inventory-slot {
+            width: 100px;
+            height: 100px;
+            background-color: #444;
+            border: 1px solid #FF4500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .inventory-slot img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .wear-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .belt-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .belt-slot {
+            width: 100px;
+            height: 50px;
+            background-color: #444;
+            border: 1px solid #FF4500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -169,6 +218,16 @@
     
     <div id="kit_list"></div>
     <div id="command_list"></div>
+
+    <div id="inventory">
+        <h2>Wear</h2>
+        <div class="wear-grid" id="wear_grid"></div>
+        <h2>Main</h2>
+        <div class="inventory-grid" id="main_grid"></div>
+        <h2>Belt</h2>
+        <div class="belt-grid" id="belt_grid"></div>
+        <div id="recommendation" style="color: yellow;"></div>
+    </div>
 
     <script src="Items.js"></script>
     <script>
@@ -256,22 +315,39 @@
             const commandList = document.getElementById('kit_list');
             commandList.innerHTML = ''; // Limpiar lista existente
 
-            if (kit) {
-                const kitDetails = document.createElement('div');
-                kitDetails.className = 'kit-item';
-                kitDetails.innerHTML = `
-                    <strong>${kit.name}</strong>
-                    <div>${kit.commands.join('<br>')}</div>
-                    <button onclick="copyKits('${kit.name}')">Copy Command</button>
-                    <button onclick="toggleKitList()">Hide list</button>
-                `;
-                commandList.appendChild(kitDetails);
-            }
-        }
+            // Limpiar cuadrículas
+            document.getElementById('wear_grid').innerHTML = '';
+            document.getElementById('main_grid').innerHTML = '';
+            document.getElementById('belt_grid').innerHTML = '';
+            document.getElementById('recommendation').innerText = '';
 
-        // Función para ocultar la lista
-        function toggleKitList() {
-            toggleKits(); // Mostrar solo la lista de nombres
+            if (kit) {
+                kit.commands.forEach(command => {
+                    const parts = command.split('"');
+                    const itemName = parts[1]; // Nombre del ítem
+                    const location = parts[4]; // Ubicación
+
+                    let slot;
+                    if (location === "Wear") {
+                        slot = document.createElement('div');
+                        slot.className = 'inventory-slot';
+                        slot.innerHTML = `<img src="images/${itemName}.png" alt="${itemName}">`;
+                        document.getElementById('wear_grid').appendChild(slot);
+                    } else if (location === "Main") {
+                        slot = document.createElement('div');
+                        slot.className = 'inventory-slot';
+                        slot.innerHTML = `<img src="images/${itemName}.png" alt="${itemName}">`;
+                        document.getElementById('main_grid').appendChild(slot);
+                    } else if (location === "Belt") {
+                        slot = document.createElement('div');
+                        slot.className = 'belt-slot';
+                        slot.innerHTML = `<img src="images/${itemName}.png" alt="${itemName}">`;
+                        document.getElementById('belt_grid').appendChild(slot);
+                    } else {
+                        document.getElementById('recommendation').innerText = "Recomiendo ponerlo en Wear";
+                    }
+                });
+            }
         }
 
         // Función para copiar el comando
