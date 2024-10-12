@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,9 +26,7 @@
             margin: 10px 0 5px;
         }
 
-        input,
-        select,
-        button {
+        input, select, button {
             width: 100%;
             padding: 10px;
             margin: 5px 0 10px;
@@ -51,8 +48,7 @@
             background-color: #E53E00; /* Hover más oscuro */
         }
 
-        #command_list,
-        #kit_list {
+        #command_list, #kit_list {
             margin-top: 20px;
             padding: 10px;
             background-color: #292929; /* Cuadro oscuro */
@@ -92,21 +88,32 @@
             margin: 20px 0;
         }
 
+        /* Estilo para la imagen del ítem */
+        .item-image {
+            max-width: 100px;
+            margin: 10px 0;
+        }
+
         /* Estilo para el inventario simulado */
         #inventory {
-            display: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             margin-top: 20px;
+            border: 2px solid #FF4500; /* Borde para el inventario */
             padding: 10px;
-            border: 2px solid #FF4500;
-            border-radius: 10px;
-            background-color: #292929;
         }
 
         .slots {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 10px;
+            flex-direction: column;
+            width: 400px; /* Ajustar el ancho según sea necesario */
+        }
+
+        .slot-row {
+            display: flex;
+            justify-content: center; /* Centrar los slots */
+            margin-bottom: 5px;
         }
 
         .slot {
@@ -171,7 +178,7 @@
 
     <label for="kaosbot_kits">Select a KaosBot name:</label>
     <select id="kaosbot_kits">
-        <option value="none">Select a kit name:</option>
+        <option value="none">Select a kitname:</option>
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
@@ -214,27 +221,17 @@
     <div id="kit_list"></div>
     <div id="command_list"></div>
 
-    <div id="inventory">
+    <div id="inventory" style="display:none;">
         <h3>Simulated Inventory</h3>
-        <div>
+        <div class="slots">
             <h4>Wear:</h4>
-            <div id="wear_slots" class="slots">
-                <!-- Aquí se mostrarán los slots de Wear -->
-            </div>
-        </div>
-        <div>
+            <div class="slot-row" id="wear_slots"></div>
             <h4>Main:</h4>
-            <div id="main_slots" class="slots">
-                <!-- Aquí se mostrarán los slots de Main -->
-            </div>
-        </div>
-        <div>
+            <div class="slot-row" id="main_slots"></div>
             <h4>Belt:</h4>
-            <div id="belt_slots" class="slots">
-                <!-- Aquí se mostrarán los slots de Belt -->
-            </div>
+            <div class="slot-row" id="belt_slots"></div>
         </div>
-        <button onclick="hideInventory()">Hide Inventory</button>
+        <button onclick="toggleInventory()">Hide Inventory</button>
     </div>
 
     <script src="Items.js"></script>
@@ -268,37 +265,7 @@
                     'Kit add "Fullequip" "largebackpack" 1 1 "Wear"'
                 ]
             },
-            {
-                name: "BuzoDive",
-                commands: [
-                    'Kit add "BuzoDive" "diving.fins" 1 1 "Wear"',
-                    'Kit add "BuzoDive" "diving.mask" 1 1 "Wear"',
-                    'Kit add "BuzoDive" "diving.tank" 1 1 "Wear"',
-                    'Kit add "BuzoDive" "hazmatsuit" 1 1 "Main"',
-                    'Kit add "BuzoDive" "diving.wetsuit" 1 1 "Wear"',
-                    'Kit add "BuzoDive" "speargun" 1 1 "Belt"',
-                    'Kit add "BuzoDive" "bow.hunting" 1 1 "Belt"',
-                    'Kit add "BuzoDive" "arrow.wooden" 68 1 "Main"',
-                    'Kit add "BuzoDive" "speargun.spear" 80 1 "Main"',
-                    'Kit add "BuzoDive" "syringe.medical" 6 1 "Belt"',
-                    'Kit add "BuzoDive" "bandage" 9 1 "Belt"'
-                ]
-            },
-            {
-                name: "Regalo",
-                commands: [
-                    'Kit add "Regalo" "cakefiveyear" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
-                    'Kit add "Regalo" "partyhat" 1 1 "Wear"',
-                    'Kit add "Regalo" "cakefiveyear" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
-                    'Kit add "Regalo" "cakefiveyear" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"'
-                ]
-            }
+            // Agrega más kits predefinidos si es necesario...
         ];
 
         // Función para mostrar/ocultar los kits de VieraGuti
@@ -329,7 +296,7 @@
                 kitDetails.className = 'kit-item';
                 kitDetails.innerHTML = `
                     <strong>${kit.name}</strong>
-                    <div>${kit.commands.join('<br>')}</div>
+                    <div>${kit.commands.join('<br>').replace(/Kit add/g, 'Kit add<br>')}</div>
                     <button onclick="copyKits('${kit.name}')">Copy Command</button>
                     <button onclick="toggleKitList()">Hide list</button>
                 `;
@@ -340,6 +307,7 @@
         // Función para mostrar la información del kit
         function showKitInfo(kitName) {
             const kit = predefinedKits.find(k => k.name === kitName);
+            const inventory = document.getElementById('inventory');
             const wearSlots = document.getElementById('wear_slots');
             const mainSlots = document.getElementById('main_slots');
             const beltSlots = document.getElementById('belt_slots');
@@ -350,20 +318,20 @@
             beltSlots.innerHTML = '';
 
             // Mostrar el inventario
-            document.getElementById('inventory').style.display = 'block';
+            inventory.style.display = 'block';
 
+            // Procesar los comandos para mostrar en los slots
             if (kit) {
                 kit.commands.forEach(command => {
                     const parts = command.split('"');
-                    const itemId = parts[1].trim(); // ID del item
-                    const location = parts[3].trim(); // Ubicación
-                    const quantity = parts[2].trim(); // Cantidad
+                    const itemId = parts[1].trim();
+                    const quantity = parts[2].trim();
+                    const location = parts[3].trim();
 
                     const slot = document.createElement('div');
                     slot.className = 'slot';
-
                     const img = document.createElement('img');
-                    img.src = `images/${itemId}.png`; // Ruta a la imagen
+                    img.src = `images/${itemId}.png`; // Cambiar a la ruta correcta
                     img.alt = itemId;
 
                     const quantityLabel = document.createElement('div');
@@ -385,13 +353,9 @@
             }
         }
 
-        // Función para ocultar el inventario
-        function hideInventory() {
-            document.getElementById('inventory').style.display = 'none';
-            // Limpiar los slots
-            document.getElementById('wear_slots').innerHTML = '';
-            document.getElementById('main_slots').innerHTML = '';
-            document.getElementById('belt_slots').innerHTML = '';
+        // Función para ocultar la lista
+        function toggleKitList() {
+            toggleKits(); // Mostrar solo la lista de nombres
         }
 
         // Función para copiar el comando
@@ -399,12 +363,12 @@
             const kit = predefinedKits.find(k => k.name === kitName);
             if (kit) {
                 const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('<br>'); // Asegúrate de que esté separado por líneas
+                tempInput.value = kit.commands.join('\n'); // Asegurarse de que esté separado por líneas
                 document.body.appendChild(tempInput);
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Commands copied:\n' + kit.commands.join('<br>')); // Mensaje de confirmación
+                alert('Commands copied: ' + kit.commands.join('\n')); // Mensaje de confirmación
             }
         }
 
@@ -486,7 +450,7 @@
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Commands copied: ' + kit.commands.join('<br>')); // Espacios en el mensaje de alerta
+                alert('Commands copied: ' + kit.commands.join('\n')); // Mensaje de confirmación
             }
         }
 
@@ -513,7 +477,7 @@
             }
         }
 
-        window.onload = function () {
+        window.onload = function() {
             const savedCommands = localStorage.getItem('commands');
             if (savedCommands) {
                 commands.push(...JSON.parse(savedCommands));
@@ -536,10 +500,22 @@
                 });
             }
         }
+
+        function toggleInventory() {
+            const inventory = document.getElementById('inventory');
+            if (inventory.style.display === 'none') {
+                inventory.style.display = 'block'; // Mostrar inventario
+            } else {
+                inventory.style.display = 'none'; // Ocultar inventario
+                // Reiniciar los slots al ocultar el inventario
+                document.getElementById('wear_slots').innerHTML = '';
+                document.getElementById('main_slots').innerHTML = '';
+                document.getElementById('belt_slots').innerHTML = '';
+            }
+        }
     </script>
     <footer>
         <p>Hecho por VieraGuti</p>
     </footer>
 </body>
-
 </html>
