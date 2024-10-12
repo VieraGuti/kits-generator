@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Arial', sans-serif; /* Cambiar a Arial */
+            font-family: 'Arial', sans-serif; /* Cambiar fuente a Arial */
             background-color: #1e1e1e; /* Fondo oscuro */
             color: #fff; /* Texto claro */
             margin: 0;
@@ -88,39 +88,29 @@
             margin: 20px 0;
         }
 
-        /* Estilo para la imagen del ítem */
-        .item-image {
-            max-width: 100px;
-            margin: 10px 0;
-        }
-
         /* Estilo para el inventario simulado */
         #inventory {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: none;
             margin-top: 20px;
-            border: 2px solid #FF4500; /* Borde para el inventario */
-            padding: 10px;
         }
 
         .slots {
             display: flex;
             flex-direction: column;
-            width: 400px; /* Ajustar el ancho según sea necesario */
+            align-items: center;
+            margin-bottom: 10px;
         }
 
         .slot-row {
             display: flex;
-            justify-content: center; /* Centrar los slots */
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
 
         .slot {
             width: 50px; /* Ancho de cada slot */
             height: 50px; /* Alto de cada slot */
             margin: 5px;
-            background-color: #FF4500; /* Fondo de los slots */
+            background-color: #FF4500; /* Color de fondo de los slots */
             border: 2px solid #FF4500; /* Borde de los slots */
             border-radius: 5px;
             position: relative; /* Posición relativa para los elementos internos */
@@ -143,7 +133,6 @@
         }
     </style>
 </head>
-
 <body>
     <h1>Kits Generator</h1>
 
@@ -217,17 +206,21 @@
     </select>
 
     <button onclick="generateCommand()">Add kit</button>
-
+    
     <div id="kit_list"></div>
     <div id="command_list"></div>
-
-    <div id="inventory" style="display:none;">
+    
+    <div id="inventory">
         <h3>Simulated Inventory</h3>
         <div class="slots">
             <h4>Wear:</h4>
             <div class="slot-row" id="wear_slots"></div>
+        </div>
+        <div class="slots">
             <h4>Main:</h4>
             <div class="slot-row" id="main_slots"></div>
+        </div>
+        <div class="slots">
             <h4>Belt:</h4>
             <div class="slot-row" id="belt_slots"></div>
         </div>
@@ -265,7 +258,37 @@
                     'Kit add "Fullequip" "largebackpack" 1 1 "Wear"'
                 ]
             },
-            // Agrega más kits predefinidos si es necesario...
+            {
+                name: "BuzoDive",
+                commands: [
+                    'Kit add "BuzoDive" "diving.fins" 1 1 "Wear"',
+                    'Kit add "BuzoDive" "diving.mask" 1 1 "Wear"',
+                    'Kit add "BuzoDive" "diving.tank" 1 1 "Wear"',
+                    'Kit add "BuzoDive" "hazmatsuit" 1 1 "Main"',
+                    'Kit add "BuzoDive" "diving.wetsuit" 1 1 "Wear"',
+                    'Kit add "BuzoDive" "speargun" 1 1 "Belt"',
+                    'Kit add "BuzoDive" "bow.hunting" 1 1 "Belt"',
+                    'Kit add "BuzoDive" "arrow.wooden" 68 1 "Main"',
+                    'Kit add "BuzoDive" "speargun.spear" 80 1 "Main"',
+                    'Kit add "BuzoDive" "syringe.medical" 6 1 "Belt"',
+                    'Kit add "BuzoDive" "bandage" 9 1 "Belt"'
+                ]
+            },
+            {
+                name: "Regalo",
+                commands: [
+                    'Kit add "Regalo" "cakefiveyear" 1 1 "Main"',
+                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
+                    'Kit add "Regalo" "partyhat" 1 1 "Wear"',
+                    'Kit add "Regalo" "cakefiveyear" 1 1 "Main"',
+                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
+                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
+                    'Kit add "Regalo" "cakefiveyear" 1 1 "Main"',
+                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
+                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
+                    'Kit add "Regalo" "supply.signal" 1 1 "Main"'
+                ]
+            }
         ];
 
         // Función para mostrar/ocultar los kits de VieraGuti
@@ -296,7 +319,7 @@
                 kitDetails.className = 'kit-item';
                 kitDetails.innerHTML = `
                     <strong>${kit.name}</strong>
-                    <div>${kit.commands.join('<br>').replace(/Kit add/g, 'Kit add<br>')}</div>
+                    <div>${kit.commands.join('<br>')}</div>
                     <button onclick="copyKits('${kit.name}')">Copy Command</button>
                     <button onclick="toggleKitList()">Hide list</button>
                 `;
@@ -307,7 +330,6 @@
         // Función para mostrar la información del kit
         function showKitInfo(kitName) {
             const kit = predefinedKits.find(k => k.name === kitName);
-            const inventory = document.getElementById('inventory');
             const wearSlots = document.getElementById('wear_slots');
             const mainSlots = document.getElementById('main_slots');
             const beltSlots = document.getElementById('belt_slots');
@@ -317,16 +339,13 @@
             mainSlots.innerHTML = '';
             beltSlots.innerHTML = '';
 
-            // Mostrar el inventario
-            inventory.style.display = 'block';
-
             // Procesar los comandos para mostrar en los slots
             if (kit) {
                 kit.commands.forEach(command => {
                     const parts = command.split('"');
                     const itemId = parts[1].trim();
-                    const quantity = parts[2].trim();
                     const location = parts[3].trim();
+                    const quantity = parts[2].trim();
 
                     const slot = document.createElement('div');
                     slot.className = 'slot';
@@ -351,6 +370,9 @@
                     }
                 });
             }
+
+            // Mostrar el inventario
+            document.getElementById('inventory').style.display = 'block';
         }
 
         // Función para ocultar la lista
@@ -363,12 +385,12 @@
             const kit = predefinedKits.find(k => k.name === kitName);
             if (kit) {
                 const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('\n'); // Asegurarse de que esté separado por líneas
+                tempInput.value = kit.commands.join('<br>'); // Asegurarse de que esté separado por líneas
                 document.body.appendChild(tempInput);
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Commands copied: ' + kit.commands.join('\n')); // Mensaje de confirmación
+                alert('Commands copied:\n' + kit.commands.join('<br>')); // Mensaje de confirmación
             }
         }
 
@@ -378,7 +400,7 @@
 
             const selectedItem = items[selectedCategory].find(item => item.id === itemList.value);
             const itemImage = document.getElementById('item_image');
-
+            
             if (selectedItem) {
                 const imageUrl = `images/${selectedItem.id}.png`;
                 itemImage.src = imageUrl;
@@ -427,7 +449,7 @@
                 kitItem.innerHTML = `
                     <strong>${kit.name}</strong>
                     <div>
-                        ${kit.commands.join('<br>').replace(/Kit add/g, 'Kit add<br>')} <!-- Añadir <br> -->
+                        ${kit.commands.join('<br>')}
                     </div>
                     <div class="kit-actions">
                         <button onclick="copyCommands('${kit.name}')">Copy</button>
@@ -445,12 +467,12 @@
             const kit = commands.find(k => k.name === kitName);
             if (kit) {
                 const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('\n');
+                tempInput.value = kit.commands.join('<br>');
                 document.body.appendChild(tempInput);
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Commands copied: ' + kit.commands.join('\n')); // Mensaje de confirmación
+                alert('Commands copied:\n' + kit.commands.join('\n')); // Mensaje de confirmación
             }
         }
 
@@ -503,15 +525,7 @@
 
         function toggleInventory() {
             const inventory = document.getElementById('inventory');
-            if (inventory.style.display === 'none') {
-                inventory.style.display = 'block'; // Mostrar inventario
-            } else {
-                inventory.style.display = 'none'; // Ocultar inventario
-                // Reiniciar los slots al ocultar el inventario
-                document.getElementById('wear_slots').innerHTML = '';
-                document.getElementById('main_slots').innerHTML = '';
-                document.getElementById('belt_slots').innerHTML = '';
-            }
+            inventory.style.display = inventory.style.display === 'none' ? 'block' : 'none';
         }
     </script>
     <footer>
