@@ -4,173 +4,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kits Generator</title>
-    <style>
-        /* Estilos básicos para el inventario */
-        .inventory {
-            border: 2px solid orange;
-            padding: 10px;
-            width: 300px;
-            margin-bottom: 20px;
-        }
-        .section-title {
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 5px;
-        }
-        .slot {
-            width: 40px;
-            height: 40px;
-            border: 1px dashed gray;
-            margin: 2px;
-            display: inline-block;
-            position: relative;
-        }
-        .item-image {
-            width: 50px;
-            height: 50px;
-            margin-top: 10px;
-        }
-        .item-list-container {
-            margin-top: 20px;
-        }
-        .wear, .main, .belt {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .show-items-button {
-            margin: 10px 0;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <script src="Items.js" defer></script>
 </head>
 <body>
+    <div class="container">
+        <h1>Kits Generator</h1>
 
-<div class="inventory">
-    <div class="section-title">Wear</div>
-    <div class="wear">
-        <!-- 7 slots for wear -->
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
+        <div class="inventory">
+            <div class="section-title">Wear</div>
+            <div class="wear">
+                <!-- 7 slots for wear -->
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+
+            <div class="section-title">Main</div>
+            <div class="main">
+                <!-- 24 slots for main inventory (6x4 grid) -->
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+
+            <div class="section-title">Belt</div>
+            <div class="belt">
+                <!-- 6 slots for belt -->
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+        </div>
+
+        <button class="show-items-button" onclick="toggleItemList()">Mostrar ítems</button>
+
+        <div class="item-list-container" id="itemListContainer">
+            <div class="item-list">
+                <h2 class="section-title">Selecciona una categoría:</h2>
+                <select id="item_category" onchange="updateItemList()">
+                    <option value="none">Select a category</option>
+                    <option value="armas">Armas</option>
+                    <option value="balas">Balas</option>
+                    <option value="utilidades">Utilidades</option>
+                    <option value="componentes">Componentes</option>
+                </select>
+
+                <h2 class="section-title">Selecciona un ítem:</h2>
+                <select id="item_list" onchange="showItemDetails()">
+                    <option value="none">Select an item</option>
+                    <!-- Aquí se añadirán dinámicamente las opciones -->
+                </select>
+
+                <img id="item_image" class="item-image" src="" alt="Imagen del ítem" style="display:none;" />
+            </div>
+        </div>
     </div>
 
-    <div class="section-title">Main</div>
-    <div class="main">
-        <!-- 24 slots for main inventory (6x4 grid) -->
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
+    <script>
+        function updateItemList() {
+            const category = document.getElementById("item_category").value;
+            const itemList = document.getElementById("item_list");
+            itemList.innerHTML = ""; // Limpiar la lista de ítems
 
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-    </div>
-
-    <div class="section-title">Belt</div>
-    <div class="belt">
-        <!-- 6 slots for belt -->
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-        <div class="slot" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="selectSlot(this)"></div>
-    </div>
-
-    <button class="show-items-button" onclick="toggleItemList()">Mostrar ítems</button>
-
-    <div class="item-list-container" id="itemListContainer">
-        <h2 class="section-title">Selecciona una categoría:</h2>
-        <label for="item_category">Select category:</label>
-        <select id="item_category" onchange="updateItemList()">
-            <option value="none">Select a category</option>
-            <option value="armas">Armas</option>
-            <option value="balas">Balas</option>
-            <option value="utilidades">Utilidades</option>
-            <option value="componentes">Componentes</option>
-        </select>
-
-        <label for="item_list">Select an item:</label>
-        <select id="item_list" onchange="showItemDetails()">
-            <option value="none">Select an item</option>
-            <!-- Aquí se añadirán dinámicamente las opciones -->
-        </select>
-
-        <img id="item_image" class="item-image" src="" alt="Imagen del ítem" style="display:none;" />
-    </div>
-</div>
-
-<script src="Items.js"></script>
-<script>
-    // Función para actualizar la lista de ítems según la categoría seleccionada
-    function updateItemList() {
-        const category = document.getElementById('item_category').value;
-        const itemList = document.getElementById('item_list');
-        itemList.innerHTML = '<option value="none">Select an item</option>'; // Limpiar opciones
-
-        if (category !== 'none') {
-            Items[category].forEach(item => {
-                const option = document.createElement('option');
-                option.value = item.id; // El id del ítem
-                option.textContent = item.nombre; // Nombre del ítem
-                itemList.appendChild(option);
-            });
+            if (category !== "none") {
+                items[category].forEach(item => {
+                    const option = document.createElement("option");
+                    option.value = item.id;
+                    option.textContent = item.nombre;
+                    itemList.appendChild(option);
+                });
+            }
         }
-    }
 
-    // Función para mostrar la imagen del ítem seleccionado
-    function showItemDetails() {
-        const itemId = document.getElementById('item_list').value;
-        const itemImage = document.getElementById('item_image');
-        
-        if (itemId !== 'none') {
-            const selectedItem = Object.values(Items).flat().find(item => item.id === itemId);
-            itemImage.src = selectedItem.imagen;
-            itemImage.alt = selectedItem.nombre;
-            itemImage.style.display = 'block'; // Mostrar la imagen
-        } else {
-            itemImage.style.display = 'none'; // Ocultar la imagen si no hay selección
+        function showItemDetails() {
+            const selectedItem = document.getElementById("item_list").value;
+            const itemImage = document.getElementById("item_image");
+            const item = findItemById(selectedItem);
+            
+            if (item) {
+                itemImage.src = item.imagen; // Actualizar la imagen
+                itemImage.style.display = "block"; // Mostrar la imagen
+            } else {
+                itemImage.src = "";
+                itemImage.style.display = "none"; // Ocultar la imagen
+            }
         }
-    }
 
-    // Aquí puedes agregar las funciones de permitir arrastrar y soltar (drop y allowDrop)
-    function allowDrop(event) {
-        event.preventDefault();
-    }
-
-    function drop(event) {
-        event.preventDefault();
-        const data = event.dataTransfer.getData("text/plain");
-        const slot = event.target;
-        // Aquí puedes agregar lógica para manejar el ítem que se está soltando
-    }
-
-    function selectSlot(slot) {
-        // Lógica al seleccionar un slot en el inventario
-    }
-
-    function toggleItemList() {
-        const container = document.getElementById('itemListContainer');
-        container.style.display = container.style.display === 'none' ? 'block' : 'none';
-    }
-</script>
-
+        function findItemById(itemId) {
+            for (const category in items) {
+                const item = items[category].find(i => i.id === itemId);
+                if (item) return item;
+            }
+            return null; // No se encontró el ítem
+        }
+    </script>
 </body>
 </html>
-
