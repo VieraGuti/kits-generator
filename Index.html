@@ -3,421 +3,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kits Generator Rust</title>
+    <title>Kits Generator - Rust Style</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: 'Press Start 2P', sans-serif; /* Estilo gaming */
-            background-color: #1e1e1e; /* Fondo oscuro */
-            color: #fff; /* Texto claro */
+            background-color: #2b2b2b;
+            color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 20px;
         }
-
+        
         h1 {
             text-align: center;
             font-size: 2.5em;
-            color: #FF4500; /* Naranja Rust */
-            text-shadow: 2px 2px 4px #000;
+            color: #f39c12;
+            text-shadow: 2px 2px 5px #000;
         }
 
-        label {
-            display: block;
-            margin: 10px 0 5px;
+        .container {
+            width: 80%;
+            margin: auto;
+            background-color: #3c3c3c;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
 
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0 10px;
-            border: none;
+        .inventory {
+            margin: 20px 0;
+        }
+
+        .section-title {
+            font-weight: bold;
+            font-size: 1.5em;
+            margin-top: 20px;
+            color: #e67e22;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .inventory-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .slot {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #e67e22;
+            margin: 5px;
+            position: relative;
             border-radius: 5px;
-            background-color: #333; /* Fondo de campos */
-            color: #fff;
+            background-color: #444;
+            transition: background-color 0.3s;
+        }
+
+        .slot:hover {
+            background-color: #555;
+        }
+
+        .slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        input[type="text"], select {
+            width: calc(100% - 30px);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #e67e22;
+            background-color: #333;
+            color: #f4f4f4;
             font-size: 1em;
         }
 
         button {
-            background-color: #FF4500; /* Naranja Rust */
-            color: white;
+            background-color: #e67e22;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: background-color 0.3s;
         }
 
         button:hover {
-            background-color: #E53E00; /* Hover más oscuro */
+            background-color: #d35400;
         }
 
-        #command_list, #kit_list {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #292929; /* Cuadro oscuro */
-            border: 2px solid #FF4500; /* Borde naranja */
+        #editModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #444;
+            border: 2px solid #e67e22;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7); /* Sombra */
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            z-index: 100;
         }
 
-        .kit-item {
-            background-color: #444; /* Fondo de cada comando */
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #FF4500; /* Borde de comandos */
+        #editModal label {
+            display: block;
+            margin: 10px 0 5px;
         }
 
-        .kit-actions {
-            display: flex;
-            gap: 5px;
+        #editModal button {
+            width: 100%;
+            margin-top: 10px;
         }
 
-        footer {
-            text-align: center;
-            color: #EAEAEA;
-            font-size: 0.8em;
-            margin-top: 40px;
-        }
-
-        /* Estilo para los botones de sección */
-        .section-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        /* Estilo para la imagen del ítem */
-        .item-image {
-            max-width: 100px;
-            margin: 10px 0;
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 99;
         }
     </style>
 </head>
 <body>
-    <h1>Kits Generator</h1>
 
-    <div class="section-buttons">
-        <button onclick="toggleKits()">VieraGuti Kits</button>
+<div class="overlay" id="overlay"></div>
+
+<div class="container">
+    <h1>Kits Generator</h1>
+    <div class="inventory">
+        <div class="section-title">Wear</div>
+        <div class="wear inventory-section" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)">
+            <div class="slot" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)"></div>
+        </div>
+
+        <div class="section-title">Main</div>
+        <div class="main inventory-section" ondrop="drop(event, 'main')" ondragover="allowDrop(event)">
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
+        </div>
+
+        <div class="section-title">Belt</div>
+        <div class="belt inventory-section" ondrop="drop(event, 'belt')" ondragover="allowDrop(event)">
+            <div class="slot" ondrop="drop(event, 'belt')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'belt')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'belt')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'belt')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'belt')" ondragover="allowDrop(event)"></div>
+            <div class="slot" ondrop="drop(event, 'belt')" ondragover="allowDrop(event)"></div>
+        </div>
     </div>
 
-    <label for="item_category">Select category:</label>
-    <select id="item_category" onchange="updateItemList()">
-        <option value="none">Select a category</option>
-        <option value="ammo">Ammo</option>
-        <option value="weapons">Weapons</option>
-        <option value="construction">Construction Items</option>
-        <option value="attire">Attire</option>
-        <option value="tools">Tools</option>
-        <option value="medsAndTeas">Meds and Teas</option>
-        <option value="trapsAndMiscellaneous">Traps and Miscellaneous</option>
-        <option value="components">Components</option>
-        <option value="electrical">Electrical</option>
-    </select>
-
-    <label for="item_list">Select an item:</label>
-    <select id="item_list" onchange="showItemDetails()">
-        <option value="none">Select an item</option>
-        <!-- Aquí se añadirán dinámicamente las opciones -->
-    </select>
-
-    <img id="item_image" class="item-image" src="" alt="Imagen del ítem" style="display:none;" />
-
-    <label for="kit_name">Enter the kit name or choose KaosBot:</label>
-    <input type="text" id="kit_name" placeholder="Write the name of the kit">
-
-    <label for="kaosbot_kits">Select a KaosBot name:</label>
-    <select id="kaosbot_kits">
-        <option value="none">Select a kitname:</option>
+    <label for="kitName">Nombre del Kit:</label>
+    <input type="text" id="kitName" placeholder="Nombre del kit" />
+    <select id="kitDropdown">
+        <option value="">Selecciona un nombre</option>
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
-        <option value="vipkit">vipkit</option>
-        <option value="elitekit1">elitekit</option>
+        <option value="elitekit">elitekit</option>
         <option value="elitekit2">elitekit2</option>
         <option value="elitekit3">elitekit3</option>
-        <option value="elitekit4">elitekit4</option>
-        <option value="elitekit5">elitekit5</option>
-        <option value="elitekit6">elitekit6</option>
-        <option value="elitekit7">elitekit7</option>
-        <option value="elitekit8">elitekit8</option>
-        <option value="elitekit9">elitekit9</option>
-        <option value="elitekit10">elitekit10</option>
-        <option value="elitekit11">elitekit11</option>
-        <option value="elitekit12">elitekit12</option>
-        <option value="elitekit13">elitekit13</option>
-        <option value="elitekit14">elitekit14</option>
-        <option value="elitekit15">elitekit15</option>
-        <option value="elitekit16">elitekit16</option>
-        <option value="elitekit17">elitekit17</option>
-        <option value="elitekit18">elitekit18</option>
-        <option value="elitekit19">elitekit19</option>
-        <option value="elitekit20">elitekit20</option>
-        <option value="elitekit21">elitekit21</option>
-        <option value="elitekit22">elitekit22</option>
+        <!-- Más opciones aquí -->
     </select>
+    <button onclick="saveKit()">Guardar Kit</button>
+    <button onclick="copyCommands()">Copiar Comandos</button>
+    <button onclick="openEditModal(currentKit)">Editar Kit</button>
 
-    <label for="quantity">Quantity:</label>
-    <input type="number" id="quantity" placeholder="Write the amount" min="1" value="1">
+    <div id="editModal">
+        <label for="editKitName">Nuevo Nombre del Kit:</label>
+        <input type="text" id="editKitName" placeholder="Nuevo nombre" />
+        <button onclick="confirmEditKit()">Confirmar</button>
+        <button onclick="closeEditModal()">Cancelar</button>
+    </div>
+</div>
 
-    <label for="location">Location:</label>
-    <select id="location">
-        <option value="Main">Main</option>
-        <option value="Wear">Wear</option>
-        <option value="Belt">Belt</option>
-    </select>
+<script src="Items.js"></script>
+<script>
+    let kits = {};
+    let currentKit = null;
 
-    <button onclick="generateCommand()">Add kit</button>
-    
-    <div id="kit_list"></div>
-    <div id="command_list"></div>
+    function allowDrop(event) {
+        event.preventDefault();
+    }
 
-    <script src="Items.js"></script>
-    <script>
-        const commands = [];
-        const predefinedKits = [
-            {
-                name: "Fullequip",
-                commands: [
-                    'Kit add "Fullequip" "metal.facemask" 1 1 "Wear"',
-                    'Kit add "Fullequip" "hoodie" 1 1 "Wear"',
-                    'Kit add "Fullequip" "metal.plate.torso" 1 1 "Wear"',
-                    'Kit add "Fullequip" "pants" 1 1 "Wear"',
-                    'Kit add "Fullequip" "roadsign.kilt" 1 1 "Wear"',
-                    'Kit add "Fullequip" "tactical.gloves" 1 1 "Wear"',
-                    'Kit add "Fullequip" "shoes.boots" 1 1 "Wear"',
-                    'Kit add "Fullequip" "rifle.ak" 1 1 "Belt"',
-                    'Kit add "Fullequip" "weapon.mod.holosight" 1 1 "Main"',
-                    'Kit add "Fullequip" "weapon.mod.lasersight" 2 1 "Main"',
-                    'Kit add "Fullequip" "weapon.mod.small.scope" 2 1 "Main"',
-                    'Kit add "Fullequip" "rifle.bolt" 1 1 "Belt"',
-                    'Kit add "Fullequip" "ammo.rifle" 420 1 "Main"',
-                    'Kit add "Fullequip" "syringe.medical" 14 1 "Belt"',
-                    'Kit add "Fullequip" "blueberries" 60 1 "Belt"',
-                    'Kit add "Fullequip" "barricade.wood.cover" 4 1 "Belt"',
-                    'Kit add "Fullequip" "bandage" 12 1 "Belt"',
-                    'Kit add "Fullequip" "pumpkin" 5 1 "Main"',
-                    'Kit add "Fullequip" "axe.salvaged" 1 1 "Main"',
-                    'Kit add "Fullequip" "jackhammer" 1 1 "Main"',
-                    'Kit add "Fullequip" "note" 1 1 "Main"',
-                    'Kit add "Fullequip" "largebackpack" 1 1 "Wear"'
-                ]
-            },
-            {
-                name: "BuzoDive",
-                commands: [
-                    'Kit add "BuzoDive" "diving.fins" 1 1 "Wear"',
-                    'Kit add "BuzoDive" "diving.mask" 1 1 "Wear"',
-                    'Kit add "BuzoDive" "diving.tank" 1 1 "Wear"',
-                    'Kit add "BuzoDive" "hazmatsuit" 1 1 "Main"',
-                    'Kit add "BuzoDive" "diving.wetsuit" 1 1 "Wear"',
-                    'Kit add "BuzoDive" "speargun" 1 1 "Belt"',
-                    'Kit add "BuzoDive" "bow.hunting" 1 1 "Belt"',
-                    'Kit add "BuzoDive" "arrow.wooden" 68 1 "Main"',
-                    'Kit add "BuzoDive" "speargun.spear" 80 1 "Main"',
-                    'Kit add "BuzoDive" "syringe.medical" 6 1 "Belt"',
-                    'Kit add "BuzoDive" "bandage" 9 1 "Belt"'
-                ]
-            },
-            {
-                name: "Regalo",
-                commands: [
-                    'Kit add "Regalo" "cakefiveyear" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
-                    'Kit add "Regalo" "partyhat" 1 1 "Wear"',
-                    'Kit add "Regalo" "cakefiveyear" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
-                    'Kit add "Regalo" "cakefiveyear" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"'
-                ]
-            }
-        ];
-
-        // Función para mostrar/ocultar los kits de VieraGuti
-        function toggleKits() {
-            const kitListContainer = document.getElementById('kit_list');
-            kitListContainer.innerHTML = ''; // Limpiar contenido anterior
-
-            predefinedKits.forEach(kit => {
-                const kitItem = document.createElement('div');
-                kitItem.className = 'kit-item';
-                kitItem.innerHTML = `
-                    <strong>${kit.name}</strong>
-                    <button onclick="showKitDetails('${kit.name}')">Show kit</button>
-                `;
-                kitListContainer.appendChild(kitItem);
-            });
-        }
-
-        // Función para mostrar los detalles del kit
-        function showKitDetails(kitName) {
-            const kit = predefinedKits.find(k => k.name === kitName);
-            const commandList = document.getElementById('kit_list');
-            commandList.innerHTML = ''; // Limpiar lista existente
-
-            if (kit) {
-                const kitDetails = document.createElement('div');
-                kitDetails.className = 'kit-item';
-                kitDetails.innerHTML = `
-                    <strong>${kit.name}</strong>
-                    <div>${kit.commands.join('<br>')}</div>
-                    <button onclick="copyKits('${kit.name}')">Copy Command</button>
-                    <button onclick="toggleKitList()">Hide list</button>
-                `;
-                commandList.appendChild(kitDetails);
-            }
-        }
-
-        // Función para ocultar la lista
-        function toggleKitList() {
-            toggleKits(); // Mostrar solo la lista de nombres
-        }
-
-        // Función para copiar el comando
-        function copyKits(kitName) {
-            const kit = predefinedKits.find(k => k.name === kitName);
-            if (kit) {
-                const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('\n');
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Espacios en el mensaje de alerta
-            }
-        }
-
-        function showItemDetails() {
-            const itemList = document.getElementById('item_list');
-            const selectedCategory = document.getElementById('item_category').value;
-
-            const selectedItem = items[selectedCategory].find(item => item.id === itemList.value);
-            const itemImage = document.getElementById('item_image');
-            
-            if (selectedItem) {
-                const imageUrl = `images/${selectedItem.id}.png`;
-                itemImage.src = imageUrl;
-                itemImage.style.display = 'block'; // Mostrar la imagen
-            } else {
-                itemImage.style.display = 'none'; // Ocultar si no hay imagen
-            }
-        }
-
-        function generateCommand() {
-            const kitName = document.getElementById('kit_name').value || document.getElementById('kaosbot_kits').value;
-            const shortName = document.getElementById('item_list').value;
-            const quantity = document.getElementById('quantity').value;
-            const location = document.getElementById('location').value;
-
-            if (!kitName || shortName === "none" || !quantity) {
-                alert('Please complete all fields.');
-                return;
-            }
-
-            const command = `Kit add "${kitName}" "${shortName}" ${quantity} 1 "${location}"`;
-            const existingKit = commands.find(kit => kit.name === kitName);
-
-            if (existingKit) {
-                existingKit.commands.push(command);
-            } else {
-                commands.push({
-                    name: kitName,
-                    commands: [command]
-                });
-            }
-
-            localStorage.setItem('commands', JSON.stringify(commands));
-            displayCommands();
-            document.getElementById('item_list').value = 'none'; // Reiniciar la selección de ítems
-            showItemDetails(); // Limpiar detalles de ítem
-        }
-
-        function displayCommands() {
-            const commandList = document.getElementById('command_list'); // Cambiado para mostrar en command_list
-            commandList.innerHTML = ''; // Limpiar lista existente
-
-            commands.forEach((kit) => {
-                const kitItem = document.createElement('div');
-                kitItem.className = 'kit-item';
-                kitItem.innerHTML = `
-                    <strong>${kit.name}</strong>
-                    <div>
-                        ${kit.commands.join('<br>')}
-                    </div>
-                    <div class="kit-actions">
-                        <button onclick="copyCommands('${kit.name}')">Copy</button>
-                        <button onclick="editKit('${kit.name}')">Edit</button>
-                        <button onclick="deleteKit('${kit.name}')">Delete</button>
-                    </div>
-                `;
-                commandList.appendChild(kitItem);
-            });
-        }
-
-        // Nueva función para copiar todos los comandos de un kit
-        function copyCommands(kitName) {
-            const kit = commands.find(k => k.name === kitName);
-            if (kit) {
-                const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('\n');
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Espacios en el mensaje de alerta
-            }
-        }
-
-        function editKit(kitName) {
-            const kit = commands.find(k => k.name === kitName);
-            if (kit) {
-                const newCommands = prompt('Edit kit commands:', kit.commands.join('\n'));
-                if (newCommands) {
-                    kit.commands = newCommands.split('\n');
-                    localStorage.setItem('commands', JSON.stringify(commands));
-                    displayCommands();
+    function drop(event, section) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData("text");
+        const slot = event.target;
+        if (slot.classList.contains('slot')) {
+            if (slot.hasChildNodes()) {
+                if (confirm("Esta ranura ya tiene un ítem. ¿Deseas reemplazarlo?")) {
+                    slot.innerHTML = ""; // Limpiar slot
+                } else {
+                    return;
                 }
             }
+            const img = document.createElement("img");
+            img.src = data;
+            img.draggable = true;
+            img.ondragstart = (e) => {
+                e.dataTransfer.setData("text", data);
+            };
+            slot.appendChild(img);
         }
+    }
 
-        function deleteKit(kitName) {
-            if (confirm(`You are going to delete the entire list from "${kitName}". You're sure?`)) {
-                const kitIndex = commands.findIndex(k => k.name === kitName);
-                if (kitIndex !== -1) {
-                    commands.splice(kitIndex, 1); // Borrar el kit del array
-                    localStorage.setItem('commands', JSON.stringify(commands));
-                    displayCommands();
-                }
-            }
+    function saveKit() {
+        const kitName = document.getElementById("kitName").value || document.getElementById("kitDropdown").value;
+        const commands = generateCommands(kitName);
+        if (!kits[kitName]) {
+            kits[kitName] = commands.split("\n");
+            alert("Kit guardado: " + kitName);
+        } else {
+            alert("Ya existe un kit con ese nombre.");
         }
+    }
 
-        window.onload = function() {
-            const savedCommands = localStorage.getItem('commands');
-            if (savedCommands) {
-                commands.push(...JSON.parse(savedCommands));
-                displayCommands();
+    function generateCommands(kitName) {
+        let commands = [];
+
+        const slots = document.querySelectorAll('.slot');
+
+        slots.forEach((slot) => {
+            if (slot.hasChildNodes()) {
+                const img = slot.querySelector("img");
+                const id = findItemId(img.dataset.name); // Obtener ID usando el nombre
+                const quantity = img.dataset.quantity || 1;
+                const location = determineLocation(slot); // Determinar la ubicación (Wear, Main, Belt)
+                commands.push(`Kit add "${kitName}" "${id}" "${quantity}" "1" "${location}"`);
             }
-        };
+        });
 
-        // Cargar los ítems en la lista del dropdown según la categoría seleccionada
-        function updateItemList() {
-            const category = document.getElementById('item_category').value;
-            const itemList = document.getElementById('item_list');
-            itemList.innerHTML = '<option value="none">Seleccione un ítem</option>'; // Reiniciar lista de ítems
+        return commands.join("\n");
+    }
 
-            if (category !== 'none') {
-                items[category].forEach(item => {
-                    const option = document.createElement('option');
-                    option.value = item.id;
-                    option.textContent = item.name;
-                    itemList.appendChild(option);
-                });
-            }
+    function determineLocation(slot) {
+        if (slot.parentNode.classList.contains('wear')) return 'Wear';
+        if (slot.parentNode.classList.contains('main')) return 'Main';
+        if (slot.parentNode.classList.contains('belt')) return 'Belt';
+        return '';
+    }
+
+    function findItemId(itemName) {
+        const item = Items.find(i => i.name === itemName);
+        return item ? item.id : null;
+    }
+
+    function copyCommands() {
+        const kitName = document.getElementById("kitName").value || document.getElementById("kitDropdown").value;
+        if (!kits[kitName]) {
+            alert("No hay comandos para copiar. Asegúrate de guardar el kit primero.");
+            return;
         }
-    </script>
-    <footer>
-        <p>Hecho por VieraGuti</p>
-    </footer>
+        const commands = kits[kitName].join("\n");
+        navigator.clipboard.writeText(commands)
+            .then(() => alert("Comandos copiados al portapapeles!"))
+            .catch(err => console.error('Error al copiar: ', err));
+    }
+
+    function openEditModal(kit) {
+        if (kit) {
+            currentKit = kit;
+            document.getElementById("editKitName").value = kit.name; // Cargar nombre actual del kit
+            document.getElementById("editModal").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        }
+    }
+
+    function confirmEditKit() {
+        const newName = document.getElementById("editKitName").value;
+        if (currentKit) {
+            currentKit.name = newName; // Actualizar el nombre del kit
+            closeEditModal();
+        }
+    }
+
+    function closeEditModal() {
+        document.getElementById("editModal").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+    }
+</script>
+
 </body>
 </html>
