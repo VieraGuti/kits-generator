@@ -3,217 +3,341 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kits Generator</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Kits Generator Rust</title>
+    <style>
+        body {
+            font-family: 'Press Start 2P', sans-serif; /* Estilo gaming */
+            background-color: #1e1e1e; /* Fondo oscuro */
+            color: #fff; /* Texto claro */
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            color: #FF4500; /* Naranja Rust */
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333; /* Fondo de campos */
+            color: #fff;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #FF4500; /* Naranja Rust */
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #E53E00; /* Hover más oscuro */
+        }
+
+        #command_list, #kit_list {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #292929; /* Cuadro oscuro */
+            border: 2px solid #FF4500; /* Borde naranja */
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7); /* Sombra */
+        }
+
+        .kit-item {
+            background-color: #444; /* Fondo de cada comando */
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #FF4500; /* Borde de comandos */
+        }
+
+        .kit-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        footer {
+            text-align: center;
+            color: #EAEAEA;
+            font-size: 0.8em;
+            margin-top: 40px;
+        }
+
+        /* Estilo para los botones de sección */
+        .section-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        /* Estilo para la imagen del ítem */
+        .item-image {
+            max-width: 100px;
+            margin: 10px 0;
+        }
+
+        /* Estilo para el inventario */
+        .inventory {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* 6 columnas */
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .inventory-slot {
+            border: 2px solid #FF4500; /* Borde de los slots */
+            background-color: #333; /* Fondo de los slots */
+            position: relative;
+            height: 70px; /* Altura del slot */
+            overflow: hidden;
+        }
+
+        .inventory-slot img {
+            max-width: 100%;
+            max-height: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .item-count {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.8em;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Kits Generator</h1>
+    <h1>Kits Generator</h1>
 
-        <div class="inventory">
-            <div class="wear" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)">
-                <h3>Wear</h3>
-                <div class="slot" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'wear')" ondragover="allowDrop(event)"></div>
-            </div>
-            <div class="main" ondrop="drop(event, 'main')" ondragover="allowDrop(event)">
-                <h3>Main</h3>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'main')" ondragover="allowDrop(event)"></div>
-            </div>
-            <div class="belt" ondrop="drop(event, 'belt')" ondragover="allowDrop(event)">
-                <h3>Belt</h3>
-                <div class="slot" ondrop="drop(event, 'belt')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'belt')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'belt')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'belt')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'belt')" ondragover="allowDrop(event)"></div>
-                <div class="slot" ondrop="drop(event, 'belt')" ondragover="allowDrop(event)"></div>
-            </div>
-        </div>
-
-        <div class="controls">
-            <label for="kitName">Nombre del Kit:</label>
-            <input type="text" id="kitName" placeholder="Nombre del kit">
-            <select id="kitDropdown"></select>
-            <button onclick="saveKit()">Guardar Kit</button>
-            <button onclick="copyCommands()">Copiar Comandos</button>
-            <button onclick="openEditModal(currentKit)">Editar Kit</button>
-            <select id="itemDropdown"></select>
-            <button onclick="addItem()">Añadir Ítem</button>
-        </div>
-
-        <div id="editModal" style="display:none;">
-            <label for="editKitName">Nuevo Nombre del Kit:</label>
-            <input type="text" id="editKitName" placeholder="Nuevo nombre">
-            <button onclick="confirmEditKit()">Confirmar</button>
-            <button onclick="closeEditModal()">Cancelar</button>
-        </div>
+    <div class="section-buttons">
+        <button onclick="toggleKits()">VieraGuti Kits</button>
     </div>
+
+    <label for="item_category">Select category:</label>
+    <select id="item_category" onchange="updateItemList()">
+        <option value="none">Select a category</option>
+        <option value="ammo">Ammo</option>
+        <option value="weapons">Weapons</option>
+        <option value="construction">Construction Items</option>
+        <option value="attire">Attire</option>
+        <option value="tools">Tools</option>
+        <option value="medsAndTeas">Meds and Teas</option>
+        <option value="trapsAndMiscellaneous">Traps and Miscellaneous</option>
+        <option value="components">Components</option>
+        <option value="electrical">Electrical</option>
+    </select>
+
+    <label for="item_list">Select an item:</label>
+    <select id="item_list" onchange="showItemDetails()">
+        <option value="none">Select an item</option>
+        <!-- Aquí se añadirán dinámicamente las opciones -->
+    </select>
+
+    <img id="item_image" class="item-image" src="" alt="Imagen del ítem" style="display:none;" />
+
+    <label for="kit_name">Enter the kit name or choose KaosBot:</label>
+    <input type="text" id="kit_name" placeholder="Write the name of the kit">
+
+    <label for="kaosbot_kits">Select a KaosBot name:</label>
+    <select id="kaosbot_kits">
+        <option value="none">Select a kitname:</option>
+        <option value="freekit">freekit</option>
+        <option value="freekit2">freekit2</option>
+        <option value="vipkit">vipkit</option>
+        <option value="elitekit1">elitekit</option>
+        <option value="elitekit2">elitekit2</option>
+        <option value="elitekit3">elitekit3</option>
+        <option value="elitekit4">elitekit4</option>
+        <option value="elitekit5">elitekit5</option>
+        <option value="elitekit6">elitekit6</option>
+        <option value="elitekit7">elitekit7</option>
+        <option value="elitekit8">elitekit8</option>
+        <option value="elitekit9">elitekit9</option>
+        <option value="elitekit10">elitekit10</option>
+        <option value="elitekit11">elitekit11</option>
+        <option value="elitekit12">elitekit12</option>
+        <option value="elitekit13">elitekit13</option>
+        <option value="elitekit14">elitekit14</option>
+        <option value="elitekit15">elitekit15</option>
+        <option value="elitekit16">elitekit16</option>
+        <option value="elitekit17">elitekit17</option>
+        <option value="elitekit18">elitekit18</option>
+        <option value="elitekit19">elitekit19</option>
+        <option value="elitekit20">elitekit20</option>
+        <option value="elitekit21">elitekit21</option>
+        <option value="elitekit22">elitekit22</option>
+    </select>
+
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" placeholder="Write the amount" min="1" value="1">
+
+    <label for="location">Location:</label>
+    <select id="location">
+        <option value="Main">Main</option>
+        <option value="Wear">Wear</option>
+        <option value="Belt">Belt</option>
+    </select>
+
+    <button onclick="generateCommand()">Add kit</button>
+    
+    <div id="kit_list"></div>
+    <div id="command_list"></div>
+
+    <h2>Inventario</h2>
+    <div class="inventory" id="inventory"></div> <!-- Inventario aquí -->
 
     <script src="Items.js"></script>
     <script>
-        let kits = {};
-        let currentKit = null;
+        const commands = [];
+        const predefinedKits = [
+            // ... Tus kits predefinidos aquí ...
+        ];
 
-        window.onload = function () {
-            loadItems();
-        };
-
-        function loadItems() {
-            const itemDropdown = document.getElementById("itemDropdown");
-            Items.forEach(item => {
-                const option = document.createElement("option");
-                option.value = item.id;
-                option.text = item.name;
-                itemDropdown.add(option);
+        // Recupera el inventario del localStorage
+        function loadInventory() {
+            const inventory = JSON.parse(localStorage.getItem('userInventory')) || [];
+            inventory.forEach(item => {
+                updateInventory(item.id, item.quantity, item.location, item.image);
             });
         }
 
-        function allowDrop(event) {
-            event.preventDefault();
-        }
-
-        function drop(event, section) {
-            event.preventDefault();
-            const data = event.dataTransfer.getData("text");
-            const slot = event.target;
-
-            if (slot.classList.contains('slot')) {
-                if (slot.hasChildNodes()) {
-                    if (confirm("Esta ranura ya tiene un ítem. ¿Deseas reemplazarlo?")) {
-                        slot.innerHTML = ""; // Limpiar slot
-                    } else {
-                        return;
-                    }
+        // Función para guardar el inventario en localStorage
+        function saveInventory() {
+            const inventorySlots = [...document.querySelectorAll('.inventory-slot')];
+            const inventory = inventorySlots.map(slot => {
+                const img = slot.querySelector('img');
+                if (img) {
+                    const itemId = img.src.split('/').pop().split('.')[0]; // Obtiene el id del ítem
+                    const quantity = slot.querySelector('.item-count').textContent;
+                    const location = getSlotLocation(slot);
+                    return { id: itemId, quantity: quantity, location: location, image: img.src };
                 }
-                const img = document.createElement("img");
-                img.src = data;
-                img.draggable = true;
-                img.ondragstart = (e) => {
-                    e.dataTransfer.setData("text", data);
-                };
-                slot.appendChild(img);
-            }
+                return null;
+            }).filter(item => item);
+            localStorage.setItem('userInventory', JSON.stringify(inventory));
         }
 
-        function saveKit() {
-            const kitName = document.getElementById("kitName").value || document.getElementById("kitDropdown").value;
-            const commands = generateCommands(kitName);
-            if (!kits[kitName]) {
-                kits[kitName] = commands.split("\n");
-                alert("Kit guardado: " + kitName);
-                updateKitDropdown();
-            } else {
-                alert("Ya existe un kit con ese nombre.");
-            }
+        // Función para obtener la ubicación del slot
+        function getSlotLocation(slot) {
+            const index = [...slot.parentElement.children].indexOf(slot);
+            if (index < 7) return 'Wear';
+            if (index < 31) return 'Main';
+            return 'Belt';
         }
 
-        function updateKitDropdown() {
-            const kitDropdown = document.getElementById("kitDropdown");
-            kitDropdown.innerHTML = ""; // Limpiar dropdown
-            for (const kitName in kits) {
-                const option = document.createElement("option");
-                option.value = kitName;
-                option.text = kitName;
-                kitDropdown.add(option);
+        // Actualiza el inventario y guarda los cambios
+        function updateInventory(itemId, quantity, location, image) {
+            const inventorySlots = [...document.querySelectorAll('.inventory-slot')];
+            let slotIndex;
+
+            // Encuentra el slot correspondiente
+            if (location === 'Main') {
+                slotIndex = [...inventorySlots].slice(7, 31).findIndex(slot => !slot.firstChild);
+            } else if (location === 'Wear') {
+                slotIndex = [...inventorySlots].slice(0, 7).findIndex(slot => !slot.firstChild);
+            } else if (location === 'Belt') {
+                slotIndex = [...inventorySlots].slice(31).findIndex(slot => !slot.firstChild);
             }
-        }
 
-        function generateCommands(kitName) {
-            let commands = [];
-            const slots = document.querySelectorAll('.slot');
-
-            slots.forEach((slot) => {
-                if (slot.hasChildNodes()) {
-                    const img = slot.querySelector("img");
-                    const id = img.src.split('/').pop().split('.')[0]; // Obtener ID de la imagen
-                    const quantity = img.dataset.quantity || 1;
-                    const location = determineLocation(slot);
-                    commands.push(`Kit add "${kitName}" "${id}" "${quantity}" "1" "${location}"`);
+            if (slotIndex >= 0) {
+                const slot = inventorySlots[slotIndex + (location === 'Belt' ? 31 : location === 'Wear' ? 0 : 7)];
+                const existingItemCount = slot.querySelector('.item-count');
+                if (existingItemCount) {
+                    // Actualiza la cantidad si el ítem ya está presente
+                    existingItemCount.textContent = parseInt(existingItemCount.textContent) + parseInt(quantity);
+                } else {
+                    // Si el slot está vacío, añade la imagen y la cantidad
+                    slot.innerHTML = `
+                        <img src="${image}" alt="Item ${itemId}">
+                        <div class="item-count">${quantity}</div>
+                    `;
                 }
+            }
+
+            // Guarda el inventario en localStorage después de cada cambio
+            saveInventory();
+        }
+
+        // Lógica para generar el comando y actualizar el inventario
+        function generateCommand() {
+            const itemName = document.getElementById('item_list').value;
+            const item = items.find(i => i.name === itemName);
+            const quantity = document.getElementById('quantity').value;
+            const location = document.getElementById('location').value;
+
+            if (item) {
+                const command = `Kit add "${document.getElementById('kit_name').value || document.getElementById('kaosbot_kits').value}" "${item.id}" "${quantity}" "1" "${location}"`;
+                commands.push(command);
+                updateInventory(item.id, quantity, location, item.image);
+                displayCommands();
+            }
+        }
+
+        // Muestra los comandos generados
+        function displayCommands() {
+            const commandList = document.getElementById('command_list');
+            commandList.innerHTML = commands.map(cmd => `<div>${cmd}</div>`).join('');
+        }
+
+        // Inicializa el inventario y carga datos del localStorage
+        function initializeInventory() {
+            const inventory = document.getElementById('inventory');
+            for (let i = 0; i < 42; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'inventory-slot';
+                inventory.appendChild(slot);
+            }
+            loadInventory(); // Carga el inventario del localStorage
+        }
+
+        // Llamada inicial para configurar el inventario
+        window.onload = initializeInventory;
+
+        // Simula la actualización de la lista de ítems (implementa tu lógica aquí)
+        function updateItemList() {
+            const category = document.getElementById('item_category').value;
+            const itemList = document.getElementById('item_list');
+            itemList.innerHTML = '<option value="none">Select an item</option>';
+            items.filter(i => i.category === category).forEach(item => {
+                itemList.innerHTML += `<option value="${item.name}">${item.name}</option>`;
             });
-
-            return commands.join("\n");
         }
 
-        function determineLocation(slot) {
-            if (slot.parentNode.classList.contains('wear')) return 'Wear';
-            if (slot.parentNode.classList.contains('main')) return 'Main';
-            if (slot.parentNode.classList.contains('belt')) return 'Belt';
-            return '';
-        }
-
-        function copyCommands() {
-            const kitName = document.getElementById("kitName").value || document.getElementById("kitDropdown").value;
-            if (kits[kitName]) {
-                const commands = kits[kitName].join("\n");
-                navigator.clipboard.writeText(commands).then(() => {
-                    alert("Comandos copiados al portapapeles.");
-                });
+        // Muestra detalles del ítem seleccionado
+        function showItemDetails() {
+            const selectedItem = document.getElementById('item_list').value;
+            const item = items.find(i => i.name === selectedItem);
+            const image = document.getElementById('item_image');
+            if (item) {
+                image.src = item.image;
+                image.style.display = 'block';
             } else {
-                alert("No existe un kit con ese nombre.");
+                image.src = '';
+                image.style.display = 'none';
             }
-        }
-
-        function openEditModal(kitName) {
-            if (!kits[kitName]) return;
-            currentKit = kitName;
-            document.getElementById("editKitName").value = kitName;
-            document.getElementById("editModal").style.display = "block";
-        }
-
-        function confirmEditKit() {
-            const newName = document.getElementById("editKitName").value;
-            if (kits[currentKit]) {
-                kits[newName] = kits[currentKit];
-                delete kits[currentKit];
-                alert("Kit editado: " + newName);
-                updateKitDropdown();
-            }
-            closeEditModal();
-        }
-
-        function closeEditModal() {
-            document.getElementById("editModal").style.display = "none";
-        }
-
-        function addItem() {
-            const itemDropdown = document.getElementById("itemDropdown");
-            const selectedItemId = itemDropdown.value;
-            const selectedItem = Items.find(item => item.id === selectedItemId);
-            const img = document.createElement("img");
-            img.src = selectedItem.image; // Suponiendo que 'image' es el nombre de la propiedad en Items.js
-            img.draggable = true;
-            img.ondragstart = (e) => {
-                e.dataTransfer.setData("text", img.src);
-            };
-            const slot = document.querySelector('.slot');
-            slot.appendChild(img);
         }
     </script>
 </body>
