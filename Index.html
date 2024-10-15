@@ -264,7 +264,6 @@ h3 {
 
     <script src="Items.js"></script>
 <script>
-   <script>
     window.onload = function() {
         console.log(items); // Verifica que todos los elementos se carguen correctamente
         loadCategories();
@@ -325,17 +324,60 @@ h3 {
                                 touch.clientY >= slotRect.top &&
                                 touch.clientY <= slotRect.bottom
                             ) {
+                                // Si se suelta en un slot
                                 const quantity = document.getElementById('itemQuantity').value;
-                                slot.innerHTML = `<img src="images/${item.id}.png" style="width: 40px;"/>${quantity > 1 ? ' x' + quantity : ''}`;
+
+                                // Verificar tipo de slot antes de añadir
+                                if (slot.dataset.type === 'wear' && category !== 'Attire') {
+                                    console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
+                                    return; // No hacer nada si no es de la categoría "Attire"
+                                }
+
+                                // Crear el contenedor para la imagen y la cantidad
+                                const itemContainer = document.createElement('div');
+                                itemContainer.style.position = 'relative';
+                                itemContainer.style.width = '100%';
+                                itemContainer.style.height = '100%';
+
+                                // Crear la imagen
+                                const imgSlot = document.createElement('img');
+                                imgSlot.src = `images/${item.id}.png`;
+                                imgSlot.style.width = '100%'; // Adaptar al tamaño del slot
+                                imgSlot.style.height = '100%'; // Adaptar al tamaño del slot
+
+                                // Crear el elemento para la cantidad
+                                const quantityElement = document.createElement('span');
+                                quantityElement.style.position = 'absolute';
+                                quantityElement.style.bottom = '5px';
+                                quantityElement.style.right = '5px';
+                                quantityElement.style.color = 'white';
+                                quantityElement.style.fontSize = '12px';
+                                quantityElement.style.backgroundColor = 'transparent'; // Sin fondo
+
+                                // Mostrar cantidad con "x" si es mayor a 1
+                                if (quantity > 1) {
+                                    quantityElement.textContent = `x${quantity}`;
+                                }
+
+                                // Añadir la imagen y la cantidad al contenedor
+                                itemContainer.appendChild(imgSlot);
+                                itemContainer.appendChild(quantityElement);
+
+                                // Limpiar slot y añadir el contenedor
+                                slot.innerHTML = '';
+                                slot.appendChild(itemContainer);
+
                                 slot.dataset.id = item.id;
                                 slot.dataset.quantity = quantity;
                                 slot.dataset.type = slot.dataset.type;
                             }
                         });
 
+                        // Resetear estilo
                         img.style.position = '';
                         img.style.left = '';
                         img.style.top = '';
+
                         document.removeEventListener('touchmove', onTouchMove);
                         document.removeEventListener('touchend', onTouchEnd);
                     };
@@ -352,15 +394,6 @@ h3 {
 
     const slots = document.querySelectorAll('.main-slot, .small-slot');
     slots.forEach(slot => {
-        // Asignar el tipo de slot basado en su clase
-        if (slot.classList.contains('wear-slot')) {
-            slot.dataset.type = 'wear';
-        } else if (slot.classList.contains('main-slot')) {
-            slot.dataset.type = 'main';
-        } else if (slot.classList.contains('belt-slot')) {
-            slot.dataset.type = 'belt';
-        }
-
         slot.addEventListener('dragover', (e) => {
             e.preventDefault();
         });
@@ -370,8 +403,8 @@ h3 {
             const data = JSON.parse(e.dataTransfer.getData('text/plain'));
             const quantity = document.getElementById('itemQuantity').value;
 
-            // Verificar si el slot es de tipo "wear" y si el ítem es de tipo "attire"
-            if (slot.dataset.type === 'wear' && data.category !== 'Attire') {
+            // Permitir "Attire" en "Wear"
+            if (slot.dataset.type === 'wear' && data.category !== 'attire') {
                 console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
                 return; // No hacer nada si no es de la categoría "Attire"
             }
@@ -390,12 +423,17 @@ h3 {
 
             // Crear el elemento para la cantidad
             const quantityElement = document.createElement('span');
-            quantityElement.textContent = quantity > 1 ? `x${quantity}` : ''; // Mostrar "x" solo si hay más de uno
             quantityElement.style.position = 'absolute';
             quantityElement.style.bottom = '5px';
             quantityElement.style.right = '5px';
             quantityElement.style.color = 'white';
             quantityElement.style.fontSize = '12px';
+            quantityElement.style.backgroundColor = 'transparent'; // Sin fondo
+
+            // Mostrar cantidad con "x" si es mayor a 1
+            if (quantity > 1) {
+                quantityElement.textContent = `x${quantity}`;
+            }
 
             // Añadir la imagen y la cantidad al contenedor
             itemContainer.appendChild(img);
@@ -407,7 +445,7 @@ h3 {
 
             slot.dataset.id = data.id;
             slot.dataset.quantity = quantity;
-            slot.dataset.type = slot.dataset.type; // Asegurarte de que el tipo se guarda correctamente
+            slot.dataset.type = slot.dataset.type; // Asegúrate de que el tipo se guarda correctamente
         });
     });
 
@@ -418,7 +456,7 @@ h3 {
             if (slot.dataset.id) {
                 const itemId = slot.dataset.id;
                 const quantity = slot.dataset.quantity;
-                const itemType = slot.dataset.type; // Asegurarte de que el tipo se guarda correctamente
+                const itemType = slot.dataset.type; // Asegúrate de que el tipo se guarda correctamente
                 commands.push(`kit add ${kitName} ${itemId} ${quantity} 1 ${itemType}`);
             }
         });
@@ -448,6 +486,7 @@ h3 {
         document.getElementById('itemQuantity').value = 1; // Resetear cantidad
     });
 </script>
+
 
     <footer>
         <p>Hecho por VieraGuti</p>
