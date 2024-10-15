@@ -76,7 +76,7 @@ const items = {
         { id: 'shotgun.waterpipe', name: 'Waterpipe Shotgun', image: 'images/weapons/shotgun.waterpipe' },
         { id: 'spear.wooden', name: 'Wooden Spear', image: 'images/weapons/spear.wooden' }
     ],
-    const resources = [
+    resources: [
     { id: 'animal_fat', name: 'Animal Fat', image: 'images/resources/animal_fat' },
     { id: 'bone_fragments', name: 'Bone Fragments', image: 'images/resources/bone_fragments' },
     { id: 'cctv_camera', name: 'CCTV Camera', image: 'images/resources/cctv_camera' },
