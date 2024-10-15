@@ -264,7 +264,7 @@ h3 {
 
     <script src="Items.js"></script>
 <script>
-    window.onload = function() {
+   window.onload = function() {
     console.log(items); // Verifica que todos los elementos se carguen correctamente
     loadCategories();
 };
@@ -296,7 +296,7 @@ document.getElementById('category').addEventListener('change', (event) => {
 
             // Manejo del arrastre para PC
             img.addEventListener('dragstart', (e) => {
-                e.dataTransfer.setData('text/plain', JSON.stringify({ id: item.id, name: item.name }));
+                e.dataTransfer.setData('text/plain', JSON.stringify({ id: item.id, name: item.name, category: category }));
             });
 
             // Manejo del toque para móviles
@@ -363,7 +363,7 @@ slots.forEach(slot => {
         const data = JSON.parse(e.dataTransfer.getData('text/plain'));
         const quantity = document.getElementById('itemQuantity').value;
 
-        // Verificar si el slot es de tipo "wear" y si el ítem es de tipo "attire"
+        // Permitir "Attire" en "Wear"
         if (slot.dataset.type === 'wear' && data.category !== 'Attire') {
             console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
             return; // No hacer nada si no es de la categoría "Attire"
@@ -388,6 +388,7 @@ slots.forEach(slot => {
         quantityElement.style.right = '5px';
         quantityElement.style.color = 'white';
         quantityElement.style.fontSize = '12px';
+        quantityElement.style.backgroundColor = 'transparent'; // Sin fondo
 
         // Mostrar cantidad con "x" si es mayor a 1
         if (quantity > 1) {
@@ -406,9 +407,7 @@ slots.forEach(slot => {
         slot.dataset.quantity = quantity;
         slot.dataset.type = slot.dataset.type;
     });
-}); 
-
-
+});
 
 document.getElementById('finalizeKit').addEventListener('click', () => {
     const commands = [];
@@ -446,6 +445,7 @@ document.getElementById('newKit').addEventListener('click', () => {
     document.getElementById('command_list').innerText = '';
     document.getElementById('itemQuantity').value = 1; // Resetear cantidad
 });
+
 </script>
 
     <footer>
