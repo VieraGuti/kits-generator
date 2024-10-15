@@ -305,7 +305,8 @@
         });
     }
 
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent); // Detección de dispositivos móviles
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    let selectedItem = null; // Variable para almacenar el ítem seleccionado
 
     document.getElementById('category').addEventListener('change', (event) => {
         const category = event.target.value;
@@ -323,23 +324,9 @@
                 img.draggable = !isMobile; // Solo draggable si no es móvil
 
                 if (isMobile) {
-                    img.addEventListener('click', (e) => {
-                        const quantity = document.getElementById('itemQuantity').value;
-                        slots.forEach(slot => {
-                            const slotRect = slot.getBoundingClientRect();
-                            if (
-                                e.clientX >= slotRect.left &&
-                                e.clientX <= slotRect.right &&
-                                e.clientY >= slotRect.top &&
-                                e.clientY <= slotRect.bottom
-                            ) {
-                                if (slot.dataset.type === 'wear' && category !== 'Attire') {
-                                    console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
-                                    return; 
-                                }
-                                applyItemToSlot(slot, item, quantity);
-                            }
-                        });
+                    img.addEventListener('click', () => {
+                        selectedItem = { id: item.id, name: item.name, category: category }; // Guardar el ítem seleccionado
+                        console.log(`Seleccionado: ${item.name}`);
                     });
                 } else {
                     img.addEventListener('dragstart', (e) => {
@@ -371,6 +358,16 @@
 
             applyItemToSlot(slot, data, quantity);
         });
+
+        if (isMobile) {
+            slot.addEventListener('click', () => {
+                if (selectedItem) {
+                    const quantity = document.getElementById('itemQuantity').value;
+                    applyItemToSlot(slot, selectedItem, quantity);
+                    selectedItem = null; // Limpiar selección
+                }
+            });
+        }
     });
 
     function applyItemToSlot(slot, item, quantity) {
