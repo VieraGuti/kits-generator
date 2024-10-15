@@ -60,6 +60,9 @@
             margin-top: 20px;
             color: #ccc;
         }
+        .inventory {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -130,7 +133,9 @@
         </div>
         <div class="drop-zone" id="main_slots">
             <h3>Main</h3>
-            ${Array(24).fill('<div class="slot"></div>').join('')}
+            <div class="drop-zone">
+                ${Array(24).fill('<div class="slot"></div>').join('')}
+            </div>
         </div>
         <div class="drop-zone" id="belt_slots">
             <h3>Belt</h3>
@@ -165,7 +170,7 @@
 
     <button onclick="addToKit()">Add Item to Kit</button>
     
-    <div id="command_list"></div>
+    <div id="command_list" class="inventory"></div>
 
     <script src="Items.js"></script>
     <script>
@@ -197,9 +202,8 @@
 
         function addToKit() {
             const quantity = document.getElementById('quantity').value;
-            const location = "Wear"; // Puedes cambiar esto según el slot que elijas
-
-            if (selectedItem) {
+            const location = document.getElementById('location').value; // Asegúrate de tener un campo para 'location'
+            if (selectedItem && quantity) {
                 const command = `kit add "${currentKit}" "${selectedItem.id}" ${quantity} 1 "${location}"`;
                 commands.push(command);
                 displayCommands();
@@ -217,10 +221,8 @@
                 commandList.appendChild(commandItem);
             });
         }
-
-        // Aquí se deberían implementar las funciones para arrastrar y soltar las imágenes
     </script>
-    
+
     <footer>
         <p>Hecho por VieraGuti</p>
     </footer>
