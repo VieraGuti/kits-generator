@@ -306,8 +306,7 @@
     }
 
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    let selectedItem = null; // Variable para almacenar el ítem seleccionado
-
+    
     document.getElementById('category').addEventListener('change', (event) => {
         const category = event.target.value;
         const itemGallery = document.getElementById('itemGallery');
@@ -324,10 +323,53 @@
                 img.draggable = !isMobile; // Solo draggable si no es móvil
 
                 if (isMobile) {
+                    // Evitar el menú contextual en dispositivos móviles
                     img.addEventListener('touchstart', (e) => {
-                        e.preventDefault(); // Evitar el menú contextual
-                        selectedItem = { id: item.id, name: item.name, category: category }; // Guardar el ítem seleccionado
-                        console.log(`Seleccionado: ${item.name}`);
+                        e.preventDefault();
+                        img.classList.add('dragging'); // Clase para el efecto visual de arrastre
+                        img.style.position = 'absolute';
+                        img.style.zIndex = 1000;
+
+                        const touch = e.touches[0];
+                        img.style.left = `${touch.clientX - 50}px`;
+                        img.style.top = `${touch.clientY - 50}px`;
+
+                        const onTouchMove = (moveEvent) => {
+                            moveEvent.preventDefault();
+                            img.style.left = `${moveEvent.touches[0].clientX - 50}px`;
+                            img.style.top = `${moveEvent.touches[0].clientY - 50}px`;
+                        };
+
+                        const onTouchEnd = (endEvent) => {
+                            slots.forEach(slot => {
+                                const slotRect = slot.getBoundingClientRect();
+                                const touch = endEvent.changedTouches[0];
+                                if (
+                                    touch.clientX >= slotRect.left &&
+                                    touch.clientX <= slotRect.right &&
+                                    touch.clientY >= slotRect.top &&
+                                    touch.clientY <= slotRect.bottom
+                                ) {
+                                    const quantity = document.getElementById('itemQuantity').value;
+                                    if (slot.dataset.type === 'wear' && item.category !== 'Attire') {
+                                        console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
+                                        return; 
+                                    }
+                                    applyItemToSlot(slot, item, quantity);
+                                }
+                            });
+
+                            img.classList.remove('dragging');
+                            img.style.position = '';
+                            img.style.left = '';
+                            img.style.top = '';
+
+                            document.removeEventListener('touchmove', onTouchMove);
+                            document.removeEventListener('touchend', onTouchEnd);
+                        };
+
+                        document.addEventListener('touchmove', onTouchMove);
+                        document.addEventListener('touchend', onTouchEnd);
                     });
                 } else {
                     img.addEventListener('dragstart', (e) => {
@@ -359,16 +401,6 @@
 
             applyItemToSlot(slot, data, quantity);
         });
-
-        if (isMobile) {
-            slot.addEventListener('click', () => {
-                if (selectedItem) {
-                    const quantity = document.getElementById('itemQuantity').value;
-                    applyItemToSlot(slot, selectedItem, quantity);
-                    selectedItem = null; // Limpiar selección
-                }
-            });
-        }
     });
 
     function applyItemToSlot(slot, item, quantity) {
@@ -442,9 +474,6 @@
         document.getElementById('itemQuantity').value = 1; 
     });
 </script>
-
-
-
 
     <footer>
         <p>Hecho por VieraGuti</p>
