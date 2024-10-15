@@ -156,6 +156,8 @@ const items = {
         { id: 'barricade.wood', name: 'Wooden Barricade', image: 'images/construction/barricade.wood' },
         { id: 'barricade.wood.cover', name: 'Wooden Barricade Cover', image: 'images/construction/barricade.wood.cover' },
         { id: 'door.hinged.wood', name: 'Wooden Door', image: 'images/construction/door.hinged.wood' },
+        { id: 'box.wooden.large', name: 'Box Large', image: 'images/construction/box.wooden.large' },
+        { id: 'furnace', name: 'Furnace', image: 'images/construction/furnace' },
         { id: 'ladder.wooden.wall', name: 'Wooden Ladder', image: 'images/construction/ladder.wooden.wall' },
         { id: 'wall.window.bars.wood', name: 'Wooden Window Bars', image: 'images/construction/wall.window.bars.wood' }
     ],
@@ -223,6 +225,7 @@ const items = {
     ],
     tools: [
         { id: 'tool.binoculars', name: 'Binoculars', image: 'images/tools/tool.binoculars' },
+        { id: 'wiretool', name: 'Wire', image: 'images/tools/wiretool' },
         { id: 'cakefiveyear', name: 'Birthday Cake', image: 'images/tools/cakefiveyear' },
         { id: 'chainsaw', name: 'Chainsaw', image: 'images/tools/chainsaw' },
         { id: 'flare', name: 'Flare', image: 'images/tools/flare' },
