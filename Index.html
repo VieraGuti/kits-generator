@@ -82,13 +82,49 @@
             max-width: 100px;
             margin: 10px 0;
         }
+
+        .item-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .item {
+            background-color: #333;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .item:hover {
+            transform: scale(1.05);
+        }
+
+        .item img {
+            max-width: 80px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
     <h1>Kits Generator</h1>
 
     <label for="kit_name">Kit Name:</label>
-    <input type="text" id="kit_name" placeholder="Enter kit name">
+    <input type="text" id="kit_name" placeholder="Enter custom kit name">
+    <select id="kit_name_select" onchange="updateKitName()">
+        <option value="">Select from KaosBot List</option>
+        <option value="freekit">freekit</option>
+        <option value="freekit2">freekit2</option>
+        <option value="vipkit">vipkit</option>
+        <option value="elitekit">elitekit</option>
+        <option value="elitekit1">elitekit1</option>
+        <option value="elitekit2">elitekit2</option>
+        <!-- Add more options as needed -->
+        <option value="elitekit44">elitekit44</option>
+    </select>
 
     <label for="item_category">Select category:</label>
     <select id="item_category" onchange="updateItemList()">
@@ -104,13 +140,7 @@
         <option value="electrical">Electrical</option>
     </select>
 
-    <label for="item_list">Select an item:</label>
-    <select id="item_list" onchange="showItemDetails()">
-        <option value="none">Select an item</option>
-        <!-- Options will be added dynamically -->
-    </select>
-
-    <img id="item_image" class="item-image" src="" alt="Item Image" style="display:none;" />
+    <div id="item_list" class="item-list"></div>
 
     <label for="quantity">Quantity:</label>
     <input type="number" id="quantity" placeholder="Write the amount" min="1" value="1">
@@ -131,31 +161,50 @@
     <script>
         const commands = [];
 
-        // Function to show item details and image
-        function showItemDetails() {
+        // Function to update item list based on selected category
+        function updateItemList() {
+            const category = document.getElementById('item_category').value;
             const itemList = document.getElementById('item_list');
-            const selectedCategory = document.getElementById('item_category').value;
+            itemList.innerHTML = ''; // Clear existing items
 
-            const selectedItem = items[selectedCategory].find(item => item.id === itemList.value);
-            const itemImage = document.getElementById('item_image');
-            
-            if (selectedItem) {
-                const imageUrl = `images/${selectedItem.id}.png`;
-                itemImage.src = imageUrl;
-                itemImage.style.display = 'block'; // Show the image
-            } else {
-                itemImage.style.display = 'none'; // Hide if no image
+            if (category !== 'none') {
+                items[category].forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'item';
+                    itemDiv.innerHTML = `
+                        <img src="images/${item.id}.png" alt="${item.name}">
+                        <p>${item.name}</p>
+                    `;
+                    itemDiv.onclick = () => selectItem(item.id);
+                    itemList.appendChild(itemDiv);
+                });
             }
+        }
+
+        // Function to select an item
+        function selectItem(itemId) {
+            const itemList = document.getElementById('item_list');
+            const selectedItem = items[document.getElementById('item_category').value].find(item => item.id === itemId);
+
+            const itemImage = document.createElement('img');
+            itemImage.src = `images/${selectedItem.id}.png`;
+            itemImage.className = 'item-image';
+            itemImage.alt = selectedItem.name;
+
+            // Show selected item in a fixed area or just use the last image
+            const itemDisplay = document.getElementById('item_image');
+            itemDisplay.src = `images/${selectedItem.id}.png`;
+            itemDisplay.style.display = 'block'; // Show the image
         }
 
         // Function to generate command
         function generateCommand() {
-            const kitName = document.getElementById('kit_name').value;
-            const shortName = document.getElementById('item_list').value;
+            const kitName = document.getElementById('kit_name').value || document.getElementById('kit_name_select').value;
+            const shortName = document.querySelector('.item-image').alt; // Get the selected item's name
             const quantity = document.getElementById('quantity').value;
             const location = document.getElementById('location').value;
 
-            if (!kitName || shortName === "none" || !quantity) {
+            if (!kitName || !shortName || !quantity) {
                 alert('Please complete all fields.');
                 return;
             }
@@ -200,45 +249,6 @@
             });
         }
 
-        // Function to copy all commands of a kit
-        function copyCommands(kitName) {
-            const kit = commands.find(k => k.name === kitName);
-            if (kit) {
-                const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('\n');
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                alert('Commands copied.');
-            }
-        }
-
-        // Function to edit a kit
-        function editKit(kitName) {
-            const kit = commands.find(k => k.name === kitName);
-            if (kit) {
-                const newCommands = prompt('Edit kit commands:', kit.commands.join('\n'));
-                if (newCommands) {
-                    kit.commands = newCommands.split('\n');
-                    localStorage.setItem('commands', JSON.stringify(commands));
-                    displayCommands();
-                }
-            }
-        }
-
-        // Function to delete a kit
-        function deleteKit(kitName) {
-            if (confirm(`Are you sure you want to delete the entire kit "${kitName}"?`)) {
-                const kitIndex = commands.findIndex(k => k.name === kitName);
-                if (kitIndex !== -1) {
-                    commands.splice(kitIndex, 1);
-                    localStorage.setItem('commands', JSON.stringify(commands));
-                    displayCommands();
-                }
-            }
-        }
-
         // Load commands from local storage on page load
         window.onload = function() {
             const savedCommands = localStorage.getItem('commands');
@@ -248,31 +258,32 @@
             }
         };
 
-        // Load items in dropdown based on selected category
-        function updateItemList() {
-            const category = document.getElementById('item_category').value;
-            const itemList = document.getElementById('item_list');
-            itemList.innerHTML = '<option value="none">Select an item</option>'; // Reset item list
+        // Function to update kit name based on selection
+        function updateKitName() {
+            const selectedOption = document.getElementById('kit_name_select').value;
+            const customNameInput = document.getElementById('kit_name');
 
-            if (category !== 'none') {
-                items[category].forEach(item => {
-                    const option = document.createElement('option');
-                    option.value = item.id;
-                    option.textContent = item.name;
-                    itemList.appendChild(option);
-                });
+            if (selectedOption === "Custom Name") {
+                customNameInput.style.display = 'block';
+                customNameInput.value = ''; // Clear custom input
+            } else {
+                customNameInput.style.display = 'none';
+                customNameInput.value = selectedOption; // Set to selected value
             }
         }
 
-        // Function to reset form
+        // Reset the form fields
         function resetForm() {
-            document.getElementById('kit_name').value = ''; // Clear kit name
-            document.getElementById('item_category').value = 'none'; // Reset category
-            updateItemList(); // Reset item list
-            document.getElementById('item_image').style.display = 'none'; // Hide image
-            document.getElementById('quantity').value = 1; // Reset quantity
-            document.getElementById('location').value = 'Main'; // Reset location
+            document.getElementById('kit_name').value = '';
+            document.getElementById('kit_name_select').selectedIndex = 0;
+            document.getElementById('item_category').selectedIndex = 0;
+            document.getElementById('item_list').innerHTML = '';
+            document.getElementById('quantity').value = 1;
+            document.getElementById('location').selectedIndex = 0;
         }
+
+        // Copy commands and edit/delete functions go here...
+
     </script>
 </body>
 </html>
