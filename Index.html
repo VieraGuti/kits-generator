@@ -342,7 +342,7 @@
         slot.addEventListener('click', () => {
             if (selectedItem.id) {
                 const quantity = document.getElementById('itemQuantity').value;
-                if (slot.dataset.type === 'wear' && selectedItem.category !== 'Attire') {
+                if (slot.dataset.type === 'wear' && selectedItem.category !== 'attire') {
                     console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
                     return; 
                 }
