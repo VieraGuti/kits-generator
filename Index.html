@@ -6,9 +6,9 @@
     <title>Kits Generator Rust</title>
     <style>
         body {
-            font-family: 'Press Start 2P', sans-serif; /* Estilo gaming */
-            background-color: #1e1e1e; /* Fondo oscuro */
-            color: #fff; /* Texto claro */
+            font-family: 'Press Start 2P', sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
             margin: 0;
             padding: 20px;
         }
@@ -16,7 +16,7 @@
         h1 {
             text-align: center;
             font-size: 2.5em;
-            color: #FF4500; /* Naranja Rust */
+            color: #FF4500;
             text-shadow: 2px 2px 4px #000;
         }
 
@@ -31,39 +31,39 @@
             margin: 5px 0 10px;
             border: none;
             border-radius: 5px;
-            background-color: #333; /* Fondo de campos */
+            background-color: #333;
             color: #fff;
             font-size: 1em;
         }
 
         button {
-            background-color: #FF4500; /* Naranja Rust */
+            background-color: #FF4500;
             color: white;
             cursor: pointer;
         }
 
         button:hover {
-            background-color: #E53E00; /* Hover más oscuro */
+            background-color: #E53E00;
         }
 
         #command_list, #kit_list {
             margin-top: 20px;
             padding: 10px;
-            background-color: #292929; /* Cuadro oscuro */
-            border: 2px solid #FF4500; /* Borde naranja */
+            background-color: #292929;
+            border: 2px solid #FF4500;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7); /* Sombra */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
         }
 
         .kit-item {
-            background-color: #444; /* Fondo de cada comando */
+            background-color: #444;
             padding: 10px;
             margin: 5px 0;
             border-radius: 5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #FF4500; /* Borde de comandos */
+            border: 1px solid #FF4500;
         }
 
         .kit-actions {
@@ -78,15 +78,6 @@
             margin-top: 40px;
         }
 
-        /* Estilo para los botones de sección */
-        .section-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        /* Estilo para la imagen del ítem */
         .item-image {
             max-width: 100px;
             margin: 10px 0;
@@ -96,9 +87,8 @@
 <body>
     <h1>Kits Generator</h1>
 
-    <div class="section-buttons">
-        <button onclick="toggleKits()">VieraGuti Kits</button>
-    </div>
+    <label for="kit_name">Kit Name:</label>
+    <input type="text" id="kit_name" placeholder="Enter kit name">
 
     <label for="item_category">Select category:</label>
     <select id="item_category" onchange="updateItemList()">
@@ -117,43 +107,10 @@
     <label for="item_list">Select an item:</label>
     <select id="item_list" onchange="showItemDetails()">
         <option value="none">Select an item</option>
-        <!-- Aquí se añadirán dinámicamente las opciones -->
+        <!-- Options will be added dynamically -->
     </select>
 
-    <img id="item_image" class="item-image" src="" alt="Imagen del ítem" style="display:none;" />
-
-    <label for="kit_name">Enter the kit name or choose KaosBot:</label>
-    <input type="text" id="kit_name" placeholder="Write the name of the kit">
-
-    <label for="kaosbot_kits">Select a KaosBot name:</label>
-    <select id="kaosbot_kits">
-        <option value="none">Select a kitname:</option>
-        <option value="freekit">freekit</option>
-        <option value="freekit2">freekit2</option>
-        <option value="vipkit">vipkit</option>
-        <option value="elitekit1">elitekit</option>
-        <option value="elitekit2">elitekit2</option>
-        <option value="elitekit3">elitekit3</option>
-        <option value="elitekit4">elitekit4</option>
-        <option value="elitekit5">elitekit5</option>
-        <option value="elitekit6">elitekit6</option>
-        <option value="elitekit7">elitekit7</option>
-        <option value="elitekit8">elitekit8</option>
-        <option value="elitekit9">elitekit9</option>
-        <option value="elitekit10">elitekit10</option>
-        <option value="elitekit11">elitekit11</option>
-        <option value="elitekit12">elitekit12</option>
-        <option value="elitekit13">elitekit13</option>
-        <option value="elitekit14">elitekit14</option>
-        <option value="elitekit15">elitekit15</option>
-        <option value="elitekit16">elitekit16</option>
-        <option value="elitekit17">elitekit17</option>
-        <option value="elitekit18">elitekit18</option>
-        <option value="elitekit19">elitekit19</option>
-        <option value="elitekit20">elitekit20</option>
-        <option value="elitekit21">elitekit21</option>
-        <option value="elitekit22">elitekit22</option>
-    </select>
+    <img id="item_image" class="item-image" src="" alt="Item Image" style="display:none;" />
 
     <label for="quantity">Quantity:</label>
     <input type="number" id="quantity" placeholder="Write the amount" min="1" value="1">
@@ -165,7 +122,7 @@
         <option value="Belt">Belt</option>
     </select>
 
-    <button onclick="generateCommand()">Add kit</button>
+    <button onclick="generateCommand()">Add to Kit</button>
     
     <div id="kit_list"></div>
     <div id="command_list"></div>
@@ -173,121 +130,8 @@
     <script src="Items.js"></script>
     <script>
         const commands = [];
-        const predefinedKits = [
-            {
-                name: "Fullequip",
-                commands: [
-                    'Kit add "Fullequip" "metal.facemask" 1 1 "Wear"',
-                    'Kit add "Fullequip" "hoodie" 1 1 "Wear"',
-                    'Kit add "Fullequip" "metal.plate.torso" 1 1 "Wear"',
-                    'Kit add "Fullequip" "pants" 1 1 "Wear"',
-                    'Kit add "Fullequip" "roadsign.kilt" 1 1 "Wear"',
-                    'Kit add "Fullequip" "tactical.gloves" 1 1 "Wear"',
-                    'Kit add "Fullequip" "shoes.boots" 1 1 "Wear"',
-                    'Kit add "Fullequip" "rifle.ak" 1 1 "Belt"',
-                    'Kit add "Fullequip" "weapon.mod.holosight" 1 1 "Main"',
-                    'Kit add "Fullequip" "weapon.mod.lasersight" 2 1 "Main"',
-                    'Kit add "Fullequip" "weapon.mod.small.scope" 2 1 "Main"',
-                    'Kit add "Fullequip" "rifle.bolt" 1 1 "Belt"',
-                    'Kit add "Fullequip" "ammo.rifle" 420 1 "Main"',
-                    'Kit add "Fullequip" "syringe.medical" 14 1 "Belt"',
-                    'Kit add "Fullequip" "blueberries" 60 1 "Belt"',
-                    'Kit add "Fullequip" "barricade.wood.cover" 4 1 "Belt"',
-                    'Kit add "Fullequip" "bandage" 12 1 "Belt"',
-                    'Kit add "Fullequip" "pumpkin" 5 1 "Main"',
-                    'Kit add "Fullequip" "axe.salvaged" 1 1 "Main"',
-                    'Kit add "Fullequip" "jackhammer" 1 1 "Main"',
-                    'Kit add "Fullequip" "note" 1 1 "Main"',
-                    'Kit add "Fullequip" "largebackpack" 1 1 "Wear"'
-                ]
-            },
-            {
-                name: "BuzoDive",
-                commands: [
-                    'Kit add "BuzoDive" "diving.fins" 1 1 "Wear"',
-                    'Kit add "BuzoDive" "diving.mask" 1 1 "Wear"',
-                    'Kit add "BuzoDive" "diving.tank" 1 1 "Wear"',
-                    'Kit add "BuzoDive" "hazmatsuit" 1 1 "Main"',
-                    'Kit add "BuzoDive" "diving.wetsuit" 1 1 "Wear"',
-                    'Kit add "BuzoDive" "speargun" 1 1 "Belt"',
-                    'Kit add "BuzoDive" "bow.hunting" 1 1 "Belt"',
-                    'Kit add "BuzoDive" "arrow.wooden" 68 1 "Main"',
-                    'Kit add "BuzoDive" "speargun.spear" 80 1 "Main"',
-                    'Kit add "BuzoDive" "syringe.medical" 6 1 "Belt"',
-                    'Kit add "BuzoDive" "bandage" 9 1 "Belt"'
-                ]
-            },
-            {
-                name: "Regalo",
-                commands: [
-                    'Kit add "Regalo" "cakefiveyear" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
-                    'Kit add "Regalo" "partyhat" 1 1 "Wear"',
-                    'Kit add "Regalo" "cakefiveyear" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
-                    'Kit add "Regalo" "cakefiveyear" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"',
-                    'Kit add "Regalo" "supply.signal" 1 1 "Main"'
-                ]
-            }
-        ];
 
-        // Función para mostrar/ocultar los kits de VieraGuti
-        function toggleKits() {
-            const kitListContainer = document.getElementById('kit_list');
-            kitListContainer.innerHTML = ''; // Limpiar contenido anterior
-
-            predefinedKits.forEach(kit => {
-                const kitItem = document.createElement('div');
-                kitItem.className = 'kit-item';
-                kitItem.innerHTML = `
-                    <strong>${kit.name}</strong>
-                    <button onclick="showKitDetails('${kit.name}')">Show kit</button>
-                `;
-                kitListContainer.appendChild(kitItem);
-            });
-        }
-
-        // Función para mostrar los detalles del kit
-        function showKitDetails(kitName) {
-            const kit = predefinedKits.find(k => k.name === kitName);
-            const commandList = document.getElementById('kit_list');
-            commandList.innerHTML = ''; // Limpiar lista existente
-
-            if (kit) {
-                const kitDetails = document.createElement('div');
-                kitDetails.className = 'kit-item';
-                kitDetails.innerHTML = `
-                    <strong>${kit.name}</strong>
-                    <div>${kit.commands.join('<br>')}</div>
-                    <button onclick="copyKits('${kit.name}')">Copy Command</button>
-                    <button onclick="toggleKitList()">Hide list</button>
-                `;
-                commandList.appendChild(kitDetails);
-            }
-        }
-
-        // Función para ocultar la lista
-        function toggleKitList() {
-            toggleKits(); // Mostrar solo la lista de nombres
-        }
-
-        // Función para copiar el comando
-        function copyKits(kitName) {
-            const kit = predefinedKits.find(k => k.name === kitName);
-            if (kit) {
-                const tempInput = document.createElement('input');
-                tempInput.value = kit.commands.join('\n');
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Espacios en el mensaje de alerta
-            }
-        }
-
+        // Function to show item details and image
         function showItemDetails() {
             const itemList = document.getElementById('item_list');
             const selectedCategory = document.getElementById('item_category').value;
@@ -298,14 +142,15 @@
             if (selectedItem) {
                 const imageUrl = `images/${selectedItem.id}.png`;
                 itemImage.src = imageUrl;
-                itemImage.style.display = 'block'; // Mostrar la imagen
+                itemImage.style.display = 'block'; // Show the image
             } else {
-                itemImage.style.display = 'none'; // Ocultar si no hay imagen
+                itemImage.style.display = 'none'; // Hide if no image
             }
         }
 
+        // Function to generate command
         function generateCommand() {
-            const kitName = document.getElementById('kit_name').value || document.getElementById('kaosbot_kits').value;
+            const kitName = document.getElementById('kit_name').value;
             const shortName = document.getElementById('item_list').value;
             const quantity = document.getElementById('quantity').value;
             const location = document.getElementById('location').value;
@@ -329,13 +174,13 @@
 
             localStorage.setItem('commands', JSON.stringify(commands));
             displayCommands();
-            document.getElementById('item_list').value = 'none'; // Reiniciar la selección de ítems
-            showItemDetails(); // Limpiar detalles de ítem
+            resetForm(); // Reset form after generating command
         }
 
+        // Function to display commands
         function displayCommands() {
-            const commandList = document.getElementById('command_list'); // Cambiado para mostrar en command_list
-            commandList.innerHTML = ''; // Limpiar lista existente
+            const commandList = document.getElementById('command_list');
+            commandList.innerHTML = ''; // Clear existing list
 
             commands.forEach((kit) => {
                 const kitItem = document.createElement('div');
@@ -355,7 +200,7 @@
             });
         }
 
-        // Nueva función para copiar todos los comandos de un kit
+        // Function to copy all commands of a kit
         function copyCommands(kitName) {
             const kit = commands.find(k => k.name === kitName);
             if (kit) {
@@ -365,10 +210,11 @@
                 tempInput.select();
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
-                alert('Commands copied: ' + kit.commands.join('\n').replace(/Kit add/g, 'Kit add\n')); // Espacios en el mensaje de alerta
+                alert('Commands copied.');
             }
         }
 
+        // Function to edit a kit
         function editKit(kitName) {
             const kit = commands.find(k => k.name === kitName);
             if (kit) {
@@ -381,17 +227,19 @@
             }
         }
 
+        // Function to delete a kit
         function deleteKit(kitName) {
-            if (confirm(`You are going to delete the entire list from "${kitName}". You're sure?`)) {
+            if (confirm(`Are you sure you want to delete the entire kit "${kitName}"?`)) {
                 const kitIndex = commands.findIndex(k => k.name === kitName);
                 if (kitIndex !== -1) {
-                    commands.splice(kitIndex, 1); // Borrar el kit del array
+                    commands.splice(kitIndex, 1);
                     localStorage.setItem('commands', JSON.stringify(commands));
                     displayCommands();
                 }
             }
         }
 
+        // Load commands from local storage on page load
         window.onload = function() {
             const savedCommands = localStorage.getItem('commands');
             if (savedCommands) {
@@ -400,11 +248,11 @@
             }
         };
 
-        // Cargar los ítems en la lista del dropdown según la categoría seleccionada
+        // Load items in dropdown based on selected category
         function updateItemList() {
             const category = document.getElementById('item_category').value;
             const itemList = document.getElementById('item_list');
-            itemList.innerHTML = '<option value="none">Seleccione un ítem</option>'; // Reiniciar lista de ítems
+            itemList.innerHTML = '<option value="none">Select an item</option>'; // Reset item list
 
             if (category !== 'none') {
                 items[category].forEach(item => {
@@ -415,9 +263,16 @@
                 });
             }
         }
+
+        // Function to reset form
+        function resetForm() {
+            document.getElementById('kit_name').value = ''; // Clear kit name
+            document.getElementById('item_category').value = 'none'; // Reset category
+            updateItemList(); // Reset item list
+            document.getElementById('item_image').style.display = 'none'; // Hide image
+            document.getElementById('quantity').value = 1; // Reset quantity
+            document.getElementById('location').value = 'Main'; // Reset location
+        }
     </script>
-    <footer>
-        <p>Hecho por VieraGuti</p>
-    </footer>
 </body>
 </html>
