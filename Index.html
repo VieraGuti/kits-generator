@@ -363,16 +363,49 @@ slots.forEach(slot => {
         const data = JSON.parse(e.dataTransfer.getData('text/plain'));
         const quantity = document.getElementById('itemQuantity').value;
 
-        if (quantity > 1) {
-            slot.innerHTML = `<img src="images/${data.id}.png" style="width: 40px;"/> x${quantity}`;
-        } else {
-            slot.innerHTML = `<img src="images/${data.id}.png" style="width: 40px;"/>`;
+        // Verificar si el slot es de tipo "wear" y si el ítem es de tipo "attire"
+        if (slot.dataset.type === 'wear' && data.category !== 'Attire') {
+            return; // No hacer nada si no es de la categoría "Attire"
         }
+
+        // Crear el contenedor para la imagen y la cantidad
+        const itemContainer = document.createElement('div');
+        itemContainer.style.position = 'relative';
+        itemContainer.style.width = '100%';
+        itemContainer.style.height = '100%';
+
+        // Crear la imagen
+        const img = document.createElement('img');
+        img.src = `images/${data.id}.png`;
+        img.style.width = '100%'; // Adaptar al tamaño del slot
+        img.style.height = '100%'; // Adaptar al tamaño del slot
+
+        // Crear el elemento para la cantidad
+        const quantityElement = document.createElement('span');
+        quantityElement.textContent = quantity;
+        quantityElement.style.position = 'absolute';
+        quantityElement.style.bottom = '5px';
+        quantityElement.style.right = '5px';
+        quantityElement.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        quantityElement.style.color = 'white';
+        quantityElement.style.padding = '2px 5px';
+        quantityElement.style.borderRadius = '3px';
+        quantityElement.style.fontSize = '12px';
+
+        // Añadir la imagen y la cantidad al contenedor
+        itemContainer.appendChild(img);
+        itemContainer.appendChild(quantityElement);
+
+        // Limpiar slot y añadir el contenedor
+        slot.innerHTML = '';
+        slot.appendChild(itemContainer);
+
         slot.dataset.id = data.id;
         slot.dataset.quantity = quantity;
         slot.dataset.type = slot.dataset.type;
     });
 });
+
 
 document.getElementById('finalizeKit').addEventListener('click', () => {
     const commands = [];
