@@ -26,7 +26,7 @@
             justify-content: center;
         }
         .slot {
-            width: 60px; /* Ajusta el tamaño del slot */
+            width: 60px;
             height: 60px;
             margin: 5px;
             background-color: #333;
@@ -63,17 +63,20 @@
         .inventory {
             margin-top: 20px;
         }
+        #kit_slots {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <h1>Kits Generator</h1>
     
-    <label for="kit_name">Enter the kit name or choose KaosBot:</label>
-    <input type="text" id="kit_name" placeholder="Write the name of the kit" oninput="showKitSlots()">
-
-    <label for="kaosbot_kits">Select a KaosBot name:</label>
-    <select id="kaosbot_kits" onchange="showKitSlots()">
-        <option value="none">Select a kitname:</option>
+    <p id="instruction">Selecciona un nombre de kit o elige uno de la lista de KaosBot:</p>
+    <input type="text" id="kit_name" placeholder="Escribe el nombre del kit" oninput="checkKitName()">
+    
+    <label for="kaosbot_kits">Selecciona un nombre de KaosBot:</label>
+    <select id="kaosbot_kits" onchange="checkKaosbotSelection()">
+        <option value="none">Selecciona un kitname:</option>
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
@@ -124,7 +127,7 @@
         <option value="elitekit44">elitekit44</option>
     </select>
 
-    <div id="kit_slots" style="display:none;">
+    <div id="kit_slots">
         <h2>Kit Slots</h2>
         <div class="drop-zone" id="wear_slots">
             <h3>Wear</h3>
@@ -152,9 +155,9 @@
         </div>
     </div>
 
-    <label for="item_category">Select category:</label>
+    <label for="item_category">Selecciona categoría:</label>
     <select id="item_category" onchange="updateItemList()">
-        <option value="none">Select a category</option>
+        <option value="none">Selecciona una categoría</option>
         <option value="ammo">Ammo</option>
         <option value="weapons">Weapons</option>
         <option value="armor">Armor</option>
@@ -165,31 +168,64 @@
         <option value="crafting">Crafting</option>
     </select>
 
-    <label for="item_list">Select an item:</label>
+    <label for="item_list">Selecciona un ítem:</label>
     <select id="item_list" onchange="showItemDetails()">
-        <option value="none">Select an item</option>
-        <!-- Aquí se añadirán dinámicamente las opciones -->
+        <option value="none">Selecciona un ítem</option>
     </select>
-
-    <img id="item_image" class="item-image" src="" alt="Imagen del ítem" style="display:none;" />
-
-    <label for="quantity">Quantity:</label>
-    <input type="number" id="quantity" placeholder="Write the amount" min="1" value="1">
-
-    <button onclick="addToKit()">Add Item to Kit</button>
     
-    <div id="command_list" class="inventory"></div>
+    <img id="item_image" class="item-image" alt="Imagen del ítem">
+
+    <div>
+        <label for="quantity">Cantidad:</label>
+        <input type="number" id="quantity" value="1" min="1">
+        
+        <button onclick="addToKit()">Añadir al kit</button>
+    </div>
+
+    <h2>Comandos Generados</h2>
+    <div id="command_list"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
         const items = [
-            { id: 'item1', name: 'Item 1', img: 'images/item1.png' },
-            { id: 'item2', name: 'Item 2', img: 'images/item2.png' },
+            { id: 'item1', name: 'Item 1', img: 'images/item1.png', category: 'ammo' },
+            { id: 'item2', name: 'Item 2', img: 'images/item2.png', category: 'weapons' },
             // Agrega más ítems según sea necesario
         ];
 
         const commands = [];
         let currentKit = '';
+
+        function checkKitName() {
+            const kitNameInput = document.getElementById('kit_name').value;
+            const kaosbotSelect = document.getElementById('kaosbot_kits');
+            const instruction = document.getElementById('instruction');
+
+            if (kitNameInput) {
+                kaosbotSelect.value = 'none';
+                kaosbotSelect.disabled = true;
+                instruction.innerText = 'Kit name seleccionado. Puedes continuar añadiendo ítems.';
+            } else {
+                kaosbotSelect.disabled = false;
+                instruction.innerText = 'Selecciona un nombre de kit o elige uno de la lista de KaosBot:';
+            }
+
+            showKitSlots();
+        }
+
+        function checkKaosbotSelection() {
+            const kaosbotSelect = document.getElementById('kaosbot_kits').value;
+            const kitNameInput = document.getElementById('kit_name');
+
+            if (kaosbotSelect !== 'none') {
+                kitNameInput.value = '';
+                kitNameInput.disabled = true;
+            } else {
+                kitNameInput.disabled = false;
+            }
+
+            showKitSlots();
+        }
 
         function showKitSlots() {
             const kitNameInput = document.getElementById('kit_name').value;
@@ -202,14 +238,16 @@
         function updateItemList() {
             const category = document.getElementById('item_category').value;
             const itemList = document.getElementById('item_list');
-            itemList.innerHTML = '<option value="none">Select an item</option>'; // Limpiar lista existente
+            itemList.innerHTML = '<option value="none">Selecciona un ítem</option>'; // Limpiar lista existente
 
-            // Aquí deberías cargar los ítems según la categoría seleccionada
+            // Cargar ítems según la categoría seleccionada
             items.forEach(item => {
-                const option = document.createElement('option');
-                option.value = item.id;
-                option.textContent = item.name;
-                itemList.appendChild(option);
+                if (item.category === category || category === 'none') {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = item.name;
+                    itemList.appendChild(option);
+                }
             });
         }
 
@@ -229,9 +267,9 @@
         function addToKit() {
             const selectedItem = items.find(item => item.id === document.getElementById('item_list').value);
             const quantity = document.getElementById('quantity').value;
-            const location = document.getElementById('location').value; // Asegúrate de tener un campo para 'location'
-            if (selectedItem && quantity) {
-                const command = `kit add "${currentKit}" "${selectedItem.id}" ${quantity} 1 "${location}"`;
+            const location = document.querySelector('.drop-zone .slot:hover'); // Para arrastrar a un slot
+            if (selectedItem && quantity && location) {
+                const command = `kit add "${currentKit}" "${selectedItem.id}" ${quantity} 1 "${location.dataset.slot}"`;
                 commands.push(command);
                 displayCommands();
             }
