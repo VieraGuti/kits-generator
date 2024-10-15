@@ -326,7 +326,46 @@ document.getElementById('category').addEventListener('change', (event) => {
                         ) {
                             // Si se suelta en un slot
                             const quantity = document.getElementById('itemQuantity').value;
-                            slot.innerHTML = `<img src="images/${item.id}.png" style="width: 40px;"/>${quantity > 1 ? ' x' + quantity : ''}`;
+                            // Verificar tipo de slot antes de añadir
+                            if (slot.dataset.type === 'wear' && category !== 'Attire') {
+                                console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
+                                return; // No hacer nada si no es de la categoría "Attire"
+                            }
+
+                            // Crear el contenedor para la imagen y la cantidad
+                            const itemContainer = document.createElement('div');
+                            itemContainer.style.position = 'relative';
+                            itemContainer.style.width = '100%';
+                            itemContainer.style.height = '100%';
+
+                            // Crear la imagen
+                            const imgSlot = document.createElement('img');
+                            imgSlot.src = `images/${item.id}.png`;
+                            imgSlot.style.width = '100%'; // Adaptar al tamaño del slot
+                            imgSlot.style.height = '100%'; // Adaptar al tamaño del slot
+
+                            // Crear el elemento para la cantidad
+                            const quantityElement = document.createElement('span');
+                            quantityElement.style.position = 'absolute';
+                            quantityElement.style.bottom = '5px';
+                            quantityElement.style.right = '5px';
+                            quantityElement.style.color = 'white';
+                            quantityElement.style.fontSize = '12px';
+                            quantityElement.style.backgroundColor = 'transparent'; // Sin fondo
+
+                            // Mostrar cantidad con "x" si es mayor a 1
+                            if (quantity > 1) {
+                                quantityElement.textContent = `x${quantity}`;
+                            }
+
+                            // Añadir la imagen y la cantidad al contenedor
+                            itemContainer.appendChild(imgSlot);
+                            itemContainer.appendChild(quantityElement);
+
+                            // Limpiar slot y añadir el contenedor
+                            slot.innerHTML = '';
+                            slot.appendChild(itemContainer);
+
                             slot.dataset.id = item.id;
                             slot.dataset.quantity = quantity;
                             slot.dataset.type = slot.dataset.type;
@@ -407,7 +446,7 @@ slots.forEach(slot => {
         slot.dataset.quantity = quantity;
         slot.dataset.type = slot.dataset.type;
     });
-});
+}); 
 
 document.getElementById('finalizeKit').addEventListener('click', () => {
     const commands = [];
