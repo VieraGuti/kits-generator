@@ -305,6 +305,8 @@
         });
     }
 
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent); // Detección de dispositivos móviles
+
     document.getElementById('category').addEventListener('change', (event) => {
         const category = event.target.value;
         const itemGallery = document.getElementById('itemGallery');
@@ -318,99 +320,32 @@
                 const img = document.createElement('img');
                 img.src = `images/${item.id}.png`;
                 img.alt = item.name;
-                img.draggable = true;
+                img.draggable = !isMobile; // Solo draggable si no es móvil
 
-                
-                img.addEventListener('dragstart', (e) => {
-                    e.dataTransfer.setData('text/plain', JSON.stringify({ id: item.id, name: item.name, category: category }));
-                });
-
-                
-                img.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    const touch = e.touches[0];
-                    img.style.position = 'absolute';
-                    img.style.left = `${touch.clientX - 50}px`;
-                    img.style.top = `${touch.clientY - 50}px`;
-
-                    const onTouchMove = (moveEvent) => {
-                        moveEvent.preventDefault();
-                        img.style.left = `${moveEvent.touches[0].clientX - 50}px`;
-                        img.style.top = `${moveEvent.touches[0].clientY - 50}px`;
-                    };
-
-                    const onTouchEnd = (endEvent) => {
-                       
+                if (isMobile) {
+                    img.addEventListener('click', (e) => {
+                        const quantity = document.getElementById('itemQuantity').value;
                         slots.forEach(slot => {
                             const slotRect = slot.getBoundingClientRect();
-                            const touch = endEvent.changedTouches[0];
                             if (
-                                touch.clientX >= slotRect.left &&
-                                touch.clientX <= slotRect.right &&
-                                touch.clientY >= slotRect.top &&
-                                touch.clientY <= slotRect.bottom
+                                e.clientX >= slotRect.left &&
+                                e.clientX <= slotRect.right &&
+                                e.clientY >= slotRect.top &&
+                                e.clientY <= slotRect.bottom
                             ) {
-                                
-                                const quantity = document.getElementById('itemQuantity').value;
-
-                                
                                 if (slot.dataset.type === 'wear' && category !== 'Attire') {
                                     console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
                                     return; 
                                 }
-
-                                
-                                const itemContainer = document.createElement('div');
-                                itemContainer.style.position = 'relative';
-                                itemContainer.style.width = '100%';
-                                itemContainer.style.height = '100%';
-
-                                
-                                const imgSlot = document.createElement('img');
-                                imgSlot.src = `images/${item.id}.png`;
-                                imgSlot.style.width = '100%'; 
-                                imgSlot.style.height = '100%'; 
-
-                                
-                                const quantityElement = document.createElement('span');
-                                quantityElement.style.position = 'absolute';
-                                quantityElement.style.bottom = '5px';
-                                quantityElement.style.right = '5px';
-                                quantityElement.style.color = 'white';
-                                quantityElement.style.fontSize = '12px';
-                                quantityElement.style.backgroundColor = 'transparent'; 
-
-                                
-                                if (quantity > 1) {
-                                    quantityElement.textContent = `x${quantity}`;
-                                }
-
-                                
-                                itemContainer.appendChild(imgSlot);
-                                itemContainer.appendChild(quantityElement);
-
-                                
-                                slot.innerHTML = '';
-                                slot.appendChild(itemContainer);
-
-                                slot.dataset.id = item.id;
-                                slot.dataset.quantity = quantity;
-                                slot.dataset.type = slot.dataset.type;
+                                applyItemToSlot(slot, item, quantity);
                             }
                         });
-
-                        
-                        img.style.position = '';
-                        img.style.left = '';
-                        img.style.top = '';
-
-                        document.removeEventListener('touchmove', onTouchMove);
-                        document.removeEventListener('touchend', onTouchEnd);
-                    };
-
-                    document.addEventListener('touchmove', onTouchMove);
-                    document.addEventListener('touchend', onTouchEnd);
-                });
+                    });
+                } else {
+                    img.addEventListener('dragstart', (e) => {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({ id: item.id, name: item.name, category: category }));
+                    });
+                }
 
                 imageItem.appendChild(img);
                 itemGallery.appendChild(imageItem);
@@ -429,51 +364,48 @@
             const data = JSON.parse(e.dataTransfer.getData('text/plain'));
             const quantity = document.getElementById('itemQuantity').value;
 
-           
             if (slot.dataset.type === 'wear' && data.category !== 'attire') {
                 console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
                 return; 
             }
 
-           
-            const itemContainer = document.createElement('div');
-            itemContainer.style.position = 'relative';
-            itemContainer.style.width = '100%';
-            itemContainer.style.height = '100%';
-
-           
-            const img = document.createElement('img');
-            img.src = `images/${data.id}.png`;
-            img.style.width = '100%'; 
-            img.style.height = '100%'; 
-
-           
-            const quantityElement = document.createElement('span');
-            quantityElement.style.position = 'absolute';
-            quantityElement.style.bottom = '5px';
-            quantityElement.style.right = '5px';
-            quantityElement.style.color = 'white';
-            quantityElement.style.fontSize = '12px';
-            quantityElement.style.backgroundColor = 'transparent';
-
-            
-            if (quantity > 1) {
-                quantityElement.textContent = `x${quantity}`;
-            }
-
-            
-            itemContainer.appendChild(img);
-            itemContainer.appendChild(quantityElement);
-
-            
-            slot.innerHTML = '';
-            slot.appendChild(itemContainer);
-
-            slot.dataset.id = data.id;
-            slot.dataset.quantity = quantity;
-            slot.dataset.type = slot.dataset.type; 
+            applyItemToSlot(slot, data, quantity);
         });
     });
+
+    function applyItemToSlot(slot, item, quantity) {
+        const itemContainer = document.createElement('div');
+        itemContainer.style.position = 'relative';
+        itemContainer.style.width = '100%';
+        itemContainer.style.height = '100%';
+
+        const imgSlot = document.createElement('img');
+        imgSlot.src = `images/${item.id}.png`;
+        imgSlot.style.width = '100%'; 
+        imgSlot.style.height = '100%'; 
+
+        const quantityElement = document.createElement('span');
+        quantityElement.style.position = 'absolute';
+        quantityElement.style.bottom = '5px';
+        quantityElement.style.right = '5px';
+        quantityElement.style.color = 'white';
+        quantityElement.style.fontSize = '12px';
+        quantityElement.style.backgroundColor = 'transparent'; 
+
+        if (quantity > 1) {
+            quantityElement.textContent = `x${quantity}`;
+        }
+
+        itemContainer.appendChild(imgSlot);
+        itemContainer.appendChild(quantityElement);
+
+        slot.innerHTML = '';
+        slot.appendChild(itemContainer);
+
+        slot.dataset.id = item.id;
+        slot.dataset.quantity = quantity;
+        slot.dataset.type = slot.dataset.type; 
+    }
 
     document.getElementById('finalizeKit').addEventListener('click', () => {
         const commands = [];
@@ -512,6 +444,7 @@
         document.getElementById('itemQuantity').value = 1; 
     });
 </script>
+
 
 
     <footer>
