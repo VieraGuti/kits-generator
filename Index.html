@@ -326,6 +326,7 @@ document.getElementById('category').addEventListener('change', (event) => {
                         ) {
                             // Si se suelta en un slot
                             const quantity = document.getElementById('itemQuantity').value;
+
                             // Verificar tipo de slot antes de añadir
                             if (slot.dataset.type === 'wear' && category !== 'Attire') {
                                 console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
@@ -484,6 +485,7 @@ document.getElementById('newKit').addEventListener('click', () => {
     document.getElementById('command_list').innerText = '';
     document.getElementById('itemQuantity').value = 1; // Resetear cantidad
 });
+
 
 </script>
 
