@@ -263,20 +263,22 @@
     <div id="command_list"></div>
 
     <script src="Items.js"></script>
-    <script>
-        window.onload = function() {
-            loadCategories();
-        };
+<script>
+    window.onload = function() {
+        console.log(items); // Verifica que todos los elementos se carguen correctamente
+        loadCategories();
+    };
 
-        function loadCategories() {
-            const categorySelect = document.getElementById('category');
-            Object.keys(items).forEach(category => {
-                const option = document.createElement('option');
-                option.value = category;
-                option.textContent = category;
-                categorySelect.appendChild(option);
-            });
-        }
+    function loadCategories() {
+        const categorySelect = document.getElementById('category');
+        Object.keys(items).forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            categorySelect.appendChild(option);
+        });
+    }
+
 
         document.getElementById('category').addEventListener('change', (event) => {
             const category = event.target.value;
