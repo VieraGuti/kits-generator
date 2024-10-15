@@ -4,72 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kits Generator - Rust Style</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         body {
-    font-family: 'Bungee', sans-serif; /* Fuente Bungee */
-    background-color: #1e1e1e;
-    color: #fff;
-    margin: 0;
-    padding: 20px;
-}
+            font-family: 'Press Start 2P', sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
 
-h3 {
-    text-align: center;
-    color: #FF4500;
-    text-shadow: 1px 1px 2px #000;
-    margin-top: 20px;
-}
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            color: #FF4500;
+            text-shadow: 2px 2px 4px #000;
+        }
 
-.main-slots {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr); /* 6 columnas para el inventario principal */
-    gap: 10px; /* Espacio entre los slots */
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #FF4500;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #E53E00;
+        }
+
+        .main-slots {
+    display: flex;
+    flex-wrap: wrap;
     margin-top: 20px;
+    border: 2px solid #FF4500; 
     padding: 10px;
-    background-color: #1e1e1e;
-    border: 2px solid #FF4500; 
     border-radius: 10px;
+    background-color: #1e1e1e; 
     box-shadow: 0 0 10px rgba(255, 69, 0, 0.5); 
-}
-
-.small-slot {
-    width: 50px;
-    height: 50px;
-    border: 2px solid #FF4500; 
-    background-color: #222; 
-    position: relative;
-    text-align: center;
-    border-radius: 5px; 
-    transition: background-color 0.3s; 
 }
 
 .main-slot {
     width: 50px;
     height: 50px;
-    border: 2px solid #FF4500; 
+    border: 1px solid #FF4500; 
+    margin: 5px;
     background-color: #222; 
     position: relative;
     text-align: center;
+    line-height: 50px;
     border-radius: 5px; 
-    transition: background-color 0.3s, transform 0.2s; 
+    transition: background-color 0.3s; 
 }
 
-.main-slot:hover,
-.small-slot:hover {
+.main-slot:hover {
     background-color: #333; 
-    transform: scale(1.05); 
 }
 
-.main-slot img,
-.small-slot img {
-    max-width: 100%; 
-    max-height: 100%;
-    border-radius: 5px;
-}
-
-.main-slot:empty::before,
-.small-slot:empty::before {
+.main-slot:empty::before {
     content: ' '; 
     background-color: rgba(255, 69, 0, 0.2); 
     width: 100%;
@@ -80,14 +86,58 @@ h3 {
     left: 0;
 }
 
-#command_list {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #292929;
-    border: 2px solid #FF4500;
-    border-radius: 10px;
+.main-slot img {
+    max-width: 100%; 
+    max-height: 100%;
+    border-radius: 5px;
 }
 
+        
+
+        .small-slot {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #FF4500;
+            display: inline-block;
+            margin: 5px;
+            background-color: #222;
+            position: relative;
+            text-align: center;
+            line-height: 40px;
+        }
+
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .image-item {
+            margin: 5px;
+            text-align: center;
+        }
+
+        .image-item img {
+            width: 80px;
+            cursor: pointer;
+            border: 1px solid #FF4500;
+            border-radius: 5px;
+        }
+
+        #command_list {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #292929;
+            border: 2px solid #FF4500;
+            border-radius: 10px;
+        }
+
+        footer {
+            text-align: center;
+            color: #EAEAEA;
+            font-size: 0.8em;
+            margin-top: 40px;
+        }
     </style>
 </head>
 <body>
