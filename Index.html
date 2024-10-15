@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Press Start 2P', sans-serif;
+            font-family: 'Press Start 2P', sans-serif; /* Fuente similar a Rust */
             background-color: #1e1e1e;
             color: #fff;
             margin: 0;
@@ -65,6 +65,7 @@
             position: relative;
             text-align: center;
             line-height: 50px;
+            cursor: pointer;
         }
 
         .small-slot {
@@ -190,9 +191,33 @@
     </select>
 
     <div class="main-slots">
-        <h3>Main</h3>
-        ${Array(24).fill('<div class="main-slot" data-type="main"></div>').join('')}
-    </div>
+    <h3>Main</h3>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+</div>
+
 
     <h3>Wear</h3>
     <div class="small-slot" data-type="wear"></div>
@@ -234,49 +259,44 @@
                 items[category].forEach(item => {
                     const imageItem = document.createElement('div');
                     imageItem.className = 'image-item';
-
-                    const img = document.createElement('img');
-                    img.src = `images/${item.id}.png`; // Usar la ID para la ruta de la imagen
-                    img.alt = item.name; // Mostrar el nombre en el alt
-                    img.draggable = true;
-                    img.addEventListener('dragstart', (e) => {
-                        e.dataTransfer.setData('text/plain', JSON.stringify({ id: item.id, name: item.name }));
-                    });
-
-                    imageItem.appendChild(img);
+                    imageItem.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" data-name="${item.name}" data-id="${item.id}">
+                        <div>${item.name}</div>
+                    `;
+                    imageItem.onclick = function() {
+                        const selectedSlot = document.querySelector('.selected');
+                        if (selectedSlot) {
+                            const quantity = prompt('¿Cuántos deseas agregar?', '1') || '1';
+                            const location = selectedSlot.getAttribute('data-type');
+                            addItemToKit(selectedSlot, item, quantity, location);
+                        }
+                    };
                     itemGallery.appendChild(imageItem);
                 });
             }
         });
 
-        const slots = document.querySelectorAll('.main-slot, .small-slot');
-        slots.forEach(slot => {
-            slot.addEventListener('dragover', (e) => {
-                e.preventDefault(); // Permitir el drop
-            });
+        function addItemToKit(slot, item, quantity, location) {
+            const commandList = document.getElementById('command_list');
+            const kitName = document.getElementById('kitName').value || 'nuevo_kit';
+            commandList.innerHTML += `<div class="command-item">${kitName} "${item.id}" ${quantity} 1 ${location}</div>`;
+            slot.textContent = item.name;
+            slot.classList.remove('selected');
+        }
 
-            slot.addEventListener('drop', (e) => {
-                e.preventDefault();
-                const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-                slot.innerHTML = `<div>${data.name}</div>`;
-                slot.dataset.id = data.id; // Almacenar el ID del item
-            });
+        document.querySelectorAll('.main-slot').forEach(slot => {
+            slot.onclick = function() {
+                document.querySelectorAll('.main-slot').forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+            };
         });
 
-        document.getElementById('finalizeKit').addEventListener('click', () => {
-            const commands = [];
-            slots.forEach(slot => {
-                if (slot.dataset.id) {
-                    const itemId = slot.dataset.id;
-                    const itemName = slot.querySelector('div').innerText;
-                    commands.push(`kit add "${document.getElementById('kitName').value}" "${itemId}"`);
-                }
-            });
-            document.getElementById('command_list').innerText = commands.join('\n');
+        document.querySelectorAll('.small-slot').forEach(slot => {
+            slot.onclick = function() {
+                document.querySelectorAll('.small-slot').forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+            };
         });
     </script>
-    <footer>
-        <p>Hecho por VieraGuti</p>
-    </footer>
 </body>
 </html>
