@@ -105,17 +105,6 @@
             border-radius: 10px;
         }
 
-        .command-item {
-            background-color: #444;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #FF4500;
-        }
-
         footer {
             text-align: center;
             color: #EAEAEA;
@@ -134,7 +123,7 @@
     <select id="kaosList">
         <option value="">-- Elige un kit --</option>
         <option value="elitekit6">elitekit6</option>
-        <!-- Agrega más opciones según sea necesario -->
+        <!-- Agregar más kits según sea necesario -->
     </select>
 
     <label for="category">Selecciona categoría:</label>
@@ -144,53 +133,28 @@
     </select>
 
     <div class="main-slots">
-    <h3>Main</h3>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-    <div class="main-slot" data-type="main"></div>
-</div>
-
+        <h3>Main</h3>
+        ${Array(24).fill('<div class="main-slot" data-type="main"></div>').join('')}
+    </div>
 
     <h3>Wear</h3>
     <div class="small-slot" data-type="wear"></div>
     <div class="small-slot" data-type="wear"></div>
     <div class="small-slot" data-type="wear"></div>
-    <div class="small-slot" data-type="wear"></div>
-    <div class="small-slot" data-type="wear"></div>
-    <div class="small-slot" data-type="wear"></div>
-    <div class="small-slot" data-type="wear"></div>
+
     <h3>Belt</h3>
     <div class="main-slot" data-type="belt"></div>
     <div class="main-slot" data-type="belt"></div>
     <div class="main-slot" data-type="belt"></div>
-    <div class="main-slot" data-type="belt"></div>
-    <div class="main-slot" data-type="belt"></div>
-    <div class="main-slot" data-type="belt"></div>
+
+    <label for="itemQuantity">Cantidad:</label>
+    <input type="number" id="itemQuantity" value="1" min="1" />
 
     <div class="image-container" id="itemGallery"></div>
     
     <button id="finalizeKit">Finalizar Kit</button>
+    <button id="copyCommands">Copiar Comandos</button>
+    <button id="newKit">Nuevo Kit</button>
     <div id="command_list"></div>
 
     <script src="Items.js"></script>
@@ -242,26 +206,55 @@
             slot.addEventListener('drop', (e) => {
                 e.preventDefault();
                 const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-                const quantity = prompt("¿Cuántos quieres agregar?");
-                slot.innerHTML = `<div>${data.name} (${quantity})</div>`;
+                const quantity = document.getElementById('itemQuantity').value;
+
+                // Mostrar la imagen y la cantidad
+                if (quantity > 1) {
+                    slot.innerHTML = `<img src="images/${data.id}.png" style="width: 40px;"/> x${quantity}`;
+                } else {
+                    slot.innerHTML = `<img src="images/${data.id}.png" style="width: 40px;"/>`;
+                }
                 slot.dataset.id = data.id; // Almacenar el ID del item
                 slot.dataset.quantity = quantity; // Almacenar la cantidad
-                slot.dataset.slotType = slot.dataset.type; // Almacenar tipo de slot
+                slot.dataset.type = slot.dataset.type; // Almacenar el tipo
             });
         });
 
         document.getElementById('finalizeKit').addEventListener('click', () => {
             const commands = [];
+            const kitName = document.getElementById('kitName').value || document.getElementById('kaosList').value;
             slots.forEach(slot => {
                 if (slot.dataset.id) {
                     const itemId = slot.dataset.id;
-                    const itemName = slot.querySelector('div').innerText;
-                    const quantity = slot.dataset.quantity || 1;
-                    const slotType = slot.dataset.slotType;
-                    commands.push(`kit add "${document.getElementById('kitName').value}" "${itemId}" ${quantity} 1 ${slotType}`);
+                    const quantity = slot.dataset.quantity;
+                    const itemType = slot.dataset.type;
+                    commands.push(`kit add "${kitName}" "${itemId}" ${quantity} 1 "${itemType}"`);
                 }
             });
             document.getElementById('command_list').innerText = commands.join('\n');
+        });
+
+        document.getElementById('copyCommands').addEventListener('click', () => {
+            const commandList = document.getElementById('command_list');
+            navigator.clipboard.writeText(commandList.innerText).then(() => {
+                alert('Comandos copiados al portapapeles!');
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+            });
+        });
+
+        document.getElementById('newKit').addEventListener('click', () => {
+            document.getElementById('kitName').value = '';
+            document.getElementById('kaosList').value = '';
+            document.getElementById('category').value = '';
+            slots.forEach(slot => {
+                slot.innerHTML = '';
+                delete slot.dataset.id;
+                delete slot.dataset.quantity;
+                delete slot.dataset.type;
+            });
+            document.getElementById('command_list').innerText = '';
+            document.getElementById('itemQuantity').value = 1; // Resetear cantidad
         });
     </script>
     <footer>
