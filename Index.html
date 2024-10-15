@@ -365,6 +365,7 @@ slots.forEach(slot => {
 
         // Verificar si el slot es de tipo "wear" y si el ítem es de tipo "attire"
         if (slot.dataset.type === 'wear' && data.category !== 'Attire') {
+            console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
             return; // No hacer nada si no es de la categoría "Attire"
         }
 
@@ -406,6 +407,7 @@ slots.forEach(slot => {
         slot.dataset.type = slot.dataset.type;
     });
 });
+
 
 
 document.getElementById('finalizeKit').addEventListener('click', () => {
