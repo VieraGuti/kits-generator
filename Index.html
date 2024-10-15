@@ -382,15 +382,16 @@ slots.forEach(slot => {
 
         // Crear el elemento para la cantidad
         const quantityElement = document.createElement('span');
-        quantityElement.textContent = quantity;
         quantityElement.style.position = 'absolute';
         quantityElement.style.bottom = '5px';
         quantityElement.style.right = '5px';
-        quantityElement.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
         quantityElement.style.color = 'white';
-        quantityElement.style.padding = '2px 5px';
-        quantityElement.style.borderRadius = '3px';
         quantityElement.style.fontSize = '12px';
+
+        // Mostrar cantidad con "x" si es mayor a 1
+        if (quantity > 1) {
+            quantityElement.textContent = `x${quantity}`;
+        }
 
         // Añadir la imagen y la cantidad al contenedor
         itemContainer.appendChild(img);
