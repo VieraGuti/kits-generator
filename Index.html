@@ -58,13 +58,20 @@ button:hover {
     background-color: #1e1e1e; 
     box-shadow: 0 0 10px rgba(255, 69, 0, 0.5); 
 }
-
 .slot-container {
     display: flex;
     flex-wrap: wrap; /* Permite que los elementos se ajusten en filas */
-    max-width: 330px; /* 6 slots de 50px + márgenes */
+    justify-content: center; /* Centra los elementos */
     margin: 10px 0; /* Espacio entre secciones */
-    justify-content: center; /* Centra los elementos en el contenedor */
+}
+
+.slot-container:nth-of-type(1) { /* Para Wear */
+    max-width: 370px; /* 7 slots de 50px + márgenes */
+}
+
+.slot-container:nth-of-type(2), /* Para Main (primera fila) */
+.slot-container:nth-of-type(3) { /* Para Main (segunda fila) */
+    max-width: 330px; /* 6 slots de 50px + márgenes */
 }
 
 .small-slot, .main-slot {
@@ -79,6 +86,8 @@ button:hover {
     border-radius: 5px; 
     transition: background-color 0.3s; 
 }
+
+
 
 .main-slot:empty::before {
     content: ' '; 
