@@ -51,33 +51,33 @@
     display: flex;
     flex-wrap: wrap;
     margin-top: 20px;
-    border: 2px solid #FF4500; /* Borde del inventario */
+    border: 2px solid #FF4500; 
     padding: 10px;
     border-radius: 10px;
-    background-color: #1e1e1e; /* Fondo oscuro del inventario */
-    box-shadow: 0 0 10px rgba(255, 69, 0, 0.5); /* Sombra para resaltar */
+    background-color: #1e1e1e; 
+    box-shadow: 0 0 10px rgba(255, 69, 0, 0.5); 
 }
 
 .main-slot {
     width: 50px;
     height: 50px;
-    border: 1px solid #FF4500; /* Borde de cada slot */
+    border: 1px solid #FF4500; 
     margin: 5px;
-    background-color: #222; /* Color de fondo del slot */
+    background-color: #222; 
     position: relative;
     text-align: center;
     line-height: 50px;
-    border-radius: 5px; /* Esquinas redondeadas */
-    transition: background-color 0.3s; /* Transición suave al pasar el mouse */
+    border-radius: 5px; 
+    transition: background-color 0.3s; 
 }
 
 .main-slot:hover {
-    background-color: #333; /* Cambio de color al pasar el mouse */
+    background-color: #333; 
 }
 
 .main-slot:empty::before {
-    content: ' '; /* Espacio para mostrar el slot vacío */
-    background-color: rgba(255, 69, 0, 0.2); /* Fondo para slots vacíos */
+    content: ' '; 
+    background-color: rgba(255, 69, 0, 0.2); 
     width: 100%;
     height: 100%;
     border-radius: 5px;
@@ -87,7 +87,7 @@
 }
 
 .main-slot img {
-    max-width: 100%; /* Ajusta las imágenes dentro de los slots */
+    max-width: 100%; 
     max-height: 100%;
     border-radius: 5px;
 }
@@ -143,45 +143,123 @@
 <body>
     <h1>Kits Generator</h1>
 
-    <label for="kitName">Nombre del kit:</label>
+    <label for="kitName">Name of kit :</label>
     <input type="text" id="kitName" placeholder="Escribe el nombre del kit">
 
-    <label for="kaosList">Selecciona un kit de la lista:</label>
+    <label for="kaosList">Select kit name:</label>
     <select id="kaosList">
-        <option value="">-- Elige un kit --</option>
+        <option value="">-- Or choose it from KAOSBOT format --</option>
+                <option value="freekit">freekit</option>
+        <option value="freekit2">freekit2</option>
+        <option value="vipkit">vipkit</option>
+        <option value="elitekit">elitekit</option>
+        <option value="elitekit1">elitekit1</option>
+        <option value="elitekit2">elitekit2</option>
+        <option value="elitekit3">elitekit3</option>
+        <option value="elitekit4">elitekit4</option>
+        <option value="elitekit5">elitekit5</option>
         <option value="elitekit6">elitekit6</option>
-        <!-- Agregar más kits según sea necesario -->
+        <option value="elitekit7">elitekit7</option>
+        <option value="elitekit8">elitekit8</option>
+        <option value="elitekit9">elitekit9</option>
+        <option value="elitekit10">elitekit10</option>
+        <option value="elitekit11">elitekit11</option>
+        <option value="elitekit12">elitekit12</option>
+        <option value="elitekit13">elitekit13</option>
+        <option value="elitekit14">elitekit14</option>
+        <option value="elitekit15">elitekit15</option>
+        <option value="elitekit16">elitekit16</option>
+        <option value="elitekit17">elitekit17</option>
+        <option value="elitekit18">elitekit18</option>
+        <option value="elitekit19">elitekit19</option>
+        <option value="elitekit20">elitekit20</option>
+        <option value="elitekit21">elitekit21</option>
+        <option value="elitekit22">elitekit22</option>
+        <option value="elitekit23">elitekit23</option>
+        <option value="elitekit24">elitekit24</option>
+        <option value="elitekit25">elitekit25</option>
+        <option value="elitekit26">elitekit26</option>
+        <option value="elitekit27">elitekit27</option>
+        <option value="elitekit28">elitekit28</option>
+        <option value="elitekit29">elitekit29</option>
+        <option value="elitekit30">elitekit30</option>
+        <option value="elitekit31">elitekit31</option>
+        <option value="elitekit32">elitekit32</option>
+        <option value="elitekit33">elitekit33</option>
+        <option value="elitekit34">elitekit34</option>
+        <option value="elitekit35">elitekit35</option>
+        <option value="elitekit36">elitekit36</option>
+        <option value="elitekit37">elitekit37</option>
+        <option value="elitekit38">elitekit38</option>
+        <option value="elitekit39">elitekit39</option>
+        <option value="elitekit40">elitekit40</option>
+        <option value="elitekit41">elitekit41</option>
+        <option value="elitekit42">elitekit42</option>
+        <option value="elitekit43">elitekit43</option>
+        <option value="elitekit44">elitekit44</option>
     </select>
+    
 
-    <label for="category">Selecciona categoría:</label>
+    <label for="category">Select category:</label>
     <select id="category">
-        <option value="">-- Elige una categoría --</option>
-        <!-- Las categorías se cargarán dinámicamente desde Items.js -->
+        <option value="">-- Choose a category --</option>
+        
     </select>
 
     <div class="main-slots">
-        <h3>Main</h3>
-        ${Array(24).fill('<div class="main-slot" data-type="main"></div>').join('')}
-    </div>
+    <h3>Main</h3>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+    <div class="main-slot" data-type="main"></div>
+</div>
+
 
     <h3>Wear</h3>
     <div class="small-slot" data-type="wear"></div>
     <div class="small-slot" data-type="wear"></div>
     <div class="small-slot" data-type="wear"></div>
-
+    <div class="small-slot" data-type="wear"></div>
+    <div class="small-slot" data-type="wear"></div>
+    <div class="small-slot" data-type="wear"></div>
+    <div class="small-slot" data-type="wear"></div>
+    
     <h3>Belt</h3>
     <div class="main-slot" data-type="belt"></div>
     <div class="main-slot" data-type="belt"></div>
     <div class="main-slot" data-type="belt"></div>
+    <div class="main-slot" data-type="belt"></div>
+    <div class="main-slot" data-type="belt"></div>
+    <div class="main-slot" data-type="belt"></div>
 
-    <label for="itemQuantity">Cantidad:</label>
+    <label for="itemQuantity">Quantity:</label>
     <input type="number" id="itemQuantity" value="1" min="1" />
 
     <div class="image-container" id="itemGallery"></div>
     
-    <button id="finalizeKit">Finalizar Kit</button>
-    <button id="copyCommands">Copiar Comandos</button>
-    <button id="newKit">Nuevo Kit</button>
+    <button id="finalizeKit">Finish Kit</button>
+    <button id="copyCommands">Copy kit commands</button>
+    <button id="newKit">New Kit</button>
     <div id="command_list"></div>
 
     <script src="Items.js"></script>
@@ -203,7 +281,7 @@
         document.getElementById('category').addEventListener('change', (event) => {
             const category = event.target.value;
             const itemGallery = document.getElementById('itemGallery');
-            itemGallery.innerHTML = ''; // Limpiar la galería de items
+            itemGallery.innerHTML = ''; 
 
             if (category && items[category]) {
                 items[category].forEach(item => {
@@ -211,8 +289,8 @@
                     imageItem.className = 'image-item';
 
                     const img = document.createElement('img');
-                    img.src = `images/${item.id}.png`; // Usar la ID para la ruta de la imagen
-                    img.alt = item.name; // Mostrar el nombre en el alt
+                    img.src = `images/${item.id}.png`; 
+                    img.alt = item.name; 
                     img.draggable = true;
                     img.addEventListener('dragstart', (e) => {
                         e.dataTransfer.setData('text/plain', JSON.stringify({ id: item.id, name: item.name }));
@@ -227,7 +305,7 @@
         const slots = document.querySelectorAll('.main-slot, .small-slot');
         slots.forEach(slot => {
             slot.addEventListener('dragover', (e) => {
-                e.preventDefault(); // Permitir el drop
+                e.preventDefault(); 
             });
 
             slot.addEventListener('drop', (e) => {
@@ -235,15 +313,15 @@
                 const data = JSON.parse(e.dataTransfer.getData('text/plain'));
                 const quantity = document.getElementById('itemQuantity').value;
 
-                // Mostrar la imagen y la cantidad
+                
                 if (quantity > 1) {
                     slot.innerHTML = `<img src="images/${data.id}.png" style="width: 40px;"/> x${quantity}`;
                 } else {
                     slot.innerHTML = `<img src="images/${data.id}.png" style="width: 40px;"/>`;
                 }
-                slot.dataset.id = data.id; // Almacenar el ID del item
-                slot.dataset.quantity = quantity; // Almacenar la cantidad
-                slot.dataset.type = slot.dataset.type; // Almacenar el tipo
+                slot.dataset.id = data.id; 
+                slot.dataset.quantity = quantity; 
+                slot.dataset.type = slot.dataset.type; 
             });
         });
 
@@ -255,7 +333,7 @@
                     const itemId = slot.dataset.id;
                     const quantity = slot.dataset.quantity;
                     const itemType = slot.dataset.type;
-                    commands.push(`kit add "${kitName}" "${itemId}" ${quantity} 1 "${itemType}"`);
+                    commands.push(`kit add ${kitName} ${itemId} ${quantity} 1 ${itemType}`);
                 }
             });
             document.getElementById('command_list').innerText = commands.join('\n');
