@@ -61,16 +61,17 @@ button:hover {
 
 .slot-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Centra los elementos */
+    flex-wrap: wrap; /* Permite que los elementos se ajusten en filas */
+    max-width: 330px; /* 6 slots de 50px + márgenes */
     margin: 10px 0; /* Espacio entre secciones */
+    justify-content: center; /* Centra los elementos en el contenedor */
 }
 
 .small-slot, .main-slot {
-    width: 50px; /* Puedes ajustar el tamaño aquí */
-    height: 50px; /* Puedes ajustar el tamaño aquí */
+    width: 50px; /* Tamaño de cada slot */
+    height: 50px; /* Tamaño de cada slot */
     border: 1px solid #FF4500; 
-    margin: 5px;
+    margin: 5px; /* Espacio entre slots */
     background-color: #222; 
     position: relative;
     text-align: center;
@@ -79,9 +80,21 @@ button:hover {
     transition: background-color 0.3s; 
 }
 
-.small-slot:hover, .main-slot:hover {
+.main-slot:empty::before {
+    content: ' '; 
+    background-color: rgba(255, 69, 0, 0.2); 
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.main-slot:hover {
     background-color: #333; 
 }
+
 
 .main-slot:empty::before {
     content: ' '; 
@@ -221,21 +234,21 @@ footer {
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
-        <br>
+   
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
-        <br>
+       
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
-        <br>
+       
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
