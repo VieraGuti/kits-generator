@@ -289,6 +289,20 @@
     <div id="command_list"></div>
 
     <script src="Items.js"></script>
+<style>
+    .image-item {
+        display: inline-block;
+        margin: 10px;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .image-item.selected img {
+        border: 3px solid #007BFF; /* Color de borde para el ítem seleccionado */
+        opacity: 0.8; /* Disminuir opacidad para resaltar la selección */
+    }
+</style>
+
 <script>
     window.onload = function() {
         console.log(items); 
@@ -324,10 +338,17 @@
                 img.src = `images/${item.id}.png`;
                 img.alt = item.name;
 
-                // Al tocar la imagen, seleccionamos el item
                 img.addEventListener('click', () => {
+                    // Limpiamos la selección previa
+                    const previouslySelected = document.querySelector('.image-item.selected');
+                    if (previouslySelected) {
+                        previouslySelected.classList.remove('selected');
+                    }
+
+                    // Seleccionamos el nuevo ítem
                     selectedItem.id = item.id;
                     selectedItem.category = category;
+                    imageItem.classList.add('selected'); // Añadimos clase para resaltar
                     console.log(`Seleccionado: ${item.name}`);
                 });
 
@@ -342,10 +363,12 @@
         slot.addEventListener('click', () => {
             if (selectedItem.id) {
                 const quantity = document.getElementById('itemQuantity').value;
-                if (slot.dataset.type === 'wear' && selectedItem.category !== 'attire') {
+
+                if (slot.dataset.type === 'wear' && selectedItem.category !== 'Attire') {
                     console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
                     return; 
                 }
+
                 applyItemToSlot(slot, selectedItem, quantity);
                 selectedItem.id = null; // Reseteamos la selección
             }
@@ -423,6 +446,7 @@
         document.getElementById('itemQuantity').value = 1; 
     });
 </script>
+
 
 
     <footer>
