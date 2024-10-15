@@ -12,109 +12,65 @@
             margin: 0;
             padding: 20px;
         }
-
         h1 {
             text-align: center;
             font-size: 2.5em;
             color: #FF4500;
             text-shadow: 2px 2px 4px #000;
         }
-
-        label, select, input {
-            display: block;
-            margin: 10px 0;
-        }
-
-        input, select, button {
+        .drop-zone {
             width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #333;
-            color: #fff;
-            font-size: 1em;
-        }
-
-        button {
-            background-color: #FF4500;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #E53E00;
-        }
-
-        .item-container {
             display: flex;
             flex-wrap: wrap;
-            margin: 20px 0;
+            margin: 10px 0;
+            justify-content: center;
         }
-
-        .item {
-            width: 100px;
-            margin: 10px;
-            cursor: pointer;
-        }
-
-        .inventory {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .inventory-area {
-            background-color: #292929;
-            padding: 10px;
-            border: 2px solid #FF4500;
-            border-radius: 10px;
-            min-height: 100px;
-        }
-
-        .item-in-inventory {
-            background-color: #444;
-            border: 1px solid #FF4500;
-            padding: 5px;
-            position: relative;
-        }
-
-        .quantity-input {
-            width: 60px;
-            margin-left: 5px;
-        }
-
-        .command-list {
-            margin-top: 20px;
-            background-color: #292929;
-            padding: 10px;
-            border: 2px solid #FF4500;
-            border-radius: 10px;
-        }
-
-        .slots {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
         .slot {
-            background-color: #444;
-            border: 2px dashed #FF4500;
+            width: 60px; /* Ajusta el tamaño del slot */
             height: 60px;
+            margin: 5px;
+            background-color: #333;
+            border: 1px solid #FF4500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
+        }
+        .item-image {
+            max-width: 100%;
+            max-height: 100%;
+            display: none;
+        }
+        .kit-item {
+            background-color: #444;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #FF4500;
+        }
+        .kit-actions {
+            display: flex;
+            gap: 5px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #ccc;
         }
     </style>
 </head>
 <body>
     <h1>Kits Generator</h1>
-
-    <label for="kit_name">Enter the kit name:</label>
-    <input type="text" id="kit_name" placeholder="Write the name of the kit" oninput="updateSlots()">
+    
+    <label for="kit_name">Enter the kit name or choose KaosBot:</label>
+    <input type="text" id="kit_name" placeholder="Write the name of the kit" oninput="showKitSlots()">
 
     <label for="kaosbot_kits">Select a KaosBot name:</label>
-    <select id="kaosbot_kits" onchange="updateSlots()">
-        <option value="none">Select a kit name:</option>
+    <select id="kaosbot_kits" onchange="showKitSlots()">
+        <option value="none">Select a kitname:</option>
         <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
@@ -122,129 +78,151 @@
         <option value="elitekit1">elitekit1</option>
         <option value="elitekit2">elitekit2</option>
         <option value="elitekit3">elitekit3</option>
+        <option value="elitekit4">elitekit4</option>
+        <option value="elitekit5">elitekit5</option>
+        <option value="elitekit6">elitekit6</option>
+        <option value="elitekit7">elitekit7</option>
+        <option value="elitekit8">elitekit8</option>
+        <option value="elitekit9">elitekit9</option>
+        <option value="elitekit10">elitekit10</option>
+        <option value="elitekit11">elitekit11</option>
+        <option value="elitekit12">elitekit12</option>
+        <option value="elitekit13">elitekit13</option>
+        <option value="elitekit14">elitekit14</option>
+        <option value="elitekit15">elitekit15</option>
+        <option value="elitekit16">elitekit16</option>
+        <option value="elitekit17">elitekit17</option>
+        <option value="elitekit18">elitekit18</option>
+        <option value="elitekit19">elitekit19</option>
+        <option value="elitekit20">elitekit20</option>
+        <option value="elitekit21">elitekit21</option>
+        <option value="elitekit22">elitekit22</option>
+        <option value="elitekit23">elitekit23</option>
+        <option value="elitekit24">elitekit24</option>
+        <option value="elitekit25">elitekit25</option>
+        <option value="elitekit26">elitekit26</option>
+        <option value="elitekit27">elitekit27</option>
+        <option value="elitekit28">elitekit28</option>
+        <option value="elitekit29">elitekit29</option>
+        <option value="elitekit30">elitekit30</option>
+        <option value="elitekit31">elitekit31</option>
+        <option value="elitekit32">elitekit32</option>
+        <option value="elitekit33">elitekit33</option>
+        <option value="elitekit34">elitekit34</option>
+        <option value="elitekit35">elitekit35</option>
+        <option value="elitekit36">elitekit36</option>
+        <option value="elitekit37">elitekit37</option>
+        <option value="elitekit38">elitekit38</option>
+        <option value="elitekit39">elitekit39</option>
+        <option value="elitekit40">elitekit40</option>
+        <option value="elitekit41">elitekit41</option>
+        <option value="elitekit42">elitekit42</option>
+        <option value="elitekit43">elitekit43</option>
         <option value="elitekit44">elitekit44</option>
     </select>
+
+    <div id="kit_slots" style="display:none;">
+        <h2>Kit Slots</h2>
+        <div class="drop-zone" id="wear_slots">
+            <h3>Wear</h3>
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div>
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
+        </div>
+        <div class="drop-zone" id="main_slots">
+            <h3>Main</h3>
+            ${Array(24).fill('<div class="slot"></div>').join('')}
+        </div>
+        <div class="drop-zone" id="belt_slots">
+            <h3>Belt</h3>
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div>
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div>
+        </div>
+    </div>
 
     <label for="item_category">Select category:</label>
     <select id="item_category" onchange="updateItemList()">
         <option value="none">Select a category</option>
         <option value="ammo">Ammo</option>
         <option value="weapons">Weapons</option>
-        <option value="construction">Construction Items</option>
-        <option value="attire">Attire</option>
+        <option value="armor">Armor</option>
         <option value="tools">Tools</option>
-        <option value="medsAndTeas">Meds and Teas</option>
-        <option value="trapsAndMiscellaneous">Traps and Miscellaneous</option>
-        <option value="components">Components</option>
-        <option value="electrical">Electrical</option>
+        <option value="resources">Resources</option>
+        <option value="clothes">Clothes</option>
+        <option value="consumables">Consumables</option>
+        <option value="crafting">Crafting</option>
     </select>
 
-    <div class="item-container" id="item_container"></div>
+    <label for="item_list">Select an item:</label>
+    <select id="item_list" onchange="showItemDetails()">
+        <option value="none">Select an item</option>
+        <!-- Aquí se añadirán dinámicamente las opciones -->
+    </select>
 
-    <div class="slots" id="wear_slots"></div>
-    <div class="slots" id="main_slots"></div>
-    <div class="slots" id="belt_slots"></div>
+    <img id="item_image" class="item-image" src="" alt="Imagen del ítem" style="display:none;" />
 
-    <div class="command-list" id="command_list"></div>
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" placeholder="Write the amount" min="1" value="1">
+
+    <button onclick="addToKit()">Add Item to Kit</button>
     
-    <button onclick="generateCommand()">Generate Kit Command</button>
+    <div id="command_list"></div>
 
     <script src="Items.js"></script>
     <script>
-        const items = {
-            ammo: [
-                { id: 'ammo1', name: 'Ammo Type 1' },
-                { id: 'ammo2', name: 'Ammo Type 2' },
-            ],
-            weapons: [
-                { id: 'weapon1', name: 'Weapon Type 1' },
-                { id: 'weapon2', name: 'Weapon Type 2' },
-            ],
-        };
+        const commands = [];
+        let currentKit = "";
+        let selectedItem = null;
 
-        function updateSlots() {
+        function showKitSlots() {
             const kitName = document.getElementById('kit_name').value || document.getElementById('kaosbot_kits').value;
-            const wearSlots = document.getElementById('wear_slots');
-            const mainSlots = document.getElementById('main_slots');
-            const beltSlots = document.getElementById('belt_slots');
-            wearSlots.innerHTML = '';
-            mainSlots.innerHTML = '';
-            beltSlots.innerHTML = '';
-
             if (kitName) {
-                for (let i = 0; i < 7; i++) {
-                    wearSlots.innerHTML += `<div class="slot" ondrop="drop(event, 'Wear')" ondragover="allowDrop(event)"></div>`;
-                }
-                for (let i = 0; i < 24; i++) {
-                    mainSlots.innerHTML += `<div class="slot" ondrop="drop(event, 'Main')" ondragover="allowDrop(event)"></div>`;
-                }
-                for (let i = 0; i < 6; i++) {
-                    beltSlots.innerHTML += `<div class="slot" ondrop="drop(event, 'Belt')" ondragover="allowDrop(event)"></div>`;
-                }
+                document.getElementById('kit_slots').style.display = 'block';
+                currentKit = kitName;
             }
         }
 
-        function updateItemList() {
-            const category = document.getElementById('item_category').value;
-            const itemContainer = document.getElementById('item_container');
-            itemContainer.innerHTML = '';
-
-            if (category !== 'none') {
-                items[category].forEach(item => {
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'item';
-                    itemDiv.draggable = true;
-                    itemDiv.ondragstart = (event) => drag(event, item.id);
-                    itemDiv.innerHTML = `<img src="images/${item.id}.png" alt="${item.name}" width="100"><br>${item.name}`;
-                    itemContainer.appendChild(itemDiv);
-                });
+        function showItemDetails() {
+            const itemList = document.getElementById('item_list');
+            const selectedCategory = document.getElementById('item_category').value;
+            selectedItem = items[selectedCategory].find(item => item.id === itemList.value);
+            const itemImage = document.getElementById('item_image');
+            
+            if (selectedItem) {
+                itemImage.src = selectedItem.img;
+                itemImage.style.display = 'block';
+            } else {
+                itemImage.style.display = 'none';
             }
         }
 
-        function allowDrop(event) {
-            event.preventDefault();
-        }
-
-        function drag(event, itemId) {
-            event.dataTransfer.setData("text/plain", itemId);
-        }
-
-        function drop(event, location) {
-            event.preventDefault();
-            const itemId = event.dataTransfer.getData("text/plain");
-            const selectedItem = items[document.getElementById('item_category').value].find(item => item.id === itemId);
+        function addToKit() {
+            const quantity = document.getElementById('quantity').value;
+            const location = "Wear"; // Puedes cambiar esto según el slot que elijas
 
             if (selectedItem) {
-                const quantityInput = prompt('Enter quantity:', '1');
-
-                if (quantityInput) {
-                    const slotDiv = event.target;
-                    slotDiv.innerHTML = `
-                        ${selectedItem.name} <input type="number" class="quantity-input" value="${quantityInput}" min="1">
-                        <input type="hidden" class="item-id" value="${selectedItem.id}">
-                        <input type="hidden" class="item-location" value="${location}">
-                    `;
-                }
+                const command = `kit add "${currentKit}" "${selectedItem.id}" ${quantity} 1 "${location}"`;
+                commands.push(command);
+                displayCommands();
             }
         }
 
-        function generateCommand() {
-            const kitName = document.getElementById('kit_name').value || document.getElementById('kaosbot_kits').value;
-            const commandListDiv = document.getElementById('command_list');
-            commandListDiv.innerHTML = '';
+        function displayCommands() {
+            const commandList = document.getElementById('command_list');
+            commandList.innerHTML = ''; // Limpiar lista existente
 
-            const slots = document.querySelectorAll('.slot');
-            slots.forEach(slot => {
-                const itemId = slot.querySelector('.item-id')?.value;
-                const itemLocation = slot.querySelector('.item-location')?.value;
-                const quantity = slot.querySelector('.quantity-input')?.value;
-
-                if (itemId && itemLocation && quantity) {
-                    const command = `kit add "${kitName}" "${itemId}" ${quantity} 1 "${itemLocation}"`;
-                    commandListDiv.innerHTML += `<div>${command}</div>`;
-                }
+            commands.forEach(command => {
+                const commandItem = document.createElement('div');
+                commandItem.className = 'kit-item';
+                commandItem.innerText = command;
+                commandList.appendChild(commandItem);
             });
         }
+
+        // Aquí se deberían implementar las funciones para arrastrar y soltar las imágenes
     </script>
+    
+    <footer>
+        <p>Hecho por VieraGuti</p>
+    </footer>
 </body>
 </html>
