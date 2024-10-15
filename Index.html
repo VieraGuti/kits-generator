@@ -24,14 +24,14 @@ h3 {
 label {
     display: block;
     margin: 10px 0 5px;
-    color: #FF4500; /* Color naranja para las etiquetas */
+    color: #FF4500; 
 }
 
 input, select {
     width: 100%;
     padding: 10px;
     margin: 5px 0 10px;
-    border: 2px solid #FF4500; /* Borde naranja */
+    border: 2px solid #FF4500; 
     border-radius: 5px;
     background-color: #333;
     color: #fff;
@@ -44,13 +44,13 @@ button {
     margin: 5px 0 10px;
     border: none;
     border-radius: 5px;
-    background-color: #FF4500; /* Fondo naranja */
-    color: white; /* Texto blanco */
+    background-color: #FF4500; 
+    color: white; 
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #E53E00; /* Color al pasar el ratón */
+    background-color: #E53E00; 
 }
 
 .main-slots {
@@ -67,33 +67,33 @@ button:hover {
 
 .slot-container {
     display: flex;
-    flex-wrap: wrap; /* Permite que los elementos se ajusten en filas */
-    justify-content: center; /* Centra los elementos */
-    margin: 10px 0; /* Espacio entre secciones */
+    flex-wrap: wrap; 
+    justify-content: center; 
+    margin: 10px 0; 
 }
 
-.slot-container:nth-of-type(1) { /* Para Wear */
-    max-width: 450px; /* 7 slots de 50px + márgenes */
+.slot-container:nth-of-type(1) { 
+    max-width: 450px; 
 }
 
-.slot-container:nth-of-type(2), /* Para Main (primera fila) */
-.slot-container:nth-of-type(3) { /* Para Main (segunda fila) */
-    max-width: 390px; /* 6 slots de 50px + márgenes */
+.slot-container:nth-of-type(2), 
+.slot-container:nth-of-type(3) { 
+    max-width: 390px; 
 }
 
-.slot-container:nth-of-type(4) { /* Para Belt */
-    max-width: 390px; /* 6 slots de 50px + márgenes */
+.slot-container:nth-of-type(4) { 
+    max-width: 390px; 
 }
 
 .small-slot, .main-slot {
-    width: 50px; /* Tamaño de cada slot */
-    height: 50px; /* Tamaño de cada slot */
+    width: 50px; 
+    height: 50px; 
     border: 1px solid #FF4500; 
-    margin: 5px; /* Espacio entre slots */
+    margin: 5px; 
     background-color: #222; 
     position: relative;
     text-align: center;
-    line-height: 50px; /* Para centrar el texto verticalmente */
+    line-height: 50px; 
     border-radius: 5px; 
     transition: background-color 0.3s; 
 }
@@ -300,7 +300,7 @@ footer {
     <script src="Items.js"></script>
 <script>
     window.onload = function() {
-        console.log(items); // Verifica que todos los elementos se carguen correctamente
+        console.log(items); 
         loadCategories();
     };
 
@@ -329,12 +329,12 @@ footer {
                 img.alt = item.name;
                 img.draggable = true;
 
-                // Manejo del arrastre para PC
+                
                 img.addEventListener('dragstart', (e) => {
                     e.dataTransfer.setData('text/plain', JSON.stringify({ id: item.id, name: item.name, category: category }));
                 });
 
-                // Manejo del toque para móviles
+                
                 img.addEventListener('touchstart', (e) => {
                     e.preventDefault();
                     const touch = e.touches[0];
@@ -349,7 +349,7 @@ footer {
                     };
 
                     const onTouchEnd = (endEvent) => {
-                        // Manejo de la soltura en un slot
+                       
                         slots.forEach(slot => {
                             const slotRect = slot.getBoundingClientRect();
                             const touch = endEvent.changedTouches[0];
@@ -359,46 +359,46 @@ footer {
                                 touch.clientY >= slotRect.top &&
                                 touch.clientY <= slotRect.bottom
                             ) {
-                                // Si se suelta en un slot
+                                
                                 const quantity = document.getElementById('itemQuantity').value;
 
-                                // Verificar tipo de slot antes de añadir
+                                
                                 if (slot.dataset.type === 'wear' && category !== 'Attire') {
                                     console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
-                                    return; // No hacer nada si no es de la categoría "Attire"
+                                    return; 
                                 }
 
-                                // Crear el contenedor para la imagen y la cantidad
+                                
                                 const itemContainer = document.createElement('div');
                                 itemContainer.style.position = 'relative';
                                 itemContainer.style.width = '100%';
                                 itemContainer.style.height = '100%';
 
-                                // Crear la imagen
+                                
                                 const imgSlot = document.createElement('img');
                                 imgSlot.src = `images/${item.id}.png`;
-                                imgSlot.style.width = '100%'; // Adaptar al tamaño del slot
-                                imgSlot.style.height = '100%'; // Adaptar al tamaño del slot
+                                imgSlot.style.width = '100%'; 
+                                imgSlot.style.height = '100%'; 
 
-                                // Crear el elemento para la cantidad
+                                
                                 const quantityElement = document.createElement('span');
                                 quantityElement.style.position = 'absolute';
                                 quantityElement.style.bottom = '5px';
                                 quantityElement.style.right = '5px';
                                 quantityElement.style.color = 'white';
                                 quantityElement.style.fontSize = '12px';
-                                quantityElement.style.backgroundColor = 'transparent'; // Sin fondo
+                                quantityElement.style.backgroundColor = 'transparent'; 
 
-                                // Mostrar cantidad con "x" si es mayor a 1
+                                
                                 if (quantity > 1) {
                                     quantityElement.textContent = `x${quantity}`;
                                 }
 
-                                // Añadir la imagen y la cantidad al contenedor
+                                
                                 itemContainer.appendChild(imgSlot);
                                 itemContainer.appendChild(quantityElement);
 
-                                // Limpiar slot y añadir el contenedor
+                                
                                 slot.innerHTML = '';
                                 slot.appendChild(itemContainer);
 
@@ -408,7 +408,7 @@ footer {
                             }
                         });
 
-                        // Resetear estilo
+                        
                         img.style.position = '';
                         img.style.left = '';
                         img.style.top = '';
@@ -438,49 +438,49 @@ footer {
             const data = JSON.parse(e.dataTransfer.getData('text/plain'));
             const quantity = document.getElementById('itemQuantity').value;
 
-            // Permitir "Attire" en "Wear"
+           
             if (slot.dataset.type === 'wear' && data.category !== 'attire') {
                 console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
-                return; // No hacer nada si no es de la categoría "Attire"
+                return; 
             }
 
-            // Crear el contenedor para la imagen y la cantidad
+           
             const itemContainer = document.createElement('div');
             itemContainer.style.position = 'relative';
             itemContainer.style.width = '100%';
             itemContainer.style.height = '100%';
 
-            // Crear la imagen
+           
             const img = document.createElement('img');
             img.src = `images/${data.id}.png`;
-            img.style.width = '100%'; // Adaptar al tamaño del slot
-            img.style.height = '100%'; // Adaptar al tamaño del slot
+            img.style.width = '100%'; 
+            img.style.height = '100%'; 
 
-            // Crear el elemento para la cantidad
+           
             const quantityElement = document.createElement('span');
             quantityElement.style.position = 'absolute';
             quantityElement.style.bottom = '5px';
             quantityElement.style.right = '5px';
             quantityElement.style.color = 'white';
             quantityElement.style.fontSize = '12px';
-            quantityElement.style.backgroundColor = 'transparent'; // Sin fondo
+            quantityElement.style.backgroundColor = 'transparent';
 
-            // Mostrar cantidad con "x" si es mayor a 1
+            
             if (quantity > 1) {
                 quantityElement.textContent = `x${quantity}`;
             }
 
-            // Añadir la imagen y la cantidad al contenedor
+            
             itemContainer.appendChild(img);
             itemContainer.appendChild(quantityElement);
 
-            // Limpiar slot y añadir el contenedor
+            
             slot.innerHTML = '';
             slot.appendChild(itemContainer);
 
             slot.dataset.id = data.id;
             slot.dataset.quantity = quantity;
-            slot.dataset.type = slot.dataset.type; // Asegúrate de que el tipo se guarda correctamente
+            slot.dataset.type = slot.dataset.type; 
         });
     });
 
@@ -491,7 +491,7 @@ footer {
             if (slot.dataset.id) {
                 const itemId = slot.dataset.id;
                 const quantity = slot.dataset.quantity;
-                const itemType = slot.dataset.type; // Asegúrate de que el tipo se guarda correctamente
+                const itemType = slot.dataset.type; 
                 commands.push(`kit add ${kitName} ${itemId} ${quantity} 1 ${itemType}`);
             }
         });
@@ -518,7 +518,7 @@ footer {
             delete slot.dataset.type;
         });
         document.getElementById('command_list').innerText = '';
-        document.getElementById('itemQuantity').value = 1; // Resetear cantidad
+        document.getElementById('itemQuantity').value = 1; 
     });
 </script>
 
