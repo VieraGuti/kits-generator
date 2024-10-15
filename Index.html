@@ -404,7 +404,7 @@ slots.forEach(slot => {
         const quantity = document.getElementById('itemQuantity').value;
 
         // Permitir "Attire" en "Wear"
-        if (slot.dataset.type === 'wear' && data.category !== 'Attire') {
+        if (slot.dataset.type === 'wear' && data.category !== 'attire') {
             console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
             return; // No hacer nada si no es de la categoría "Attire"
         }
