@@ -265,128 +265,151 @@ h3 {
     <script src="Items.js"></script>
 <script>
     window.onload = function() {
-        console.log(items); // Verifica que todos los elementos se carguen correctamente
-        loadCategories();
-    };
+    console.log(items); // Verifica que todos los elementos se carguen correctamente
+    loadCategories();
+};
 
-    function loadCategories() {
-        const categorySelect = document.getElementById('category');
-        Object.keys(items).forEach(category => {
-            const option = document.createElement('option');
-            option.value = category;
-            option.textContent = category;
-            categorySelect.appendChild(option);
+function loadCategories() {
+    const categorySelect = document.getElementById('category');
+    Object.keys(items).forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categorySelect.appendChild(option);
+    });
+}
+
+document.getElementById('category').addEventListener('change', (event) => {
+    const category = event.target.value;
+    const itemGallery = document.getElementById('itemGallery');
+    itemGallery.innerHTML = '';
+
+    if (category && items[category]) {
+        items[category].forEach(item => {
+            const imageItem = document.createElement('div');
+            imageItem.className = 'image-item';
+
+            const img = document.createElement('img');
+            img.src = `images/${item.id}.png`;
+            img.alt = item.name;
+            img.draggable = true;
+
+            // Manejo del arrastre para PC
+            img.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', JSON.stringify({ id: item.id, name: item.name }));
+            });
+
+            // Manejo del toque para móviles
+            img.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // Evita que se muestre información
+                const touch = e.touches[0];
+                img.style.position = 'absolute';
+                img.style.left = `${touch.clientX - 50}px`;
+                img.style.top = `${touch.clientY - 50}px`;
+
+                const onTouchMove = (moveEvent) => {
+                    moveEvent.preventDefault();
+                    img.style.left = `${moveEvent.touches[0].clientX - 50}px`;
+                    img.style.top = `${moveEvent.touches[0].clientY - 50}px`;
+                };
+
+                const onTouchEnd = (endEvent) => {
+                    // Manejo de la soltura en un slot
+                    slots.forEach(slot => {
+                        const slotRect = slot.getBoundingClientRect();
+                        const touch = endEvent.changedTouches[0];
+                        if (
+                            touch.clientX >= slotRect.left &&
+                            touch.clientX <= slotRect.right &&
+                            touch.clientY >= slotRect.top &&
+                            touch.clientY <= slotRect.bottom
+                        ) {
+                            // Si se suelta en un slot
+                            const quantity = document.getElementById('itemQuantity').value;
+                            slot.innerHTML = `<img src="images/${item.id}.png" style="width: 40px;"/>${quantity > 1 ? ' x' + quantity : ''}`;
+                            slot.dataset.id = item.id;
+                            slot.dataset.quantity = quantity;
+                            slot.dataset.type = slot.dataset.type;
+                        }
+                    });
+
+                    // Resetear estilo
+                    img.style.position = '';
+                    img.style.left = '';
+                    img.style.top = '';
+
+                    document.removeEventListener('touchmove', onTouchMove);
+                    document.removeEventListener('touchend', onTouchEnd);
+                };
+
+                document.addEventListener('touchmove', onTouchMove);
+                document.addEventListener('touchend', onTouchEnd);
+            });
+
+            imageItem.appendChild(img);
+            itemGallery.appendChild(imageItem);
         });
     }
+});
 
-    document.getElementById('category').addEventListener('change', (event) => {
-        const category = event.target.value;
-        const itemGallery = document.getElementById('itemGallery');
-        itemGallery.innerHTML = '';
+const slots = document.querySelectorAll('.main-slot, .small-slot');
+slots.forEach(slot => {
+    slot.addEventListener('dragover', (e) => {
+        e.preventDefault();
+    });
 
-        if (category && items[category]) {
-            items[category].forEach(item => {
-                const imageItem = document.createElement('div');
-                imageItem.className = 'image-item';
+    slot.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+        const quantity = document.getElementById('itemQuantity').value;
 
-                const img = document.createElement('img');
-                img.src = `images/${item.id}.png`;
-                img.alt = item.name;
-                img.draggable = true;
+        if (quantity > 1) {
+            slot.innerHTML = `<img src="images/${data.id}.png" style="width: 40px;"/> x${quantity}`;
+        } else {
+            slot.innerHTML = `<img src="images/${data.id}.png" style="width: 40px;"/>`;
+        }
+        slot.dataset.id = data.id;
+        slot.dataset.quantity = quantity;
+        slot.dataset.type = slot.dataset.type;
+    });
+});
 
-                // Manejo del arrastre para PC
-                img.addEventListener('dragstart', (e) => {
-                    e.dataTransfer.setData('text/plain', JSON.stringify({ id: item.id, name: item.name }));
-                });
-
-                // Manejo del toque para móviles
-                img.addEventListener('touchstart', (e) => {
-                    e.preventDefault(); // Evita que se muestre información
-                    const touch = e.touches[0];
-                    img.style.position = 'absolute';
-                    img.style.left = `${touch.clientX - 50}px`;
-                    img.style.top = `${touch.clientY - 50}px`;
-
-                    const onTouchMove = (moveEvent) => {
-                        moveEvent.preventDefault();
-                        img.style.left = `${moveEvent.touches[0].clientX - 50}px`;
-                        img.style.top = `${moveEvent.touches[0].clientY - 50}px`;
-                    };
-
-                    const onTouchEnd = (endEvent) => {
-                        // Aquí puedes manejar el final del arrastre si lo necesitas
-                        document.removeEventListener('touchmove', onTouchMove);
-                        document.removeEventListener('touchend', onTouchEnd);
-                    };
-
-                    document.addEventListener('touchmove', onTouchMove);
-                    document.addEventListener('touchend', onTouchEnd);
-                });
-
-                imageItem.appendChild(img);
-                itemGallery.appendChild(imageItem);
-            });
+document.getElementById('finalizeKit').addEventListener('click', () => {
+    const commands = [];
+    const kitName = document.getElementById('kitName').value || document.getElementById('kaosList').value;
+    slots.forEach(slot => {
+        if (slot.dataset.id) {
+            const itemId = slot.dataset.id;
+            const quantity = slot.dataset.quantity;
+            const itemType = slot.dataset.type;
+            commands.push(`kit add ${kitName} ${itemId} ${quantity} 1 ${itemType}`);
         }
     });
+    document.getElementById('command_list').innerText = commands.join('\n');
+});
 
-    const slots = document.querySelectorAll('.main-slot, .small-slot');
+document.getElementById('copyCommands').addEventListener('click', () => {
+    const commandList = document.getElementById('command_list');
+    navigator.clipboard.writeText(commandList.innerText).then(() => {
+        alert('Comandos copiados al portapapeles!');
+    }).catch(err => {
+        console.error('Error al copiar: ', err);
+    });
+});
+
+document.getElementById('newKit').addEventListener('click', () => {
+    document.getElementById('kitName').value = '';
+    document.getElementById('kaosList').value = '';
+    document.getElementById('category').value = '';
     slots.forEach(slot => {
-        slot.addEventListener('dragover', (e) => {
-            e.preventDefault();
-        });
-
-        slot.addEventListener('drop', (e) => {
-            e.preventDefault();
-            const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-            const quantity = document.getElementById('itemQuantity').value;
-
-            if (quantity > 1) {
-                slot.innerHTML = `<img src="images/${data.id}.png" style="width: 40px;"/> x${quantity}`;
-            } else {
-                slot.innerHTML = `<img src="images/${data.id}.png" style="width: 40px;"/>`;
-            }
-            slot.dataset.id = data.id;
-            slot.dataset.quantity = quantity;
-            slot.dataset.type = slot.dataset.type;
-        });
+        slot.innerHTML = '';
+        delete slot.dataset.id;
+        delete slot.dataset.quantity;
+        delete slot.dataset.type;
     });
-
-    document.getElementById('finalizeKit').addEventListener('click', () => {
-        const commands = [];
-        const kitName = document.getElementById('kitName').value || document.getElementById('kaosList').value;
-        slots.forEach(slot => {
-            if (slot.dataset.id) {
-                const itemId = slot.dataset.id;
-                const quantity = slot.dataset.quantity;
-                const itemType = slot.dataset.type;
-                commands.push(`kit add ${kitName} ${itemId} ${quantity} 1 ${itemType}`);
-            }
-        });
-        document.getElementById('command_list').innerText = commands.join('\n');
-    });
-
-    document.getElementById('copyCommands').addEventListener('click', () => {
-        const commandList = document.getElementById('command_list');
-        navigator.clipboard.writeText(commandList.innerText).then(() => {
-            alert('Comandos copiados al portapapeles!');
-        }).catch(err => {
-            console.error('Error al copiar: ', err);
-        });
-    });
-
-    document.getElementById('newKit').addEventListener('click', () => {
-        document.getElementById('kitName').value = '';
-        document.getElementById('kaosList').value = '';
-        document.getElementById('category').value = '';
-        slots.forEach(slot => {
-            slot.innerHTML = '';
-            delete slot.dataset.id;
-            delete slot.dataset.quantity;
-            delete slot.dataset.type;
-        });
-        document.getElementById('command_list').innerText = '';
-        document.getElementById('itemQuantity').value = 1; // Resetear cantidad
-    });
+    document.getElementById('command_list').innerText = '';
+    document.getElementById('itemQuantity').value = 1; // Resetear cantidad
+});
 </script>
 
     <footer>
