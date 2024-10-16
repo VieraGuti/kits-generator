@@ -161,8 +161,10 @@
 
 </head>
 <body>
+    <!-- Contador de kits generados -->
+    <p>Total de kits generados: <span id="kitCounter">0</span></p>
     <h1>Kits Generator</h1>
-
+   
     <label for="kitName">Name of kit :</label>
     <input type="text" id="kitName" placeholder="Escribe el nombre del kit">
 
@@ -409,17 +411,30 @@
         slot.dataset.type = slot.dataset.type; 
     }
 
-    document.getElementById('finalizeKit').addEventListener('click', () => {
-        const commands = [];
-        const kitName = document.getElementById('kitName').value || document.getElementById('kaosList').value;
-        slots.forEach(slot => {
-            if (slot.dataset.id) {
-                const itemId = slot.dataset.id;
-                const quantity = slot.dataset.quantity;
-                const itemType = slot.dataset.type; 
-                commands.push(`kit add "${kitName}" "${itemId}" ${quantity} 1 "${itemType}"`);
-            }
-        });
+    let kitCount = 0; // Variable global que lleva el conteo de kits generados
+
+document.getElementById('finalizeKit').addEventListener('click', () => {
+    const commands = [];
+    const kitName = document.getElementById('kitName').value || document.getElementById('kaosList').value;
+
+    slots.forEach(slot => {
+        if (slot.dataset.id) {
+            const itemId = slot.dataset.id;
+            const quantity = slot.dataset.quantity;
+            const itemType = slot.dataset.type; 
+            commands.push(`kit add "${kitName}" "${itemId}" ${quantity} 1 "${itemType}"`);
+        }
+    });
+
+    // Mostrar los comandos generados en el HTML
+    document.getElementById('command_list').innerText = commands.join('\n');
+
+    // Incrementar el contador de kits generados
+    kitCount++;
+    
+    // Actualizar el contador en el HTML
+    document.getElementById('kitCounter').textContent = kitCount;
+});
         document.getElementById('command_list').innerText = commands.join('\n');
     });
 
