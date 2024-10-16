@@ -425,18 +425,26 @@
         });
         document.getElementById('command_list').innerText = commands.join('\n');
     });
+let kitCounter = 0; // Define el contador global
 
-  document.getElementById('copyCommands').addEventListener('click', () => {
+function incrementKitCounter() {
+    kitCounter++;
+    document.getElementById('kitCounter').textContent = kitCounter; // Actualiza el contador en el DOM
+}
+
+document.getElementById('copyCommands').addEventListener('click', () => {
     const commandList = document.getElementById('command_list');
     navigator.clipboard.writeText(commandList.innerText).then(() => {
         alert('Comandos copiados al portapapeles!');
         
         // Incrementa el contador de kits generados aquí
-        window.incrementKitCounter();
+        incrementKitCounter(); // Llama a la función correctamente
     }).catch(err => {
         console.error('Error al copiar: ', err);
     });
 });
+
+ 
 
     document.getElementById('newKit').addEventListener('click', () => {
         document.getElementById('kitName').value = '';
