@@ -432,17 +432,17 @@ function incrementKitCounter() {
     document.getElementById('kitCounter').textContent = kitCounter; // Actualiza el contador en el DOM
 }
 
-document.getElementById('copyCommands').addEventListener('click', () => {
-    const commandList = document.getElementById('command_list');
-    navigator.clipboard.writeText(commandList.innerText).then(() => {
-        alert('Comandos copiados al portapapeles!');
-        
-        // Incrementa el contador de kits generados aquí
-        incrementKitCounter(); // Llama a la función correctamente
-    }).catch(err => {
-        console.error('Error al copiar: ', err);
-    });
-});
+  <script src="kitCounter.js"></script>
+    <script>
+        document.getElementById('copyCommands').addEventListener('click', () => {
+            const commandList = document.getElementById('command_list');
+            navigator.clipboard.writeText(commandList.innerText).then(() => {
+                alert('Comandos copiados al portapapeles!');
+                incrementKitCounter(); // Llama a la función correctamente
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+            });
+        });
 
  
 
