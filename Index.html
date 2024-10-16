@@ -306,13 +306,13 @@
     }
 </style>
 <script>
+    let kitCounter = localStorage.getItem('kitCount') ? parseInt(localStorage.getItem('kitCount')) : 0; // Carga el contador desde localStorage
+
     window.onload = function() {
         console.log(items); 
         loadCategories();
         document.getElementById('kitCounter').textContent = kitCounter; // Muestra el contador al cargar
     };
-
-    let kitCounter = localStorage.getItem('kitCount') ? parseInt(localStorage.getItem('kitCount')) : 0; // Carga el contador desde localStorage
 
     function loadCategories() {
         const categorySelect = document.getElementById('category');
@@ -436,7 +436,7 @@
         const commandList = document.getElementById('command_list');
         navigator.clipboard.writeText(commandList.innerText).then(() => {
             alert('Comandos copiados al portapapeles!');
-            incrementKitCounter();
+            incrementKitCounter(); // Incrementa el contador
         }).catch(err => {
             console.error('Error al copiar: ', err);
         });
