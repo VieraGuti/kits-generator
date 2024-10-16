@@ -161,6 +161,9 @@
 
 </head>
 <body>
+    <div id="kitCounterContainer">
+    <p>Kits generados: <span id="kitCounter">0</span></p>
+</div>
     <h1>Kits Generator</h1>
 
     <label for="kitName">Name of kit :</label>
@@ -423,14 +426,17 @@
         document.getElementById('command_list').innerText = commands.join('\n');
     });
 
-    document.getElementById('copyCommands').addEventListener('click', () => {
-        const commandList = document.getElementById('command_list');
-        navigator.clipboard.writeText(commandList.innerText).then(() => {
-            alert('Comandos copiados al portapapeles!');
-        }).catch(err => {
-            console.error('Error al copiar: ', err);
-        });
+  document.getElementById('copyCommands').addEventListener('click', () => {
+    const commandList = document.getElementById('command_list');
+    navigator.clipboard.writeText(commandList.innerText).then(() => {
+        alert('Comandos copiados al portapapeles!');
+        
+        // Incrementa el contador de kits generados aquí
+        window.incrementKitCounter();
+    }).catch(err => {
+        console.error('Error al copiar: ', err);
     });
+});
 
     document.getElementById('newKit').addEventListener('click', () => {
         document.getElementById('kitName').value = '';
