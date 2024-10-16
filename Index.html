@@ -161,7 +161,6 @@
 
 </head>
 <body>
-    
     <h1>Kits Generator</h1>
 
     <label for="kitName">Name of kit :</label>
@@ -285,14 +284,9 @@
     <div class="image-container" id="itemGallery"></div>
     
     <button id="finalizeKit">Finish Kit</button>
-<button id="copyCommands">Copy kit commands</button>
-<button id="newKit">New Kit</button>
-<div id="command_list"></div>
-
-<div>
-    <h3>Kits Generated: <span id="kitCounter">0</span></h3>
-</div>
-
+    <button id="copyCommands">Copy kit commands</button>
+    <button id="newKit">New Kit</button>
+    <div id="command_list"></div>
 
     <script src="Items.js"></script>
 <style>
@@ -310,7 +304,6 @@
 </style>
 
 <script>
-        let kitCount = 0; // Variable global que lleva el conteo de kits generados
     window.onload = function() {
         console.log(items); 
         loadCategories();
@@ -416,28 +409,19 @@
         slot.dataset.type = slot.dataset.type; 
     }
 
-    let kitCount = 0; // Variable global que lleva el conteo de kits generados
-
-document.getElementById('finalizeKit').addEventListener('click', () => {
-    const commands = [];
-    const kitName = document.getElementById('kitName').value || document.getElementById('kaosList').value;
-
-    slots.forEach(slot => {
-        if (slot.dataset.id) {
-            const itemId = slot.dataset.id;
-            const quantity = slot.dataset.quantity;
-            const itemType = slot.dataset.type; 
-            commands.push(`kit add "${kitName}" "${itemId}" ${quantity} 1 "${itemType}"`);
-        }
+    document.getElementById('finalizeKit').addEventListener('click', () => {
+        const commands = [];
+        const kitName = document.getElementById('kitName').value || document.getElementById('kaosList').value;
+        slots.forEach(slot => {
+            if (slot.dataset.id) {
+                const itemId = slot.dataset.id;
+                const quantity = slot.dataset.quantity;
+                const itemType = slot.dataset.type; 
+                commands.push(`kit add "${kitName}" "${itemId}" ${quantity} 1 "${itemType}"`);
+            }
+        });
+        document.getElementById('command_list').innerText = commands.join('\n');
     });
-    document.getElementById('command_list').innerText = commands.join('\n');
-
-    // Incrementar el contador de kits generados
-    kitCount++;
-    
-    // Actualizar el contador en el HTML
-    document.getElementById('kitCounter').textContent = kitCount;
-});
 
     document.getElementById('copyCommands').addEventListener('click', () => {
         const commandList = document.getElementById('command_list');
