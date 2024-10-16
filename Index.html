@@ -449,6 +449,9 @@
     });
 </script>
 <script>
+    // Inicialización del contador
+    let kitCount = 0;
+
     // Cargar el contador desde el Local Storage al cargar la página
     window.onload = function() {
         // Recuperar el contador del Local Storage
@@ -458,52 +461,24 @@
         } else {
             kitCount = 0; // Si no hay valor guardado, inicializa a 0
         }
+
         // Actualizar el contador en la interfaz
         document.getElementById('kitCounter').textContent = `Generated Kits Counter: ${kitCount}`;
-
-        // Cargar otras funciones si es necesario
-        loadCategories();
     };
-
-    // Inicialización del contador
-    let kitCount = 0;
 
     // Asegúrate de que 'copyCommand' es el ID del botón que deseas usar
     document.getElementById('copyCommand').addEventListener('click', function() {
         // Incrementar el contador solo aquí
         kitCount++;
-        
+
         // Actualizar el Local Storage
         localStorage.setItem('kitCount', kitCount);
 
         // Actualizar el texto del contador en la interfaz
         document.getElementById('kitCounter').textContent = `Generated Kits Counter: ${kitCount}`;
-
-        // Aquí va el código que copia los comandos de los kits
-        const kitName = document.getElementById('kitName').value;
-        const kaosList = document.getElementById('kaosList').value;
-
-        const commands = [];
-        const slots = document.querySelectorAll('.main-slot, .small-slot');
-        slots.forEach(slot => {
-            if (slot.dataset.id) {
-                const itemId = slot.dataset.id;
-                const quantity = slot.dataset.quantity;
-                const itemType = slot.dataset.type;
-                commands.push(`kit add "${kitName}" "${itemId}" ${quantity} 1 "${itemType}"`);
-            }
-        });
-
-        const commandString = commands.join('\n');
-
-        // Copiar al portapapeles
-        navigator.clipboard.writeText(commandString).then(() => {
-            alert('Comandos copiados al portapapeles: \n' + commandString);
-        }).catch(err => {
-            console.error('Error al copiar: ', err);
-        });
     });
 </script>
+    
     
     <footer>
         <p>Free to use. If you wish to make a donation you can do so at this link: https://www.paypal.me/angeelvieera </p>
