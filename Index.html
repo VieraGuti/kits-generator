@@ -403,6 +403,119 @@
         itemContainer.appendChild(imgSlot);
         itemContainer.appendChild(quantityElement);
 
+     <script>
+    // Inicialización del contador
+    let kitCount = 0;
+
+    // Función que se ejecutará cuando se cargue la ventana
+    window.onload = function() {
+        console.log(items); 
+        loadCategories();
+
+        // Recuperar el contador del Local Storage al cargar la página
+        const storedCount = localStorage.getItem('kitCount');
+        if (storedCount) {
+            kitCount = parseInt(storedCount, 10);
+        } else {
+            kitCount = 0; // Si no hay valor guardado, inicializa a 0
+        }
+
+        // Actualizar el contador en la interfaz
+        document.getElementById('kitCounter').textContent = `Generated Kits Counter: ${kitCount}`;
+    };
+
+    function loadCategories() {
+        const categorySelect = document.getElementById('category');
+        Object.keys(items).forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            categorySelect.appendChild(option);
+        });
+    }
+
+    const selectedItem = {
+        id: null,
+        category: null,
+    };
+
+    document.getElementById('category').addEventListener('change', (event) => {
+        const category = event.target.value;
+        const itemGallery = document.getElementById('itemGallery');
+        itemGallery.innerHTML = '';
+
+        if (category && items[category]) {
+            items[category].forEach(item => {
+                const imageItem = document.createElement('div');
+                imageItem.className = 'image-item';
+
+                const img = document.createElement('img');
+                img.src = `images/${item.id}.png`;
+                img.alt = item.name;
+
+                img.addEventListener('click', () => {
+                    // Limpiamos la selección previa
+                    const previouslySelected = document.querySelector('.image-item.selected');
+                    if (previouslySelected) {
+                        previouslySelected.classList.remove('selected');
+                    }
+
+                    // Seleccionamos el nuevo ítem
+                    selectedItem.id = item.id;
+                    selectedItem.category = category;
+                    imageItem.classList.add('selected'); // Añadimos clase para resaltar
+                    console.log(`Seleccionado: ${item.name}`);
+                });
+
+                imageItem.appendChild(img);
+                itemGallery.appendChild(imageItem);
+            });
+        }
+    });
+
+    const slots = document.querySelectorAll('.main-slot, .small-slot');
+    slots.forEach(slot => {
+        slot.addEventListener('click', () => {
+            if (selectedItem.id) {
+                const quantity = document.getElementById('itemQuantity').value;
+
+                if (slot.dataset.type === 'wear' && selectedItem.category !== 'attire') {
+                    console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
+                    return; 
+                }
+
+                applyItemToSlot(slot, selectedItem, quantity);
+                selectedItem.id = null; // Reseteamos la selección
+            }
+        });
+    });
+
+    function applyItemToSlot(slot, item, quantity) {
+        const itemContainer = document.createElement('div');
+        itemContainer.style.position = 'relative';
+        itemContainer.style.width = '100%';
+        itemContainer.style.height = '100%';
+
+        const imgSlot = document.createElement('img');
+        imgSlot.src = `images/${item.id}.png`;
+        imgSlot.style.width = '100%'; 
+        imgSlot.style.height = '100%'; 
+
+        const quantityElement = document.createElement('span');
+        quantityElement.style.position = 'absolute';
+        quantityElement.style.bottom = '5px';
+        quantityElement.style.right = '5px';
+        quantityElement.style.color = 'white';
+        quantityElement.style.fontSize = '12px';
+        quantityElement.style.backgroundColor = 'transparent'; 
+
+        if (quantity > 1) {
+            quantityElement.textContent = `x${quantity}`;
+        }
+
+        itemContainer.appendChild(imgSlot);
+        itemContainer.appendChild(quantityElement);
+
         slot.innerHTML = '';
         slot.appendChild(itemContainer);
 
@@ -429,6 +542,15 @@
         const commandList = document.getElementById('command_list');
         navigator.clipboard.writeText(commandList.innerText).then(() => {
             alert('Comandos copiados al portapapeles!');
+
+            // Incrementar el contador solo aquí
+            kitCount++;
+
+            // Actualizar el Local Storage
+            localStorage.setItem('kitCount', kitCount);
+
+            // Actualizar el texto del contador en la interfaz
+            document.getElementById('kitCounter').textContent = `Generated Kits Counter: ${kitCount}`;
         }).catch(err => {
             console.error('Error al copiar: ', err);
         });
@@ -448,33 +570,7 @@
         document.getElementById('itemQuantity').value = 1; 
     });
 </script>
-<script>
-    // Inicialización del contador
-    let kitCount = 0;
-        // Recuperar el contador del Local Storage
-        const storedCount = localStorage.getItem('kitCount');
-        if (storedCount) {
-            kitCount = parseInt(storedCount, 10);
-        } else {
-            kitCount = 0; // Si no hay valor guardado, inicializa a 0
-        }
-
-        // Actualizar el contador en la interfaz
-        document.getElementById('kitCounter').textContent = `Generated Kits Counter: ${kitCount}`;
-    };
-
-    // Asegúrate de que 'copyCommand' es el ID del botón que deseas usar
-    document.getElementById('copyCommands').addEventListener('click', function() {
-        // Incrementar el contador solo aquí
-        kitCount++;
-
-        // Actualizar el Local Storage
-        localStorage.setItem('kitCount', kitCount);
-
-        // Actualizar el texto del contador en la interfaz
-        document.getElementById('kitCounter').textContent = `Generated Kits Counter: ${kitCount}`;
-    });
-</script>
+    
     
     
     <footer>
