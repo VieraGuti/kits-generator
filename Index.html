@@ -161,6 +161,8 @@
 
 </head>
 <body>
+    <p id="kitCounter">Generated Kits Counter: 0</p>
+    
     <h1>Kits Generator</h1>
 
     <label for="kitName">Name of kit :</label>
@@ -444,6 +446,26 @@
         });
         document.getElementById('command_list').innerText = '';
         document.getElementById('itemQuantity').value = 1; 
+    });
+</script>
+<script>
+    let kitCount = 0;
+
+    document.getElementById('copyKits').addEventListener('click', function() {
+        kitCount++;
+        document.getElementById('kitCounter').textContent = `Generated Kits Counter: ${kitCount}`;
+
+        // Aquí va el código que copia los comandos de los kits
+        const kitName = document.getElementById('kitName').value;
+        const kaosList = document.getElementById('kaosList').value;
+
+        // Ejemplo de cómo formar el comando (ajústalo según tu lógica)
+        const command = `give ${kaosList} ${kitName}`;
+        
+        // Copiar al portapapeles (puedes necesitar la lógica para esto)
+        navigator.clipboard.writeText(command).then(() => {
+            alert('Comando copiado al portapapeles: ' + command);
+        });
     });
 </script>
 
