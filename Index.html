@@ -3,174 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kits Generator - Rust Style</title>
+    <title>Kits Generator Rust CE </title>
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
     <style>
-   body {
-    font-family: 'Russo One', sans-serif;
-    background-color: #121212; /* Fondo más oscuro */
-    color: #fff;
-    margin: 0;
-    padding: 20px;
-}
+        body {
+            font-family: 'Russo One', sans-serif;
+            background-color: #121212; 
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
 
-h3 {
-    text-align: center;
-    color: #FF4500;
-    text-shadow: 1px 1px 2px #000;
-    margin-top: 20px;
-}
+        h3 {
+            text-align: center;
+            color: #FF4500;
+            text-shadow: 1px 1px 2px #000;
+            margin-top: 20px;
+        }
 
-label {
-    display: block;
-    margin: 15px 0 5px; /* Más espacio arriba */
-    color: #FF4500; 
-}
+        label {
+            display: block;
+            margin: 15px 0 5px; 
+            color: #FF4500; 
+        }
 
-input, select, button {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0 15px; /* Más espacio abajo */
-    border: 2px solid #FF4500; 
-    border-radius: 5px;
-    background-color: #333;
-    color: #fff;
-    font-size: 1em;
-    transition: border 0.3s; /* Suave transición */
-}
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 15px; 
+            border: 2px solid #FF4500; 
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-size: 1em;
+            transition: border 0.3s; 
+        }
 
-button {
-    cursor: pointer;
-    background-color: #FF4500; /* Color vibrante para los botones */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Sombra */
-}
+        button {
+            cursor: pointer;
+            background-color: #FF4500; 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
+        }
 
-button:hover {
-    background-color: #E53E00; /* Mejor contraste en hover */
-}
+        button:hover {
+            background-color: #E53E00; 
+        }
 
-.main-slots {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-    border: 2px solid #FF4500; 
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #1e1e1e; 
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); /* Sombra más suave */
-}
+        .main-slots {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            border: 2px solid #FF4500; 
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #1e1e1e; 
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); 
+        }
 
-.slot-container {
-    display: flex;
-    flex-wrap: wrap; 
-    justify-content: center; 
-    margin: 10px 0; 
-}
+        .slot-container {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: center; 
+            margin: 10px auto; 
+            max-width: 450px; 
+        }
 
-.slot-container:nth-of-type(1) { 
-    max-width: 450px; 
-}
+        .main-slot {
+            width: 50px; 
+            height: 50px; 
+            border: 1px solid rgba(255, 69, 0, 0.5); 
+            margin: 2px; 
+            background-color: #222; 
+            border-radius: 5px; 
+            position: relative;
+            text-align: center;
+            line-height: 50px; 
+            transition: background-color 0.3s, transform 0.2s; 
+        }
 
-.slot-container:nth-of-type(2), 
-.slot-container:nth-of-type(3), 
-.slot-container:nth-of-type(4) { 
-    max-width: 390px; 
-}
+        .main-slot:hover {
+            background-color: #333; 
+            transform: scale(1.05); 
+        }
 
-.small-slot, .main-slot {
-    width: 50px; 
-    height: 50px; 
-    border: 1px solid #FF4500; 
-    margin: 5px; 
-    background-color: #222; 
-    position: relative;
-    text-align: center;
-    line-height: 50px; 
-    border-radius: 5px; 
-    transition: background-color 0.3s, transform 0.2s; /* Añadido efecto de transformación */
-}
+        .main-slot img {
+            max-width: 100%; 
+            max-height: 100%;
+            border-radius: 5px;
+        }
 
-.main-slot:hover {
-    background-color: #333; 
-    transform: scale(1.05); /* Efecto de aumento al pasar el ratón */
-}
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
 
-.main-slot img {
-    max-width: 100%; 
-    max-height: 100%;
-    border-radius: 5px;
-}
+        .image-item {
+            margin: 5px;
+            text-align: center;
+        }
 
-.image-container {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 10px;
-}
+        .image-item img {
+            width: 80px;
+            cursor: pointer;
+            border: 1px solid #FF4500;
+            border-radius: 5px;
+            transition: transform 0.2s; 
+        }
 
-.image-item {
-    margin: 5px;
-    text-align: center;
-}
+        .image-item img:hover {
+            transform: scale(1.1); 
+        }
 
-.image-item img {
-    width: 80px;
-    cursor: pointer;
-    border: 1px solid #FF4500;
-    border-radius: 5px;
-    transition: transform 0.2s; /* Animación al pasar el ratón */
-}
+        #command_list {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #292929;
+            border: 2px solid #FF4500;
+            border-radius: 10px;
+        }
 
-.image-item img:hover {
-    transform: scale(1.1); /* Aumento de imagen al pasar el ratón */
-}
+        footer {
+            text-align: center;
+            color: #EAEAEA;
+            font-size: 0.8em;
+            margin-top: 40px;
+        }
 
-#command_list {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #292929;
-    border: 2px solid #FF4500;
-    border-radius: 10px;
-}
+        
+        @media (max-width: 768px) {
+            .main-slot {
+                width: 40px; 
+                height: 40px; 
+            }
 
-footer {
-    text-align: center;
-    color: #EAEAEA;
-    font-size: 0.8em;
-    margin-top: 40px;
-}
+            h3 {
+                font-size: 1.5em; 
+            }
+        }
 
-/* Media Queries para diseño responsivo */
-@media (max-width: 768px) {
-    .small-slot, .main-slot {
-        width: 40px; 
-        height: 40px; 
-    }
+        @media (max-width: 480px) {
+            .main-slot {
+                width: 35px; 
+                height: 35px; 
+            }
 
-    h3 {
-        font-size: 1.5em; /* Ajusta el tamaño del encabezado */
-    }
-}
+            input, select, button {
+                padding: 8px; 
+                font-size: 0.9em; 
+            }
 
-@media (max-width: 480px) {
-    .small-slot, .main-slot {
-        width: 35px; 
-        height: 35px; 
-    }
-
-    input, select, button {
-        padding: 8px; /* Reduce el padding en móviles */
-        font-size: 0.9em; /* Reduce el tamaño de fuente en móviles */
-    }
-
-    h3 {
-        font-size: 1.2em; /* Ajusta aún más el tamaño del encabezado */
-    }
-}
-
-</style>
-
+            h3 {
+                font-size: 1.2em; /
+            }
+        }
+    </style>
 </head>
+
+
 <body>
     <div id="kitCounterContainer">
         <p>Kits generated: <span id="kitCounter">0</span></p>
@@ -179,7 +170,7 @@ footer {
     <h1>Kits Generator</h1>
 
     <label for="kitName">Name of kit:</label>
-    <input type="text" id="kitName" placeholder="Escribe el nombre del kit">
+    <input type="text" id="kitName" placeholder="Write the name of the kit">
 
     <label for="kaosList">Select kit name:</label>
     <select id="kaosList">
@@ -317,17 +308,17 @@ footer {
         }
 
         .image-item.selected img {
-            border: 3px solid #007BFF; /* Color de borde para el ítem seleccionado */
-            opacity: 0.8; /* Disminuir opacidad para resaltar la selección */
+            border: 3px solid #007BFF; 
+            opacity: 0.8; 
         }
 </style>
 <script>
-    let kitCounter = localStorage.getItem('kitCount') ? parseInt(localStorage.getItem('kitCount')) : 0; // Carga el contador desde localStorage
+    let kitCounter = localStorage.getItem('kitCount') ? parseInt(localStorage.getItem('kitCount')) : 0; 
 
     window.onload = function() {
         console.log(items); 
         loadCategories();
-        document.getElementById('kitCounter').textContent = kitCounter; // Muestra el contador al cargar
+        document.getElementById('kitCounter').textContent = kitCounter; 
     };
 
     function loadCategories() {
@@ -395,37 +386,56 @@ footer {
     });
 
     function applyItemToSlot(slot, item, quantity) {
-        const itemContainer = document.createElement('div');
-        itemContainer.style.position = 'relative';
-        itemContainer.style.width = '100%';
-        itemContainer.style.height = '100%';
+        const currentItemId = slot.dataset.id;
 
-        const imgSlot = document.createElement('img');
-        imgSlot.src = `images/${item.id}.png`;
-        imgSlot.style.width = '100%'; 
-        imgSlot.style.height = '100%'; 
+        if (currentItemId) {
+            
+            const currentQuantity = parseInt(slot.dataset.quantity);
+            const newQuantity = currentQuantity + parseInt(quantity);
+            slot.dataset.quantity = newQuantity; 
 
-        const quantityElement = document.createElement('span');
-        quantityElement.style.position = 'absolute';
-        quantityElement.style.bottom = '5px';
-        quantityElement.style.right = '5px';
-        quantityElement.style.color = 'white';
-        quantityElement.style.fontSize = '12px';
-        quantityElement.style.backgroundColor = 'transparent'; 
+            
+            const quantityElement = slot.querySelector('span');
+            if (quantityElement) {
+                quantityElement.textContent = `x${newQuantity}`;
+            }
+        } else {
+            
+            const itemContainer = document.createElement('div');
+            itemContainer.style.position = 'relative';
+            itemContainer.style.width = '100%';
+            itemContainer.style.height = '100%';
 
-        if (quantity > 1) {
-            quantityElement.textContent = `x${quantity}`;
+            const imgSlot = document.createElement('img');
+            imgSlot.src = `images/${item.id}.png`;
+            imgSlot.style.width = '100%'; 
+            imgSlot.style.height = '100%'; 
+
+            const quantityElement = document.createElement('span');
+            quantityElement.style.position = 'absolute';
+            quantityElement.style.bottom = '5px';
+            quantityElement.style.right = '5px';
+            quantityElement.style.color = 'white';
+            quantityElement.style.fontSize = '12px';
+            quantityElement.style.backgroundColor = 'transparent'; 
+
+            
+            if (quantity > 1) {
+                quantityElement.textContent = `x${quantity}`;
+            } else {
+                quantityElement.textContent = ''; 
+            }
+
+            itemContainer.appendChild(imgSlot);
+            itemContainer.appendChild(quantityElement);
+
+            slot.innerHTML = '';
+            slot.appendChild(itemContainer);
+
+            slot.dataset.id = item.id;
+            slot.dataset.quantity = quantity;
+            slot.dataset.type = slot.dataset.type; 
         }
-
-        itemContainer.appendChild(imgSlot);
-        itemContainer.appendChild(quantityElement);
-
-        slot.innerHTML = '';
-        slot.appendChild(itemContainer);
-
-        slot.dataset.id = item.id;
-        slot.dataset.quantity = quantity;
-        slot.dataset.type = slot.dataset.type; 
     }
 
     document.getElementById('finalizeKit').addEventListener('click', () => {
@@ -452,7 +462,7 @@ footer {
         const commandList = document.getElementById('command_list');
         navigator.clipboard.writeText(commandList.innerText).then(() => {
             alert('Comandos copiados al portapapeles!');
-            incrementKitCounter(); // Incrementa el contador
+            incrementKitCounter(); 
         }).catch(err => {
             console.error('Error al copiar: ', err);
         });
