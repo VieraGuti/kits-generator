@@ -3,179 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kits Generator Rust CE </title>
+    <title>Kits Generator - Rust Style</title>
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Russo One', sans-serif;
-            background-color: #121212; 
-            color: #fff;
-            margin: 0;
-            padding: 20px;
+    body {
+        font-family: 'Russo One', sans-serif;
+        background-color: #1e1e1e;
+        color: #fff;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h3 {
+        text-align: center;
+        color: #FF4500;
+        text-shadow: 1px 1px 2px #000;
+        margin-top: 20px;
+    }
+
+    label {
+        display: block;
+        margin: 10px 0 5px;
+        color: #FF4500; 
+    }
+
+    input, select, button {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0 10px;
+        border: 2px solid #FF4500; 
+        border-radius: 5px;
+        background-color: #333;
+        color: #fff;
+        font-size: 1em;
+    }
+
+    button {
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #E53E00; 
+    }
+
+    .main-slots {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+        border: 2px solid #FF4500; 
+        padding: 10px;
+        border-radius: 10px;
+        background-color: #1e1e1e; 
+        box-shadow: 0 0 10px rgba(255, 69, 0, 0.5); 
+    }
+
+    .slot-container {
+        display: flex;
+        flex-wrap: wrap; 
+        justify-content: center; 
+        margin: 10px 0; 
+    }
+
+    .slot-container:nth-of-type(1) { 
+        max-width: 450px; 
+    }
+
+    .slot-container:nth-of-type(2), 
+    .slot-container:nth-of-type(3), 
+    .slot-container:nth-of-type(4) { 
+        max-width: 390px; 
+    }
+
+    .small-slot, .main-slot {
+        width: 50px; 
+        height: 50px; 
+        border: 1px solid #FF4500; 
+        margin: 5px; 
+        background-color: #222; 
+        position: relative;
+        text-align: center;
+        line-height: 50px; 
+        border-radius: 5px; 
+        transition: background-color 0.3s; 
+    }
+
+    .main-slot:hover {
+        background-color: #333; 
+    }
+
+    .main-slot img {
+        max-width: 100%; 
+        max-height: 100%;
+        border-radius: 5px;
+    }
+
+    .image-container {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .image-item {
+        margin: 5px;
+        text-align: center;
+    }
+
+    .image-item img {
+        width: 80px;
+        cursor: pointer;
+        border: 1px solid #FF4500;
+        border-radius: 5px;
+    }
+
+    #command_list {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #292929;
+        border: 2px solid #FF4500;
+        border-radius: 10px;
+    }
+
+    footer {
+        text-align: center;
+        color: #EAEAEA;
+        font-size: 0.8em;
+        margin-top: 40px;
+    }
+
+    /* Media Queries para diseño responsivo */
+    @media (max-width: 768px) {
+        .small-slot, .main-slot {
+            width: 40px; 
+            height: 40px; 
         }
 
         h3 {
-            text-align: center;
-            color: #FF4500;
-            text-shadow: 1px 1px 2px #000;
-            margin-top: 20px;
+            font-size: 1.5em; /* Ajusta el tamaño del encabezado */
         }
+    }
 
-        label {
-            display: block;
-            margin: 15px 0 5px; 
-            color: #FF4500; 
+    @media (max-width: 480px) {
+        .small-slot, .main-slot {
+            width: 35px; 
+            height: 35px; 
         }
 
         input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0 15px; 
-            border: 2px solid #FF4500; 
-            border-radius: 5px;
-            background-color: #333;
-            color: #fff;
-            font-size: 1em;
-            transition: border 0.3s; 
+            padding: 8px; /* Reduce el padding en móviles */
         }
 
-        button {
-            cursor: pointer;
-            background-color: #FF4500; 
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
+        h3 {
+            font-size: 1.2em; /* ese es bueeeeeeeeeeeeeeeeeeeeeeeeeeenooooooooo */
         }
-
-        button:hover {
-            background-color: #E53E00; 
-        }
-
-        .main-slots {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-            border: 2px solid #FF4500; 
-            padding: 10px;
-            border-radius: 10px;
-            background-color: #1e1e1e; 
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); 
-        }
-
-        .slot-container {
-            display: flex;
-            flex-wrap: wrap; 
-            justify-content: center; 
-            margin: 10px auto; 
-            max-width: 480px; /* Ajustado para 7 slots en wear */
-        }
-
-        .small-slot, .main-slot {
-            width: 50px; 
-            height: 50px; 
-            border: 1px solid #FF4500; 
-            margin: 5px; 
-            background-color: #222; 
-            border-radius: 5px; 
-            position: relative;
-            text-align: center;
-            line-height: 50px; 
-            transition: background-color 0.3s, transform 0.2s; 
-        }
-
-        .main-slot:hover, .small-slot:hover {
-            background-color: #333; 
-            transform: scale(1.05); 
-        }
-
-        .main-slot img, .small-slot img {
-            max-width: 100%; 
-            max-height: 100%;
-            border-radius: 5px;
-        }
-
-        .image-container {
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .image-item {
-            margin: 5px;
-            text-align: center;
-        }
-
-        .image-item img {
-            width: 80px;
-            cursor: pointer;
-            border: 1px solid #FF4500;
-            border-radius: 5px;
-            transition: transform 0.2s; 
-        }
-
-        .image-item img:hover {
-            transform: scale(1.1); 
-        }
-
-        #command_list {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #292929;
-            border: 2px solid #FF4500;
-            border-radius: 10px;
-        }
-
-        footer {
-            text-align: center;
-            color: #EAEAEA;
-            font-size: 0.8em;
-            margin-top: 40px;
-        }
-
-        @media (max-width: 768px) {
-            .small-slot, .main-slot {
-                width: 40px; 
-                height: 40px; 
-            }
-
-            h3 {
-                font-size: 1.5em; 
-            }
-        }
-
-        @media (max-width: 480px) {
-            .small-slot, .main-slot {
-                width: 35px; 
-                height: 35px; 
-            }
-
-            input, select, button {
-                padding: 8px; 
-                font-size: 0.9em; 
-            }
-
-            h3 {
-                font-size: 1.2em; 
-            }
-        }
-    </style>
+    }
+</style>
 
 </head>
-
-
 <body>
     <div id="kitCounterContainer">
-        <p>Kits generated: <span id="kitCounter">0</span></p>
-    </div>
-    
+    <p>Kits generated: <span id="kitCounter">0</span></p>
+</div>
     <h1>Kits Generator</h1>
 
-    <label for="kitName">Name of kit:</label>
-    <input type="text" id="kitName" placeholder="Write the name of the kit">
+    <label for="kitName">Name of kit :</label>
+    <input type="text" id="kitName" placeholder="Escribe el nombre del kit">
 
     <label for="kaosList">Select kit name:</label>
     <select id="kaosList">
         <option value="">-- Or choose it from KAOSBOT format --</option>
-        <option value="freekit">freekit</option>
+                <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
         <option value="elitekit">elitekit</option>
@@ -224,16 +221,16 @@
         <option value="elitekit43">elitekit43</option>
         <option value="elitekit44">elitekit44</option>
     </select>
+    
 
     <label for="category">Select category:</label>
     <select id="category">
         <option value="">-- Choose a category --</option>
+        
     </select>
-
-<div class="main-slots">
+    <div class="main-slots">
     <h3>Wear</h3>
     <div class="slot-container">
-        <!-- 7 slots for wear -->
         <div class="small-slot" data-type="wear"></div>
         <div class="small-slot" data-type="wear"></div>
         <div class="small-slot" data-type="wear"></div>
@@ -245,28 +242,27 @@
 
     <h3>Main</h3>
     <div class="slot-container">
-        <!-- 24 slots for main -->
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
-
+   
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
-
+       
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
-
+       
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
         <div class="main-slot" data-type="main"></div>
@@ -277,7 +273,6 @@
 
     <h3>Belt</h3>
     <div class="slot-container">
-        <!-- 6 slots for belt -->
         <div class="main-slot" data-type="belt"></div>
         <div class="main-slot" data-type="belt"></div>
         <div class="main-slot" data-type="belt"></div>
@@ -286,8 +281,6 @@
         <div class="main-slot" data-type="belt"></div>
     </div>
 </div>
-
-
     <label for="itemQuantity">Quantity:</label>
     <input type="number" id="itemQuantity" value="1" min="1" />
 
@@ -299,26 +292,26 @@
     <div id="command_list"></div>
 
     <script src="Items.js"></script>
-    <style>
-        .image-item {
-            display: inline-block;
-            margin: 10px;
-            cursor: pointer;
-            position: relative;
-        }
+<style>
+    .image-item {
+        display: inline-block;
+        margin: 10px;
+        cursor: pointer;
+        position: relative;
+    }
 
-        .image-item.selected img {
-            border: 3px solid #007BFF; 
-            opacity: 0.8; 
-        }
+    .image-item.selected img {
+        border: 3px solid #007BFF; /* Color de borde para el ítem seleccionado */
+        opacity: 0.8; /* Disminuir opacidad para resaltar la selección */
+    }
 </style>
 <script>
-    let kitCounter = localStorage.getItem('kitCount') ? parseInt(localStorage.getItem('kitCount')) : 0; 
+    let kitCounter = localStorage.getItem('kitCount') ? parseInt(localStorage.getItem('kitCount')) : 0; // Carga el contador desde localStorage
 
     window.onload = function() {
         console.log(items); 
         loadCategories();
-        document.getElementById('kitCounter').textContent = kitCounter; 
+        document.getElementById('kitCounter').textContent = kitCounter; // Muestra el contador al cargar
     };
 
     function loadCategories() {
@@ -386,56 +379,37 @@
     });
 
     function applyItemToSlot(slot, item, quantity) {
-        const currentItemId = slot.dataset.id;
+        const itemContainer = document.createElement('div');
+        itemContainer.style.position = 'relative';
+        itemContainer.style.width = '100%';
+        itemContainer.style.height = '100%';
 
-        if (currentItemId) {
-            
-            const currentQuantity = parseInt(slot.dataset.quantity);
-            const newQuantity = currentQuantity + parseInt(quantity);
-            slot.dataset.quantity = newQuantity; 
+        const imgSlot = document.createElement('img');
+        imgSlot.src = `images/${item.id}.png`;
+        imgSlot.style.width = '100%'; 
+        imgSlot.style.height = '100%'; 
 
-            
-            const quantityElement = slot.querySelector('span');
-            if (quantityElement) {
-                quantityElement.textContent = `x${newQuantity}`;
-            }
-        } else {
-            
-            const itemContainer = document.createElement('div');
-            itemContainer.style.position = 'relative';
-            itemContainer.style.width = '100%';
-            itemContainer.style.height = '100%';
+        const quantityElement = document.createElement('span');
+        quantityElement.style.position = 'absolute';
+        quantityElement.style.bottom = '5px';
+        quantityElement.style.right = '5px';
+        quantityElement.style.color = 'white';
+        quantityElement.style.fontSize = '12px';
+        quantityElement.style.backgroundColor = 'transparent'; 
 
-            const imgSlot = document.createElement('img');
-            imgSlot.src = `images/${item.id}.png`;
-            imgSlot.style.width = '100%'; 
-            imgSlot.style.height = '100%'; 
-
-            const quantityElement = document.createElement('span');
-            quantityElement.style.position = 'absolute';
-            quantityElement.style.bottom = '5px';
-            quantityElement.style.right = '5px';
-            quantityElement.style.color = 'white';
-            quantityElement.style.fontSize = '12px';
-            quantityElement.style.backgroundColor = 'transparent'; 
-
-            
-            if (quantity > 1) {
-                quantityElement.textContent = `x${quantity}`;
-            } else {
-                quantityElement.textContent = ''; 
-            }
-
-            itemContainer.appendChild(imgSlot);
-            itemContainer.appendChild(quantityElement);
-
-            slot.innerHTML = '';
-            slot.appendChild(itemContainer);
-
-            slot.dataset.id = item.id;
-            slot.dataset.quantity = quantity;
-            slot.dataset.type = slot.dataset.type; 
+        if (quantity > 1) {
+            quantityElement.textContent = `x${quantity}`;
         }
+
+        itemContainer.appendChild(imgSlot);
+        itemContainer.appendChild(quantityElement);
+
+        slot.innerHTML = '';
+        slot.appendChild(itemContainer);
+
+        slot.dataset.id = item.id;
+        slot.dataset.quantity = quantity;
+        slot.dataset.type = slot.dataset.type; 
     }
 
     document.getElementById('finalizeKit').addEventListener('click', () => {
@@ -462,7 +436,7 @@
         const commandList = document.getElementById('command_list');
         navigator.clipboard.writeText(commandList.innerText).then(() => {
             alert('Comandos copiados al portapapeles!');
-            incrementKitCounter(); 
+            incrementKitCounter(); // Incrementa el contador
         }).catch(err => {
             console.error('Error al copiar: ', err);
         });
@@ -482,6 +456,7 @@
         document.getElementById('itemQuantity').value = 1; 
     });
 </script>
+
 
     
     <footer>
