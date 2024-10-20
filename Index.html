@@ -301,17 +301,17 @@
     }
 
     .image-item.selected img {
-        border: 3px solid #007BFF; /* Color de borde para el ítem seleccionado */
-        opacity: 0.8; /* Disminuir opacidad para resaltar la selección */
+        border: 3px solid #007BFF; 
+        opacity: 0.8; 
     }
 </style>
 <script>
-    let kitCounter = localStorage.getItem('kitCount') ? parseInt(localStorage.getItem('kitCount')) : 0; // Carga el contador desde localStorage
+    let kitCounter = localStorage.getItem('kitCount') ? parseInt(localStorage.getItem('kitCount')) : 0; 
 
     window.onload = function() {
         console.log(items); 
         loadCategories();
-        document.getElementById('kitCounter').textContent = kitCounter; // Muestra el contador al cargar
+        document.getElementById('kitCounter').textContent = kitCounter; 
     };
 
     function loadCategories() {
