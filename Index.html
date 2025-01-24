@@ -12,6 +12,7 @@
         color: #fff;
         margin: 0;
         padding: 20px;
+        transition: background-color 0.5s ease-in-out; /* Transición suave para el fondo */
     }
 
     h3 {
@@ -19,23 +20,25 @@
         color: #FF4500;
         text-shadow: 1px 1px 2px #000;
         margin-top: 20px;
+        animation: fadeIn 1s ease-out; /* Animación de aparición para los títulos */
     }
 
     label {
         display: block;
         margin: 10px 0 5px;
-        color: #FF4500; 
+        color: #FF4500;
     }
 
     input, select, button {
         width: 100%;
         padding: 10px;
         margin: 5px 0 10px;
-        border: 2px solid #FF4500; 
+        border: 2px solid #FF4500;
         border-radius: 5px;
         background-color: #333;
         color: #fff;
         font-size: 1em;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     }
 
     button {
@@ -43,7 +46,9 @@
     }
 
     button:hover {
-        background-color: #E53E00; 
+        background-color: #E53E00;
+        transform: scale(1.1); /* Efecto de aumento al pasar el mouse */
+        box-shadow: 0px 0px 10px rgba(255, 69, 0, 0.7); /* Sombras más intensas en hover */
     }
 
     .main-slots {
@@ -51,51 +56,62 @@
         flex-direction: column;
         align-items: center;
         margin-top: 20px;
-        border: 2px solid #FF4500; 
+        border: 2px solid #FF4500;
         padding: 10px;
         border-radius: 10px;
-        background-color: #1e1e1e; 
-        box-shadow: 0 0 10px rgba(255, 69, 0, 0.5); 
+        background-color: #1e1e1e;
+        box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+        transition: transform 0.3s ease-out;
+    }
+
+    .main-slots:hover {
+        transform: translateY(-5px); /* Efecto de elevación al pasar el mouse */
     }
 
     .slot-container {
         display: flex;
-        flex-wrap: wrap; 
-        justify-content: center; 
-        margin: 10px 0; 
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 10px 0;
     }
 
-    .slot-container:nth-of-type(1) { 
-        max-width: 450px; 
+    .slot-container:nth-of-type(1) {
+        max-width: 450px;
     }
 
-    .slot-container:nth-of-type(2), 
-    .slot-container:nth-of-type(3), 
-    .slot-container:nth-of-type(4) { 
-        max-width: 390px; 
+    .slot-container:nth-of-type(2),
+    .slot-container:nth-of-type(3),
+    .slot-container:nth-of-type(4) {
+        max-width: 390px;
     }
 
     .small-slot, .main-slot {
-        width: 50px; 
-        height: 50px; 
-        border: 1px solid #FF4500; 
-        margin: 5px; 
-        background-color: #222; 
+        width: 50px;
+        height: 50px;
+        border: 1px solid #FF4500;
+        margin: 5px;
+        background-color: #222;
         position: relative;
         text-align: center;
-        line-height: 50px; 
-        border-radius: 5px; 
-        transition: background-color 0.3s; 
+        line-height: 50px;
+        border-radius: 5px;
+        transition: background-color 0.3s, transform 0.2s ease-in-out;
     }
 
     .main-slot:hover {
-        background-color: #333; 
+        background-color: #333;
+        transform: scale(1.1); /* Aumento en tamaño al pasar el mouse */
     }
 
     .main-slot img {
-        max-width: 100%; 
+        max-width: 100%;
         max-height: 100%;
         border-radius: 5px;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .main-slot:hover img {
+        opacity: 0.8; /* Efecto de opacidad cuando el mouse está sobre el slot */
     }
 
     .image-container {
@@ -107,6 +123,11 @@
     .image-item {
         margin: 5px;
         text-align: center;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .image-item:hover {
+        transform: scale(1.1); /* Efecto de aumento al pasar el mouse sobre las imágenes */
     }
 
     .image-item img {
@@ -114,6 +135,11 @@
         cursor: pointer;
         border: 1px solid #FF4500;
         border-radius: 5px;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .image-item img:hover {
+        box-shadow: 0px 0px 15px rgba(255, 69, 0, 0.7); /* Sombras al pasar el mouse sobre las imágenes */
     }
 
     #command_list {
@@ -122,6 +148,11 @@
         background-color: #292929;
         border: 2px solid #FF4500;
         border-radius: 10px;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    #command_list:hover {
+        background-color: #333; /* Cambio de fondo al pasar el mouse */
     }
 
     footer {
@@ -134,27 +165,37 @@
     /* Media Queries para diseño responsivo */
     @media (max-width: 768px) {
         .small-slot, .main-slot {
-            width: 40px; 
-            height: 40px; 
+            width: 40px;
+            height: 40px;
         }
 
         h3 {
-            font-size: 1.5em; /* Ajusta el tamaño del encabezado */
+            font-size: 1.5em;
         }
     }
 
     @media (max-width: 480px) {
         .small-slot, .main-slot {
-            width: 35px; 
-            height: 35px; 
+            width: 35px;
+            height: 35px;
         }
 
         input, select, button {
-            padding: 8px; /* Reduce el padding en móviles */
+            padding: 8px;
         }
 
         h3 {
-            font-size: 1.2em; /* ese es bueeeeeeeeeeeeeeeeeeeeeeeeeeenooooooooo */
+            font-size: 1.2em;
+        }
+    }
+
+    /* Animación de desvanecimiento */
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
         }
     }
 </style>
@@ -367,9 +408,10 @@
             if (selectedItem.id) {
                 const quantity = document.getElementById('itemQuantity').value;
 
-                if (slot.dataset.type === 'wear' && selectedItem.category !== 'attire') {
-                    console.log('Este item no es de la categoría "Attire" y no se puede aplicar aquí.');
-                    return; 
+                // Verificar el tipo del slot y la categoría del ítem seleccionado
+                if (slot.dataset.type && selectedItem.category !== slot.dataset.type) {
+                    console.log(`Este item no es de la categoría correcta para este slot. Se esperaba: "${slot.dataset.type}", pero el item es de: "${selectedItem.category}".`);
+                    return;
                 }
 
                 applyItemToSlot(slot, selectedItem, quantity);
@@ -404,12 +446,13 @@
         itemContainer.appendChild(imgSlot);
         itemContainer.appendChild(quantityElement);
 
-        slot.innerHTML = '';
+        slot.innerHTML = ''; // Limpiar el slot antes de agregar el nuevo item
         slot.appendChild(itemContainer);
 
+        // Recuperar el tipo de slot, si no está asignado, determinarlo por defecto
         slot.dataset.id = item.id;
         slot.dataset.quantity = quantity;
-        slot.dataset.type = slot.dataset.type; 
+        slot.dataset.type = slot.dataset.type || 'default'; // Asigna un valor predeterminado si no existe un tipo
     }
 
     document.getElementById('finalizeKit').addEventListener('click', () => {
@@ -419,7 +462,7 @@
             if (slot.dataset.id) {
                 const itemId = slot.dataset.id;
                 const quantity = slot.dataset.quantity;
-                const itemType = slot.dataset.type; 
+                const itemType = slot.dataset.type || 'default'; // Verifica si el tipo está disponible, de lo contrario usa 'default'
                 commands.push(`kit add "${kitName}" "${itemId}" ${quantity} 1 "${itemType}"`);
             }
         });
@@ -457,8 +500,6 @@
     });
 </script>
 
-
-    
     <footer>
         <p>** If "undefined" appears, you must refresh the page. and start again. ** </p>
     <address>
