@@ -368,7 +368,57 @@ const items = {
         { id: 'electric.timer', name: 'Timer', image: 'images/electrical/electric.timer' },
         { id: 'waterpump', name: 'Water Pump', image: 'images/electrical/waterpump' },
         { id: 'generator.wind.scrap', name: 'Wind Turbine', image: 'images/electrical/generator.wind.scrap' }
-        // No coma al final
+    ],
+    Easter: [
+        { id: 'easter.bronzeegg', name: 'Bronze Egg', image: 'images/easter/easter.bronzeegg' },
+        { id: 'attire.bunnyears', name: 'Bunny Ears', image: 'images/easter/attire.bunnyears' },
+        { id: 'attire.bunny.onesie', name: 'Bunny Onesie', image: 'images/easter/attire.bunny.onesie' },
+        { id: 'easterbasket', name: 'Egg Basket', image: 'images/easter/easterbasket' },
+        { id: 'easter.goldegg', name: 'Gold Egg', image: 'images/easter/easter.goldegg' },
+        { id: 'easter.paintedeggs', name: 'Painted Egg', image: 'images/easter/easter.paintedeggs' },
+        { id: 'easter.silveregg', name: 'Silver Egg', image: 'images/easter/easter.silveregg' }
+    ],
+    Halloween: [
+        { id: 'knife.butcher', name: 'Butcher Knife', image: 'images/halloween/knife.butcher' },
+        { id: 'coffin.storage', name: 'Coffin', image: 'images/halloween/coffin.storage' },
+        { id: 'gravestone', name: 'Gravestone', image: 'images/halloween/gravestone' },
+        { id: 'wall.graveyard.fence', name: 'Graveyard Fence', image: 'images/halloween/wall.graveyard.fence' },
+        { id: 'halloween.candy', name: 'Halloween Candy', image: 'images/halloween/halloween.candy' },
+        { id: 'halloween.lootbag.large', name: 'Large Loot Bag', image: 'images/halloween/halloween.lootbag.large' },
+        { id: 'halloween.lootbag.medium', name: 'Medium Loot Bag', image: 'images/halloween/halloween.lootbag.medium' },
+        { id: 'halloween.mummysuit', name: 'Mummy Suit', image: 'images/halloween/halloween.mummysuit' },
+        { id: 'pitchfork', name: 'Pitchfork', image: 'images/halloween/pitchfork' },
+        { id: 'pumpkinbasket', name: 'Pumpkin Bucket', image: 'images/halloween/pumpkinbasket' },
+        { id: 'scarecrow', name: 'Scarecrow', image: 'images/halloween/scarecrow' },
+        { id: 'scarecrow.suit', name: 'Scarecrow Suit', image: 'images/halloween/scarecrow.suit' },
+        { id: 'scarecrowhead', name: 'Scarecrow Wrap', image: 'images/halloween/scarecrowhead' },
+        { id: 'sickle', name: 'Sickle', image: 'images/halloween/sickle' },
+        { id: 'halloween.lootbag.small', name: 'Small Loot Bag', image: 'images/halloween/halloween.lootbag.small' },
+        { id: 'spiderweb', name: 'Spider Webs', image: 'images/halloween/spiderweb' },
+        { id: 'woodcross', name: 'Wooden Cross', image: 'images/halloween/woodcross' }
+    ],
+    Xmas: [
+        { id: 'candycane', name: 'Candy Cane', image: 'images/xmas/candycane' },
+        { id: 'candycaneclub', name: 'Candy Cane Club', image: 'images/xmas/candycaneclub' },
+        { id: 'xmas.lightstring', name: 'Christmas Lights', image: 'images/xmas/xmas.lightstring' },
+        { id: 'xmas.tree', name: 'Christmas Tree', image: 'images/xmas/xmas.tree' },
+        { id: 'coal', name: 'Coal', image: 'images/xmas/coal' },
+        { id: 'xmas.decoration.baubels', name: 'Decorative Baubles', image: 'images/xmas/xmas.decoration.baubels' },
+        { id: 'xmas.decoration.gingerbreadmen', name: 'Decorative Gingerbread Men', image: 'images/xmas/xmas.decoration.gingerbreadmen' },
+        { id: 'xmas.decoration.pinecone', name: 'Decorative Pinecones', image: 'images/xmas/xmas.decoration.pinecone' },
+        { id: 'xmas.decoration.candycanes', name: 'Decorative Plastic Candy Canes', image: 'images/xmas/xmas.decoration.candycanes' },
+        { id: 'xmas.decoration.tinsel', name: 'Decorative Tinsel', image: 'images/xmas/xmas.decoration.tinsel' },
+        { id: 'gingerbreadsuit', name: 'Gingerbread Suit', image: 'images/xmas/gingerbreadsuit' },
+        { id: 'wall.external.high.ice', name: 'High Ice Wall', image: 'images/xmas/wall.external.high.ice' },
+        { id: 'xmas.present.large', name: 'Large Present', image: 'images/xmas/xmas.present.large' },
+        { id: 'stocking.large', name: 'Large Stocking', image: 'images/xmas/stocking.large' },
+        { id: 'xmas.present.medium', name: 'Medium Present', image: 'images/xmas/xmas.present.medium' },
+        { id: 'xmas.present.small', name: 'Small Present', image: 'images/xmas/xmas.present.small' },
+        { id: 'stocking.small', name: 'Small Stocking', image: 'images/xmas/stocking.small' },
+        { id: 'snowball', name: 'Snowball', image: 'images/xmas/snowball' },
+        { id: 'snowballgun', name: 'Snowball Gun', image: 'images/xmas/snowballgun' },
+        { id: 'xmas.decoration.star', name: 'Star Tree Topper', image: 'images/xmas/xmas.decoration.star' },
+        { id: 'xmas.decoration.lights', name: 'Tree Lights', image: 'images/xmas/xmas.decoration.lights' }
     ]
 }; // Cerrar correctamente el objeto 'items'
 window.items = items;
