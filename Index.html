@@ -213,10 +213,9 @@
     <label for="kaosList">Select kit name:</label>
     <select id="kaosList">
         <option value="">-- Or choose it from KAOSBOT format --</option>
-                <option value="freekit">freekit</option>
+        <option value="freekit">freekit</option>
         <option value="freekit2">freekit2</option>
         <option value="vipkit">vipkit</option>
-        <option value="elitekit">elitekit</option>
         <option value="elitekit1">elitekit1</option>
         <option value="elitekit2">elitekit2</option>
         <option value="elitekit3">elitekit3</option>
@@ -349,6 +348,16 @@
 <script>
     let kitCounter = localStorage.getItem('kitCount') ? parseInt(localStorage.getItem('kitCount')) : 0;
 
+    // Lista de ítems permitidos para el slot "wear"
+    const allowedWearItems = [
+        'gingerbreadsuit',
+        'halloween.mummysuit',
+        'scarecrow.suit',
+        'scarecrowhead',
+        'attire.bunny.onesie',
+        'attire.bunnyears'
+    ];
+
     window.onload = function() {
         console.log(items);
         loadCategories();
@@ -408,9 +417,9 @@
             if (selectedItem.id) {
                 const quantity = document.getElementById('itemQuantity').value;
 
-                // Verificar si el tipo de slot es "wear" y el ítem seleccionado es de la categoría "attire"
-                if (slot.dataset.type === 'wear' && selectedItem.category !== 'attire') {
-                    console.log('Este ítem no es de la categoría "attire" y no se puede aplicar en un slot "wear".');
+                // Verificar si el tipo de slot es "wear" y el ítem seleccionado es uno de los permitidos
+                if (slot.dataset.type === 'wear' && !isAllowedWearItem(selectedItem.id)) {
+                    console.log('Este ítem no está permitido en un slot "wear".');
                     return;
                 }
 
@@ -421,10 +430,15 @@
         });
     });
 
+    function isAllowedWearItem(itemId) {
+        // Verifica si el ítem está en la lista de ítems permitidos para el slot "wear"
+        return allowedWearItems.includes(itemId) || selectedItem.category === 'attire';
+    }
+
     function applyItemToSlot(slot, item, quantity) {
-        // Verificamos si el slot es "wear" y si el ítem es de la categoría "attire"
-        if (slot.dataset.type === 'wear' && item.category !== 'attire') {
-            console.log('Este ítem no es de la categoría "attire" y no se puede aplicar en un slot "wear".');
+        // Verificamos si el slot es "wear" y si el ítem es de los permitidos para "wear"
+        if (slot.dataset.type === 'wear' && !isAllowedWearItem(item.id)) {
+            console.log('Este ítem no está permitido en un slot "wear".');
             return;
         }
 
@@ -545,6 +559,7 @@
     });
 
     document.getElementById('newKit').addEventListener('click', () => {
+        // Reiniciar el kit completamente (limpiar los slots)
         document.getElementById('kitName').value = '';
         document.getElementById('kaosList').value = '';
         document.getElementById('category').value = '';
