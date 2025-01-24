@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kits Generator - Rust Style</title>
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
-    <style>
+<style>
     body {
         font-family: 'Russo One', sans-serif;
         background-color: #1e1e1e;
         color: #fff;
         margin: 0;
         padding: 20px;
-        transition: background-color 0.5s ease-in-out; /* Transición suave para el fondo */
+        transition: background-color 0.5s ease-in-out;
     }
 
     h3 {
@@ -20,7 +20,7 @@
         color: #FF4500;
         text-shadow: 1px 1px 2px #000;
         margin-top: 20px;
-        animation: fadeIn 1s ease-out; /* Animación de aparición para los títulos */
+        animation: fadeIn 1s ease-out;
     }
 
     label {
@@ -47,8 +47,8 @@
 
     button:hover {
         background-color: #E53E00;
-        transform: scale(1.1); /* Efecto de aumento al pasar el mouse */
-        box-shadow: 0px 0px 10px rgba(255, 69, 0, 0.7); /* Sombras más intensas en hover */
+        transform: scale(1.1);
+        box-shadow: 0px 0px 10px rgba(255, 69, 0, 0.7);
     }
 
     .main-slots {
@@ -65,7 +65,7 @@
     }
 
     .main-slots:hover {
-        transform: translateY(-5px); /* Efecto de elevación al pasar el mouse */
+        transform: translateY(-5px);
     }
 
     .slot-container {
@@ -73,16 +73,6 @@
         flex-wrap: wrap;
         justify-content: center;
         margin: 10px 0;
-    }
-
-    .slot-container:nth-of-type(1) {
-        max-width: 450px;
-    }
-
-    .slot-container:nth-of-type(2),
-    .slot-container:nth-of-type(3),
-    .slot-container:nth-of-type(4) {
-        max-width: 390px;
     }
 
     .small-slot, .main-slot {
@@ -100,7 +90,7 @@
 
     .main-slot:hover {
         background-color: #333;
-        transform: scale(1.1); /* Aumento en tamaño al pasar el mouse */
+        transform: scale(1.1);
     }
 
     .main-slot img {
@@ -111,7 +101,7 @@
     }
 
     .main-slot:hover img {
-        opacity: 0.8; /* Efecto de opacidad cuando el mouse está sobre el slot */
+        opacity: 0.8;
     }
 
     .image-container {
@@ -127,7 +117,7 @@
     }
 
     .image-item:hover {
-        transform: scale(1.1); /* Efecto de aumento al pasar el mouse sobre las imágenes */
+        transform: scale(1.1);
     }
 
     .image-item img {
@@ -139,7 +129,7 @@
     }
 
     .image-item img:hover {
-        box-shadow: 0px 0px 15px rgba(255, 69, 0, 0.7); /* Sombras al pasar el mouse sobre las imágenes */
+        box-shadow: 0px 0px 15px rgba(255, 69, 0, 0.7);
     }
 
     #command_list {
@@ -152,7 +142,7 @@
     }
 
     #command_list:hover {
-        background-color: #333; /* Cambio de fondo al pasar el mouse */
+        background-color: #333;
     }
 
     footer {
@@ -162,7 +152,22 @@
         margin-top: 40px;
     }
 
-    /* Media Queries para diseño responsivo */
+    .back-button {
+        padding: 10px 20px;
+        background-color: #FF4500;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+        font-size: 1em;
+    }
+
+    .back-button:hover {
+        background-color: #E53E00;
+        transform: scale(1.1);
+    }
+
     @media (max-width: 768px) {
         .small-slot, .main-slot {
             width: 40px;
@@ -189,7 +194,6 @@
         }
     }
 
-    /* Animación de desvanecimiento */
     @keyframes fadeIn {
         0% {
             opacity: 0;
@@ -199,6 +203,7 @@
         }
     }
 </style>
+
 
 </head>
 <body>
