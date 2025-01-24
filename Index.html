@@ -408,10 +408,10 @@
             if (selectedItem.id) {
                 const quantity = document.getElementById('itemQuantity').value;
 
-                // Verificar el tipo del slot y la categoría del ítem seleccionado
+                // No impedir la aplicación del ítem en el slot si el tipo de slot no coincide.
+                // Solamente mostramos un mensaje en consola si hay una discrepancia, pero seguimos adelante.
                 if (slot.dataset.type && selectedItem.category !== slot.dataset.type) {
                     console.log(`Este item no es de la categoría correcta para este slot. Se esperaba: "${slot.dataset.type}", pero el item es de: "${selectedItem.category}".`);
-                    return;
                 }
 
                 applyItemToSlot(slot, selectedItem, quantity);
@@ -449,10 +449,41 @@
         slot.innerHTML = ''; // Limpiar el slot antes de agregar el nuevo item
         slot.appendChild(itemContainer);
 
-        // Recuperar el tipo de slot, si no está asignado, determinarlo por defecto
+        // Agregar el ID y cantidad al dataset del slot
         slot.dataset.id = item.id;
         slot.dataset.quantity = quantity;
         slot.dataset.type = slot.dataset.type || 'default'; // Asigna un valor predeterminado si no existe un tipo
+
+        // Hacer el slot interactivo para editar o eliminar
+        itemContainer.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evitar que se dispare el evento click del slot
+            showEditMenu(slot);
+        });
+    }
+
+    function showEditMenu(slot) {
+        const currentQuantity = slot.dataset.quantity;
+        const newQuantity = prompt("Edita la cantidad del ítem:", currentQuantity);
+
+        if (newQuantity === null) {
+            // Si el usuario cancela, no hacer nada
+            return;
+        }
+
+        if (newQuantity === '0' || newQuantity === 'delete') {
+            // Si la cantidad es 0 o 'delete', eliminar el ítem
+            slot.innerHTML = '';
+            delete slot.dataset.id;
+            delete slot.dataset.quantity;
+            delete slot.dataset.type;
+            console.log("Ítem eliminado.");
+        } else {
+            // Si se ingresó una nueva cantidad, actualizar el ítem
+            slot.dataset.quantity = newQuantity;
+            const quantityElement = slot.querySelector('span');
+            quantityElement.textContent = `x${newQuantity}`;
+            console.log(`Cantidad actualizada a: ${newQuantity}`);
+        }
     }
 
     document.getElementById('finalizeKit').addEventListener('click', () => {
@@ -499,6 +530,7 @@
         document.getElementById('itemQuantity').value = 1; 
     });
 </script>
+
 
     <footer>
         <p>** If "undefined" appears, you must refresh the page. and start again. ** </p>
