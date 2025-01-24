@@ -559,23 +559,21 @@
     });
 
     document.getElementById('newKit').addEventListener('click', () => {
-        // Reiniciar el kit completamente (limpiar los slots)
+        // Limpiar todos los slots y datos asociados
         document.getElementById('kitName').value = '';
         document.getElementById('kaosList').value = '';
         document.getElementById('category').value = '';
         slots.forEach(slot => {
-            slot.innerHTML = '';
-            // Aseguramos de que los slots mantengan su tipo original (como 'wear', 'belt', etc.)
-            if (slot.dataset.type) {
-                slot.dataset.type = slot.dataset.type;
-            } else {
-                slot.dataset.type = 'FixThis-Wear-Main-or-belt?'; // Si no tiene tipo, asignar tipo por defecto
-            }
+            slot.innerHTML = ''; // Limpiar el contenido del slot
+            delete slot.dataset.id;
+            delete slot.dataset.quantity;
+            delete slot.dataset.type; // Eliminar los datos del slot para que no persistan
         });
-        document.getElementById('command_list').innerText = '';
-        document.getElementById('itemQuantity').value = 1;
+        document.getElementById('command_list').innerText = ''; // Limpiar la lista de comandos
+        document.getElementById('itemQuantity').value = 1; // Restablecer la cantidad
     });
 </script>
+
 
 
     <footer>
