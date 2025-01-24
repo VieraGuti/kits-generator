@@ -347,12 +347,12 @@
     }
 </style>
 <script>
-    let kitCounter = localStorage.getItem('kitCount') ? parseInt(localStorage.getItem('kitCount')) : 0; 
+    let kitCounter = localStorage.getItem('kitCount') ? parseInt(localStorage.getItem('kitCount')) : 0;
 
     window.onload = function() {
-        console.log(items); 
+        console.log(items);
         loadCategories();
-        document.getElementById('kitCounter').textContent = kitCounter; 
+        document.getElementById('kitCounter').textContent = kitCounter;
     };
 
     function loadCategories() {
@@ -408,12 +408,13 @@
             if (selectedItem.id) {
                 const quantity = document.getElementById('itemQuantity').value;
 
-                // No impedir la aplicación del ítem en el slot si el tipo de slot no coincide.
-                // Solamente mostramos un mensaje en consola si hay una discrepancia, pero seguimos adelante.
-                if (slot.dataset.type && selectedItem.category !== slot.dataset.type) {
-                    console.log(`Este item no es de la categoría correcta para este slot. Se esperaba: "${slot.dataset.type}", pero el item es de: "${selectedItem.category}".`);
+                // Verificar si el tipo de slot es "wear" y el ítem seleccionado es de la categoría "attire"
+                if (slot.dataset.type === 'wear' && selectedItem.category !== 'attire') {
+                    console.log('Este ítem no es de la categoría "Attire" y no se puede aplicar aquí.');
+                    return;
                 }
 
+                // Aplicar el ítem en el slot
                 applyItemToSlot(slot, selectedItem, quantity);
                 selectedItem.id = null;
             }
@@ -428,8 +429,8 @@
 
         const imgSlot = document.createElement('img');
         imgSlot.src = `images/${item.id}.png`;
-        imgSlot.style.width = '100%'; 
-        imgSlot.style.height = '100%'; 
+        imgSlot.style.width = '100%';
+        imgSlot.style.height = '100%';
 
         const quantityElement = document.createElement('span');
         quantityElement.style.position = 'absolute';
@@ -437,7 +438,7 @@
         quantityElement.style.right = '5px';
         quantityElement.style.color = 'white';
         quantityElement.style.fontSize = '12px';
-        quantityElement.style.backgroundColor = 'transparent'; 
+        quantityElement.style.backgroundColor = 'transparent';
 
         if (quantity > 1) {
             quantityElement.textContent = `x${quantity}`;
@@ -446,7 +447,7 @@
         itemContainer.appendChild(imgSlot);
         itemContainer.appendChild(quantityElement);
 
-        slot.innerHTML = ''; // Limpiar el slot antes de agregar el nuevo item
+        slot.innerHTML = ''; // Limpiar el slot antes de agregar el nuevo ítem
         slot.appendChild(itemContainer);
 
         // Agregar el ID y cantidad al dataset del slot
@@ -527,7 +528,7 @@
             delete slot.dataset.type;
         });
         document.getElementById('command_list').innerText = '';
-        document.getElementById('itemQuantity').value = 1; 
+        document.getElementById('itemQuantity').value = 1;
     });
 </script>
 
