@@ -410,7 +410,7 @@
 
                 // Verificar si el tipo de slot es "wear" y el ítem seleccionado es de la categoría "attire"
                 if (slot.dataset.type === 'wear' && selectedItem.category !== 'attire') {
-                    console.log('Este ítem no es de la categoría "Attire" y no se puede aplicar aquí.');
+                    console.log('Este ítem no es de la categoría "attire" y no se puede aplicar en un slot "wear".');
                     return;
                 }
 
@@ -422,6 +422,12 @@
     });
 
     function applyItemToSlot(slot, item, quantity) {
+        // Verificamos si el slot es "wear" y si el ítem es de la categoría "attire"
+        if (slot.dataset.type === 'wear' && item.category !== 'attire') {
+            console.log('Este ítem no es de la categoría "attire" y no se puede aplicar en un slot "wear".');
+            return;
+        }
+
         const itemContainer = document.createElement('div');
         itemContainer.style.position = 'relative';
         itemContainer.style.width = '100%';
@@ -454,17 +460,33 @@
         slot.dataset.id = item.id;
         slot.dataset.quantity = quantity;
 
-        // Asegurarse de que el tipo se mantenga, si ya tiene un tipo asignado
-        if (!slot.dataset.type) {
-            // Si no tiene tipo, asignamos un tipo predeterminado
-            slot.dataset.type = 'default';
+        // Detectar el tipo del slot, si no está definido, asignamos un tipo correctamente
+        if (!slot.dataset.type || !['wear', 'main', 'belt'].includes(slot.dataset.type)) {
+            slot.dataset.type = detectSlotType(slot);
+            if (slot.dataset.type === 'FixThis-Wear-Main-or-belt?') {
+                console.error('FixThis-Wear-Main-or-belt?');
+            }
         }
-        
+
         // Hacer el slot interactivo para editar o eliminar
         itemContainer.addEventListener('click', (e) => {
             e.stopPropagation(); // Evitar que se dispare el evento click del slot
             showEditMenu(slot);
         });
+    }
+
+    function detectSlotType(slot) {
+        // Aquí se detecta y asigna correctamente el tipo de slot
+        if (slot.classList.contains('main-slot')) {
+            return 'main';
+        }
+        if (slot.classList.contains('belt-slot')) {
+            return 'belt';
+        }
+        if (slot.classList.contains('wear-slot')) {
+            return 'wear';
+        }
+        return 'FixThis-Wear-Main-or-belt?'; // Si no se puede determinar el tipo
     }
 
     function showEditMenu(slot) {
@@ -499,7 +521,7 @@
             if (slot.dataset.id) {
                 const itemId = slot.dataset.id;
                 const quantity = slot.dataset.quantity;
-                const itemType = slot.dataset.type || 'default'; // Verifica si el tipo está disponible, de lo contrario usa 'default'
+                const itemType = slot.dataset.type || 'FixThis-Wear-Main-or-belt?'; // Verifica si el tipo está disponible, de lo contrario usa 'FixThis-Wear-Main-or-belt?'
                 commands.push(`kit add "${kitName}" "${itemId}" ${quantity} 1 "${itemType}"`);
             }
         });
@@ -532,7 +554,7 @@
             if (slot.dataset.type) {
                 slot.dataset.type = slot.dataset.type;
             } else {
-                slot.dataset.type = 'default'; // Si no tiene tipo, asignar tipo por defecto
+                slot.dataset.type = 'FixThis-Wear-Main-or-belt?'; // Si no tiene tipo, asignar tipo por defecto
             }
         });
         document.getElementById('command_list').innerText = '';
