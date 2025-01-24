@@ -450,11 +450,16 @@
         slot.innerHTML = ''; // Limpiar el slot antes de agregar el nuevo ítem
         slot.appendChild(itemContainer);
 
-        // Agregar el ID y cantidad al dataset del slot
+        // Asignar el ID y cantidad al dataset del slot
         slot.dataset.id = item.id;
         slot.dataset.quantity = quantity;
-        slot.dataset.type = slot.dataset.type || 'default'; // Asigna un valor predeterminado si no existe un tipo
 
+        // Asegurarse de que el tipo se mantenga, si ya tiene un tipo asignado
+        if (!slot.dataset.type) {
+            // Si no tiene tipo, asignamos un tipo predeterminado
+            slot.dataset.type = 'default';
+        }
+        
         // Hacer el slot interactivo para editar o eliminar
         itemContainer.addEventListener('click', (e) => {
             e.stopPropagation(); // Evitar que se dispare el evento click del slot
@@ -523,9 +528,12 @@
         document.getElementById('category').value = '';
         slots.forEach(slot => {
             slot.innerHTML = '';
-            delete slot.dataset.id;
-            delete slot.dataset.quantity;
-            delete slot.dataset.type;
+            // Aseguramos de que los slots mantengan su tipo original (como 'wear', 'belt', etc.)
+            if (slot.dataset.type) {
+                slot.dataset.type = slot.dataset.type;
+            } else {
+                slot.dataset.type = 'default'; // Si no tiene tipo, asignar tipo por defecto
+            }
         });
         document.getElementById('command_list').innerText = '';
         document.getElementById('itemQuantity').value = 1;
