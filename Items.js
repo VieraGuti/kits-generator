@@ -22,6 +22,7 @@ const items = {
         { id: 'arrow.fire', name: 'Fire Arrow', image: 'images/ammo/arrow.fire' },
         { id: 'arrow.hv', name: 'HV Arrow', image: 'images/ammo/arrow.hv' },
         { id: 'arrow.wooden', name: 'Arrow', image: 'images/ammo/arrow.wooden' },
+        { id: 'explosive.timed', name: 'Explosive Timed C4', image: 'images/ammo/explosive.timed' },
         { id: 'submarine.torpedo.straight', name: 'Torpedo', image: 'images/ammo/submarine.torpedo.straight' }
     ],
     weapons: [
