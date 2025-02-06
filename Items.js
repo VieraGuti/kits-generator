@@ -46,6 +46,7 @@ const items = {
         { id: 'crossbow', name: 'Crossbow', image: 'images/weapons/crossbow' },
         { id: 'smg.2', name: 'Custom SMG', image: 'images/weapons/smg.2' },
         { id: 'shotgun.double', name: 'Double Barrel Shotgun', image: 'images/weapons/shotgun.double' },
+        { id: 'shotgun.m4', name: 'M4 Shotgun', image: 'images/weapons/shotgun.m4' },
         { id: 'pistol.eoka', name: 'Eoka Pistol', image: 'images/weapons/pistol.eoka' },
         { id: 'grenade.f1', name: 'F1 Grenade', image: 'images/weapons/grenade.f1' },
         { id: 'flamethrower', name: 'Flame Thrower', image: 'images/weapons/flamethrower' },
