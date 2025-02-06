@@ -358,86 +358,93 @@
     let kitCounter = localStorage.getItem('kitCount') ? parseInt(localStorage.getItem('kitCount')) : 0;
 
     // Lista de ítems permitidos para el slot "wear"
-    const allowedWearItems = [
-        'gingerbreadsuit',
-        'halloween.mummysuit',
-        'scarecrow.suit',
-        'scarecrowhead',
-        'attire.bunny.onesie',
-        'attire.bunnyears'
-    ];
+const allowedWearItems = [
+    'gingerbreadsuit',
+    'halloween.mummysuit',
+    'scarecrow.suit',
+    'scarecrowhead',
+    'attire.bunny.onesie',
+    'attire.bunnyears'
+];
 
-    window.onload = function() {
-        console.log(items);
-        loadCategories();
-        document.getElementById('kitCounter').textContent = kitCounter;
-    };
+// Función para verificar si el ítem está permitido para el slot "wear"
+function isAllowedWearItem(itemId) {
+    return allowedWearItems.includes(itemId);
+}
 
-    function loadCategories() {
-        const categorySelect = document.getElementById('category');
-        Object.keys(items).forEach(category => {
-            const option = document.createElement('option');
-            option.value = category;
-            option.textContent = category;
-            categorySelect.appendChild(option);
-        });
-    }
+window.onload = function() {
+    console.log(items);
+    loadCategories();
+    document.getElementById('kitCounter').textContent = kitCounter;
+};
 
-    const selectedItem = {
-        id: null,
-        category: null,
-    };
-
-    document.getElementById('category').addEventListener('change', (event) => {
-        const category = event.target.value;
-        const itemGallery = document.getElementById('itemGallery');
-        itemGallery.innerHTML = '';
-
-        if (category && items[category]) {
-            items[category].forEach(item => {
-                const imageItem = document.createElement('div');
-                imageItem.className = 'image-item';
-
-                const img = document.createElement('img');
-                img.src = `images/${item.id}.png`;
-                img.alt = item.name;
-
-                img.addEventListener('click', () => {
-                    const previouslySelected = document.querySelector('.image-item.selected');
-                    if (previouslySelected) {
-                        previouslySelected.classList.remove('selected');
-                    }
-
-                    selectedItem.id = item.id;
-                    selectedItem.category = category;
-                    imageItem.classList.add('selected');
-                    console.log(`Seleccionado: ${item.name}`);
-                });
-
-                imageItem.appendChild(img);
-                itemGallery.appendChild(imageItem);
-            });
-        }
+function loadCategories() {
+    const categorySelect = document.getElementById('category');
+    Object.keys(items).forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categorySelect.appendChild(option);
     });
+}
 
-    const slots = document.querySelectorAll('.main-slot, .small-slot');
-    slots.forEach(slot => {
-        slot.addEventListener('click', () => {
-            if (selectedItem.id) {
-                const quantity = document.getElementById('itemQuantity').value;
+const selectedItem = {
+    id: null,
+    category: null,
+};
 
-                // Verificar si el tipo de slot es "wear" y el ítem seleccionado es uno de los permitidos
-                if (slot.dataset.type === 'wear' && !isAllowedWearItem(selectedItem.id)) {
-                    console.log('Este ítem no está permitido en un slot "wear".');
-                    return;
+document.getElementById('category').addEventListener('change', (event) => {
+    const category = event.target.value;
+    const itemGallery = document.getElementById('itemGallery');
+    itemGallery.innerHTML = '';
+
+    if (category && items[category]) {
+        items[category].forEach(item => {
+            const imageItem = document.createElement('div');
+            imageItem.className = 'image-item';
+
+            const img = document.createElement('img');
+            img.src = `images/${item.id}.png`;
+            img.alt = item.name;
+
+            img.addEventListener('click', () => {
+                const previouslySelected = document.querySelector('.image-item.selected');
+                if (previouslySelected) {
+                    previouslySelected.classList.remove('selected');
                 }
 
-                // Aplicar el ítem en el slot
-                applyItemToSlot(slot, selectedItem, quantity);
-                selectedItem.id = null;
-            }
+                selectedItem.id = item.id;
+                selectedItem.category = category;
+                imageItem.classList.add('selected');
+                console.log(`Seleccionado: ${item.name}`);
+            });
+
+            imageItem.appendChild(img);
+            itemGallery.appendChild(imageItem);
         });
+    }
+});
+
+const slots = document.querySelectorAll('.main-slot, .small-slot');
+slots.forEach(slot => {
+    slot.addEventListener('click', () => {
+        if (selectedItem.id) {
+            const quantity = document.getElementById('itemQuantity').value;
+
+            // Verificar si el tipo de slot es "wear" y el ítem seleccionado es uno de los permitidos
+            if (slot.dataset.type === 'wear' && !isAllowedWearItem(selectedItem.id)) {
+                console.log('Este ítem no está permitido en un slot "wear".');
+                alert('Este ítem no está permitido en un slot "wear".');
+                return;
+            }
+
+            // Aplicar el ítem en el slot
+            applyItemToSlot(slot, selectedItem, quantity);
+            selectedItem.id = null;
+        }
     });
+});
+
 
     function isAllowedWearItem(itemId) {
         // Verifica si el ítem está en la lista de ítems permitidos para el slot "wear"
