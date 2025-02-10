@@ -169,7 +169,7 @@ const items = {
         { id: 'workbench3', name: 'Workbench 3', image: 'images/construction/workbench3' },
         { id: 'bed', name: 'Bed', image: 'images/construction/bed' }
  ],
-    attire: [
+    ATTIRE: [
         { id: 'mask.bandana', name: 'Bandana Mask', image: 'images/attire/mask.bandana' },
         { id: 'barrelcostume', name: 'Barrel Costume', image: 'images/attire/barrelcostume' },
         { id: 'hat.cap', name: 'Baseball Cap', image: 'images/attire/hat.cap' },
