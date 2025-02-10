@@ -1,5 +1,5 @@
 const items = {
-    ammo: [
+    AMMO: [
         { id: 'ammo.shotgun', name: '12 Gauge Buckshot', image: 'images/ammo/ammo.shotgun' },
         { id: 'ammo.shotgun.fire', name: '12 Gauge Incendiary Shell', image: 'images/ammo/ammo.shotgun.fire' },
         { id: 'ammo.shotgun.slug', name: '12 Gauge Slug', image: 'images/ammo/ammo.shotgun.slug' },
@@ -26,7 +26,7 @@ const items = {
         { id: 'explosive.timed', name: 'Explosive Timed C4', image: 'images/ammo/explosive.timed' },
         { id: 'submarine.torpedo.straight', name: 'Torpedo', image: 'images/ammo/submarine.torpedo.straight' }
     ],
-    weapons: [
+    WEAPONS: [
         { id: 'weapon.mod.burstmodule', name: 'Burst Module', image: 'images/weapons/weapon.mod.burstmodule' },
         { id: 'weapon.mod.extendedmags', name: 'Extended Magazine', image: 'images/weapons/weapon.mod.extendedmags' },
         { id: 'weapon.mod.small.scope', name: 'Scope x4', image: 'images/weapons/weapon.mod.small.scope' },
@@ -83,7 +83,7 @@ const items = {
         { id: 'shotgun.waterpipe', name: 'Waterpipe Shotgun', image: 'images/weapons/shotgun.waterpipe' },
         { id: 'spear.wooden', name: 'Wooden Spear', image: 'images/weapons/spear.wooden' }
     ],
-    resources : [
+    RESOURCES : [
     { id: 'fat.animal', name: 'Animal Fat', image: 'images/resources/fat.animal' },
     { id: 'bone.fragments', name: 'Bone Fragments', image: 'images/resources/bone.fragments' },
     { id: 'cctv.camera', name: 'CCTV Camera', image: 'images/resources/cctv.camera' },
@@ -116,7 +116,7 @@ const items = {
     { id: 'wood', name: 'Wood', image: 'images/resources/wood' }
 ],
 
-    construction: [
+    CONSTRUCTION: [
         { id: 'door.hinged.toptier', name: 'Armored Door', image: 'images/construction/door.hinged.toptier' },
         { id: 'door.double.hinged.toptier', name: 'Armored Double Door', image: 'images/construction/door.double.hinged.toptier' },
         { id: 'barricade.woodwire', name: 'Barbed Wooden Barricade', image: 'images/construction/barricade.woodwire' },
@@ -169,7 +169,7 @@ const items = {
         { id: 'workbench3', name: 'Workbench 3', image: 'images/construction/workbench3' },
         { id: 'bed', name: 'Bed', image: 'images/construction/bed' }
  ],
-    attire: [
+    ATTIRE: [
         { id: 'mask.bandana', name: 'Bandana Mask', image: 'images/attire/mask.bandana' },
         { id: 'barrelcostume', name: 'Barrel Costume', image: 'images/attire/barrelcostume' },
         { id: 'hat.cap', name: 'Baseball Cap', image: 'images/attire/hat.cap' },
@@ -231,7 +231,7 @@ const items = {
         { id: 'wood.armor.pants', name: 'Wood Armor Pants', image: 'images/attire/wood.armor.pants' },
         { id: 'wood.armor.jacket', name: 'Wood Chestplate', image: 'images/attire/wood.armor.jacket' }
     ],
-    tools: [
+    TOOLS: [
         { id: 'tool.binoculars', name: 'Binoculars', image: 'images/tools/tool.binoculars' },
         { id: 'wiretool', name: 'Wire', image: 'images/tools/wiretool' },
         { id: 'cakefiveyear', name: 'Birthday Cake', image: 'images/tools/cakefiveyear' },
@@ -258,7 +258,7 @@ const items = {
         { id: 'torch', name: 'Torch', image: 'images/tools/torch' },
         { id: 'bucket.water', name: 'Water Bucket', image: 'images/tools/bucket.water' }
     ],
-    medsAndTeas: [
+    MEDSANDTEAS: [
         { id: 'antiradpills', name: 'Anti-Radiation Pills', image: 'images/medsAndTeas/antiradpills' },
         { id: 'blueberries', name: 'Blueberries', image: 'images/medsAndTeas/blueberries' },
         { id: 'pumpkin', name: 'Pumpkin', image: 'images/medsAndTeas/pumpkin' },
@@ -287,8 +287,8 @@ const items = {
         { id: 'woodtea.pure', name: 'Pure Wood Tea', image: 'images/medsAndTeas/woodtea.pure' },
         { id: 'radiationremovetea', name: 'Rad. Removal Tea', image: 'images/medsAndTeas/radiationremovetea' }
     ],
-food: [ 
-    { id: 'fish.anchovy', name: 'Anchovy', image: 'images/food/fish.anchovy' },
+FOOD: [ 
+    { id: 'fish.anchovy', name: 'Anchovy', image: 'images/food/fish.anchovy' }, 
     { id: 'apple', name: 'Apple', image: 'images/food/apple' },
     { id: 'black.raspberries', name: 'Black Raspberries', image: 'images/food/black.raspberries' },
     { id: 'blueberries', name: 'Blueberries', image: 'images/food/blueberries' },
@@ -353,7 +353,7 @@ food: [
     { id: 'fish.troutsmall', name: 'Small Trout', image: 'images/food/fish.troutsmall' }
 ],
 
-    trapsAndMiscellaneous: [
+    TRAPSANDMISCELLANEOUS: [
         { id: 'flameturret', name: 'Flame Turret', image: 'images/trapsAndMiscellaneous/flameturret' },
         { id: 'trap.landmine', name: 'Landmine', image: 'images/trapsAndMiscellaneous/trap.landmine' },
         { id: 'guntrap', name: 'Shotgun Trap', image: 'images/trapsAndMiscellaneous/guntrap' },
@@ -366,7 +366,7 @@ food: [
         { id: 'note', name: 'Note', image: 'images/trapsAndMiscellaneous/note' },
         { id: 'keycard_red', name: 'Red Keycard', image: 'images/trapsAndMiscellaneous/keycard_red' }
     ],
-    components: [
+    COMPONENTS: [
         { id: 'fuse', name: 'Electric Fuse', image: 'images/components/fuse' },
         { id: 'propanetank', name: 'Empty Propane Tank', image: 'images/components/propanetank' },
         { id: 'gears', name: 'Gears', image: 'images/components/gears' },
@@ -383,7 +383,7 @@ food: [
         { id: 'tarp', name: 'Tarp', image: 'images/components/tarp' },
         { id: 'techparts', name: 'Tech Trash', image: 'images/components/techparts' }
     ],
-    electrical: [
+    ELECTRICAL: [
         { id: 'electric.andswitch', name: 'AND Switch', image: 'images/electrical/electric.andswitch' },
         { id: 'electric.audioalarm', name: 'Audio Alarm', image: 'images/electrical/electric.audioalarm' },
         { id: 'autoturret', name: 'Auto Turret', image: 'images/electrical/autoturret' },
@@ -438,7 +438,7 @@ food: [
         { id: 'waterpump', name: 'Water Pump', image: 'images/electrical/waterpump' },
         { id: 'generator.wind.scrap', name: 'Wind Turbine', image: 'images/electrical/generator.wind.scrap' }
     ],
-    Easter: [
+    EASTER: [
         { id: 'easter.bronzeegg', name: 'Bronze Egg', image: 'images/easter/easter.bronzeegg' },
         { id: 'attire.bunnyears', name: 'Bunny Ears', image: 'images/easter/attire.bunnyears' },
         { id: 'attire.bunny.onesie', name: 'Bunny Onesie', image: 'images/easter/attire.bunny.onesie' },
@@ -447,7 +447,7 @@ food: [
         { id: 'easter.paintedeggs', name: 'Painted Egg', image: 'images/easter/easter.paintedeggs' },
         { id: 'easter.silveregg', name: 'Silver Egg', image: 'images/easter/easter.silveregg' }
     ],
-    Halloween: [
+    HALLOWEEN: [
         { id: 'knife.butcher', name: 'Butcher Knife', image: 'images/halloween/knife.butcher' },
         { id: 'coffin.storage', name: 'Coffin', image: 'images/halloween/coffin.storage' },
         { id: 'gravestone', name: 'Gravestone', image: 'images/halloween/gravestone' },
@@ -466,7 +466,7 @@ food: [
         { id: 'spiderweb', name: 'Spider Webs', image: 'images/halloween/spiderweb' },
         { id: 'woodcross', name: 'Wooden Cross', image: 'images/halloween/woodcross' }
     ],
-    Xmas: [
+    XMAS: [
         { id: 'candycane', name: 'Candy Cane', image: 'images/xmas/candycane' },
         { id: 'candycaneclub', name: 'Candy Cane Club', image: 'images/xmas/candycaneclub' },
         { id: 'xmas.lightstring', name: 'Christmas Lights', image: 'images/xmas/xmas.lightstring' },
