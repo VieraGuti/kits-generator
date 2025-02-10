@@ -21,6 +21,7 @@ const items = {
         { id: 'arrow.bone', name: 'Bone Arrow', image: 'images/ammo/arrow.bone' },
         { id: 'arrow.fire', name: 'Fire Arrow', image: 'images/ammo/arrow.fire' },
         { id: 'arrow.hv', name: 'HV Arrow', image: 'images/ammo/arrow.hv' },
+        { id: 'speargun.spear', name: 'Speargun Spear', image: 'images/ammo/speargun.spear' },
         { id: 'arrow.wooden', name: 'Arrow', image: 'images/ammo/arrow.wooden' },
         { id: 'explosive.timed', name: 'Explosive Timed C4', image: 'images/ammo/explosive.timed' },
         { id: 'submarine.torpedo.straight', name: 'Torpedo', image: 'images/ammo/submarine.torpedo.straight' }
