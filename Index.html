@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kits Generator - Rust Style</title>
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
-<style>
+    <style>
 	body {
 		font-family: 'Russo One', sans-serif;
 		background-color: #00000000;
@@ -16,8 +16,8 @@
 		padding: 20px;
 		transition: background-color 0.5s ease-in-out;
 		background-image: url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjA4OGV0dnMzMmFmcnd0ZzUyZjF4c2ZhYjhoNDdrcWJmcXp3a3UycCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Co4o0MS48vsJibPvQ4/giphy.gif');
-		background-size: contain;
-	}
+	        background-size: contain;
+    }
 
 	h3 {
 		text-align: center;
@@ -54,7 +54,6 @@
 		flex: 1;
 		min-width: 0; /* Allows flex items to shrink below content size */
 	}
-
 	button {
 		cursor: pointer;
 		width: auto;
@@ -323,7 +322,7 @@
 		height: 100%;
 		background: rgba(0, 0, 0, 0.8);
 		display: flex;
-			justify-content: center;
+		justify-content: center;
 		align-items: center;
 		z-index: 1000;
 	}
@@ -362,7 +361,6 @@
 			margin-left: 0vw;
 		}
 	}
-
 	@media (max-width: 1150px) {
 		.content-row {
 			flex-direction: column;
@@ -396,13 +394,11 @@
 			font-size: 1.5em;
 		}
 	}
-
 	@media (max-width: 768px) {
 		.form-row {
 			gap: 10px;
 		}
 	}
-
 	@media (max-width: 600px) {
 		body {
 			transform: scale(0.9);
@@ -410,8 +406,7 @@
 		.main-slots {
 			transform: scale(0.85);
 		}
-	}
-
+	}	
 	@media (max-width: 500px) {
 		body {
 			transform: scale(0.9);
@@ -420,7 +415,6 @@
 			transform: scale(0.7);
 		}
 	}
-
 	@media (max-width: 480px) {
 		.small-slot, .main-slot {
 			width: 42px;
@@ -434,7 +428,6 @@
 			font-size: 1.2em;
 		}
 	}
-
 	@media (max-width: 425px) {
 		body {
 			transform: scale(0.9);
@@ -443,33 +436,9 @@
 			transform: scale(0.6);
 		}
 	}
-</style>
-
+    </style>
 </head>
 <body>
-<!-- Editor de color -->
-<input type="color" id="borderColorPicker" value="#00fff7" onchange="changeBorderColor(this.value)">
-<button onclick="loadKit()">Load Kit</button>
-
-<!-- Aquí se mostrarán los ítems cargados -->
-<div id="kitContainer"></div>
-
-<!-- Campo para ingresar los comandos -->
-<div id="command_list" contenteditable="true">
-    kit add "vipkit" "deer.skull.mask" 1 1 "wear"
-    kit add "vipkit" "diving.tank" 1 1 "wear"
-    kit add "vipkit" "boots.frog" 1 1 "wear"
-    kit add "vipkit" "jacket" 1 1 "wear"
-    kit add "vipkit" "hoodie" 1 1 "wear"
-    kit add "vipkit" "grenade.f1" 4242424 1 "main"
-    kit add "vipkit" "smg.mp5" 2323 1 "belt"
-</div>
-
-<!-- Botón para cargar el kit -->
-<button onclick="loadKit()">Load Kit</button>
-
-<!-- Botón para agregar un nuevo kit -->
-<button onclick="addNewKit()">Add New Kit</button>
     <div class="counter-container" style="
         display: flex;
         justify-content: space-between;
@@ -1296,62 +1265,6 @@
 			updateGalleryWithSearch(e.target.value);
 		}, 300);
 	});
-	let kits = []; // Array para almacenar los kits
-
-// Función para cargar los kits desde el contenido del campo 'command_list'
-function loadKit() {
-    const commandList = document.getElementById('command_list').innerText.trim();
-    const kitContainer = document.getElementById('kitContainer');
-    kitContainer.innerHTML = ""; // Limpiar el contenedor antes de cargar
-
-    // Dividir el contenido en líneas (cada línea es un 'kit add')
-    const commands = commandList.split('\n');
-
-    commands.forEach(command => {
-        const regex = /kit add "(.*?)" "(.*?)" (\d+) (\d+) "(.*?)"/;
-        const match = command.match(regex);
-
-        if (match) {
-            const kitName = match[1];
-            const itemName = match[2];
-            const quantity = match[3];
-            const id = match[4];
-            const location = match[5];
-
-            // Buscar la URL de la imagen basada en el nombre del ítem
-            const imageUrl = `path/to/images/${itemName}.png`; // Cambiar la ruta si es necesario
-
-            // Crear un contenedor para cada ítem
-            const itemContainer = document.createElement('div');
-            itemContainer.classList.add('item-container');
-
-            // Mostrar el ítem, cantidad, y ubicación en el contenedor
-            itemContainer.innerHTML = `
-                <img src="${imageUrl}" alt="${itemName}" class="item-image">
-                <div class="item-info">
-                    <span>Item: ${itemName}</span>
-                    <span>Quantity: ${quantity}</span>
-                    <span>Location: ${location}</span>
-                </div>
-            `;
-            kitContainer.appendChild(itemContainer);
-        }
-    });
-}
-
-// Función para cambiar el color de los bordes de todos los contenedores
-function changeBorderColor(color) {
-    const elements = document.querySelectorAll('.item-container');
-    elements.forEach(el => {
-        el.style.borderColor = color;
-    });
-}
-
-// Si necesitas agregar un nuevo kit de manera dinámica, puedes utilizar esta función para interactuar con la UI y agregar más kits.
-function addNewKit() {
-    // Aquí puedes manejar la creación de un nuevo kit si lo deseas (si es necesario para la UI)
-    alert('Add New Kit clicked');
-}
 
 	searchInput.addEventListener('keypress', (e) => {
 		if (e.key === 'Enter') {
