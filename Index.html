@@ -1358,5 +1358,265 @@
         updateKitCommands();  // Para actualizar los comandos y mostrarlo si es necesario
     });
 </script>
+	<button id="pasteKitButton">Pegar tu kit</button>
+<textarea id="kitPasteArea" placeholder="Pega tu kit aquí..."></textarea>
+
+<!-- Controles para personalización estética -->
+<div id="customizationControls">
+    <label for="borderColor">Color de borde:</label>
+    <input type="color" id="borderColor" value="#000000">
+
+    <label for="backgroundImage">Imagen de fondo (Solo para el contenedor):</label>
+    <input type="file" id="backgroundImage" accept="image/*">
+
+    <label for="shadowEffect">Sombras:</label>
+    <input type="checkbox" id="shadowEffect">
+</div>
+
+<!-- Contenedor principal con los slots (respetando formato de 6x4) -->
+<div class="main-slots" id="kitContainer">
+    <!-- Aquí irán los slots, que seguirán en formato de 6x4 -->
+</div>
+
+<style>
+    /* Mantener la estructura de 6x4 slots en el contenedor */
+    .main-slots {
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 2px solid #e1fffe;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: #00000020;
+        box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+        transition: transform 0.3s ease-out;
+        width: 30%;
+        min-width: 610px;
+        position: relative;  /* Para manejar la imagen de fondo */
+    }
+
+    /* Estilo para los contenedores de los slots */
+    .slot-container {
+        border: 2px solid #000; /* Borde negro por defecto */
+        padding: 10px;
+        margin: 5px;
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        background-color: #f9f9f9;
+        position: relative;
+        box-sizing: border-box;
+    }
+
+    /* Para la imagen dentro de cada slot */
+    .slot-container img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* Sombra opcional en los slots */
+    .slot-container.shadow {
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Efecto para el fondo del contenedor main-slots */
+    .main-slots.custom-background {
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* Disposición en formato de 6x4 (esto no cambia el layout de los slots) */
+    #kitContainer {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr); /* 6 columnas */
+        grid-template-rows: repeat(4, 1fr);    /* 4 filas */
+        gap: 10px;
+        width: 100%;
+        height: auto;
+    }
+
+    /* Estilos para los contenedores más pequeños de los slots */
+    .small-slot {
+        border: 2px solid #8B8B8B;
+        padding: 5px;
+        margin: 3px;
+        width: 80px;
+        height: 80px;
+        background-color: #f0f0f0;
+        position: relative;
+    }
+
+    /* Para la imagen dentro de cada small slot */
+    .small-slot img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* Controles estéticos debajo del área de texto */
+    #customizationControls {
+        margin-top: 20px;
+        padding: 10px;
+        background: #f0f0f0;
+        border-radius: 8px;
+    }
+</style>
+
+<script>
+    // Event listener para el botón de pegar el kit
+    document.getElementById('pasteKitButton').addEventListener('click', () => {
+        const pasteArea = document.getElementById('kitPasteArea');
+        const commands = pasteArea.value.trim().split('\n');  // Dividimos por líneas
+
+        if (commands.length === 0) {
+            alert('No hay comandos para pegar.');
+            return;
+        }
+
+        let isResetRequired = false;
+
+        // Recorremos cada línea (comando)
+        commands.forEach(command => {
+            const regex = /^kit add "(.*?)" "(.*?)" (\d+) 1 "(.*?)"$/;
+            const match = command.match(regex);
+            
+            if (match) {
+                const kitName = match[1];
+                const itemId = match[2];
+                const quantity = parseInt(match[3]);
+                const slotType = match[4];
+
+                let targetSlot = null;
+                if (slotType === 'wear') {
+                    targetSlot = findFirstAvailableSlot('wear');
+                } else if (slotType === 'main') {
+                    targetSlot = findFirstAvailableSlot('main');
+                } else if (slotType === 'belt') {
+                    targetSlot = findFirstAvailableSlot('belt');
+                }
+
+                if (targetSlot) {
+                    applyItemToSlot(targetSlot, {
+                        id: itemId,
+                        category: slotType
+                    }, quantity);
+                } else {
+                    isResetRequired = true;
+                }
+            } else {
+                alert('Comando no válido: ' + command);
+            }
+        });
+
+        // Si no se encuentra un slot disponible, mostramos el mensaje de reset
+        if (isResetRequired) {
+            alert('Debes resetear primero antes de aplicar este kit.');
+        }
+
+        pasteArea.value = '';
+        updateKitCommands();  
+    });
+
+    // Función para obtener el primer slot disponible
+    function findFirstAvailableSlot(slotType) {
+        const slots = document.querySelectorAll(`[data-type="${slotType}"]`);
+        for (let slot of slots) {
+            if (!slot.dataset.id) {
+                return slot;
+            }
+        }
+        return null;
+    }
+
+    // Función para aplicar el ítem al slot (con su imagen y cantidad)
+    function applyItemToSlot(slot, item, quantity) {
+        const itemContainer = document.createElement('div');
+        itemContainer.className = 'item-container';
+
+        const imgSlot = document.createElement('img');
+        imgSlot.src = `images/${item.id}.png`;
+        imgSlot.style.width = '100%';
+        imgSlot.style.height = '100%';
+
+        const controls = document.createElement('div');
+        controls.className = 'slot-controls';
+
+        const quantityDisplay = document.createElement('span');
+        quantityDisplay.className = 'quantity-display';
+        quantityDisplay.textContent = quantity;
+
+        quantityDisplay.onclick = (e) => {
+            e.stopPropagation();
+            const newQuantity = prompt('Enter new quantity:', quantity);
+            if (newQuantity !== null && !isNaN(newQuantity) && newQuantity > 0) {
+                quantityDisplay.textContent = newQuantity;
+                updateKitCommands();
+            }
+        };
+
+        controls.appendChild(quantityDisplay);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-item';
+        removeBtn.textContent = '×';
+        removeBtn.onclick = (e) => {
+            e.stopPropagation();
+            slot.innerHTML = '';
+            delete slot.dataset.id;
+            delete slot.dataset.quantity;
+            updateKitCommands();
+        };
+
+        itemContainer.appendChild(imgSlot);
+        itemContainer.appendChild(controls);
+        itemContainer.appendChild(removeBtn);
+
+        slot.innerHTML = '';
+        slot.appendChild(itemContainer);
+
+        slot.dataset.id = item.id;
+        slot.dataset.quantity = quantity;
+    }
+
+    // Función para aplicar la personalización estética dentro de .main-slots y small slots
+    function applyCustomization() {
+        const borderColor = document.getElementById('borderColor').value;
+        const backgroundImageFile = document.getElementById('backgroundImage').files[0];
+        const shadowEffect = document.getElementById('shadowEffect').checked;
+
+        // Cambiar el color de los bordes del contenedor main-slots y small-slots
+        const mainSlotContainer = document.querySelector('.main-slots');
+        const smallSlots = document.querySelectorAll('.small-slot');
+        
+        mainSlotContainer.style.borderColor = borderColor;
+
+        // Cambiar el fondo de .main-slots si se selecciona una imagen
+        if (backgroundImageFile) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                mainSlotContainer.style.backgroundImage = `url(${e.target.result})`;
+                mainSlotContainer.classList.add('custom-background');
+            };
+            reader.readAsDataURL(backgroundImageFile);
+        } else {
+            mainSlotContainer.style.backgroundImage = '';
+            mainSlotContainer.classList.remove('custom-background');
+        }
+
+        // Cambiar la sombra
+        if (shadowEffect) {
+            mainSlotContainer.classList.add('shadow');
+            smallSlots.forEach(slot => slot.classList.add('shadow'));
+        } else {
+            mainSlotContainer.classList.remove('shadow');
+            smallSlots.forEach(slot => slot.classList.remove('shadow'));
+        }
+    }
+
+    // Aplicar la personalización al cambiar los controles
+    document.getElementById('borderColor').addEventListener('input', applyCustomization);
+    document.getElementById('backgroundImage').addEventListener('change', applyCustomization);
+    document.getElementById('shadowEffect').addEventListener('change', applyCustomization);
+</script>
 </body>
 </html>
