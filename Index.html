@@ -1357,7 +1357,93 @@
         background-position: center;
     }
 </style>
+<button id="pasteKitButton">Pegar tu kit</button>
+<textarea id="kitPasteArea" placeholder="Pega tu kit aquí..."></textarea>
 
+<!-- Controles para personalización estética -->
+<div id="customizationControls">
+    <label for="borderColor">Color de borde:</label>
+    <input type="color" id="borderColor" value="#000000">
+
+    <label for="backgroundImage">Imagen de fondo (Solo para el contenedor):</label>
+    <input type="file" id="backgroundImage" accept="image/*">
+
+    <label for="shadowEffect">Sombras:</label>
+    <input type="checkbox" id="shadowEffect">
+</div>
+
+<!-- Contenedor principal con los slots (respetando formato de 6x4) -->
+<div class="main-slots" id="kitContainer">
+    <!-- Aquí irán los slots, que seguirán en formato de 6x4 -->
+</div>
+
+<style>
+    /* Mantener la estructura de 6x4 slots en el contenedor */
+    .main-slots {
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 2px solid #e1fffe;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: #00000020;
+        box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+        transition: transform 0.3s ease-out;
+        width: 30%;
+        min-width: 610px;
+        position: relative;  /* Para manejar la imagen de fondo */
+    }
+
+    /* Estilo para los slots dentro del contenedor */
+    .slot-container {
+        border: 2px solid #000; /* Borde negro por defecto */
+        padding: 10px;
+        margin: 5px;
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        background-color: #f9f9f9;
+        position: relative;
+        box-sizing: border-box;
+    }
+    
+    /* Para la imagen dentro de cada slot */
+    .slot-container img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* Sombra opcional en los slots */
+    .slot-container.shadow {
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Efecto para el fondo del contenedor main-slots */
+    .main-slots.custom-background {
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* Disposición en formato de 6x4 (esto no cambia el layout de los slots) */
+    #kitContainer {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr); /* 6 columnas */
+        grid-template-rows: repeat(4, 1fr);    /* 4 filas */
+        gap: 10px;
+        width: 100%;
+        height: auto;
+    }
+
+    /* Controles estéticos debajo del área de texto */
+    #customizationControls {
+        margin-top: 20px;
+        padding: 10px;
+        background: #f0f0f0;
+        border-radius: 8px;
+    }
+</style>
+</script>
 <script>
     // Event listener para el botón de pegar el kit
     document.getElementById('pasteKitButton').addEventListener('click', () => {
@@ -1474,34 +1560,34 @@
         slot.dataset.quantity = quantity;
     }
 
-    // Función para aplicar la personalización estética
+    // Función para aplicar la personalización estética dentro de .main-slots
     function applyCustomization() {
         const borderColor = document.getElementById('borderColor').value;
         const backgroundImageFile = document.getElementById('backgroundImage').files[0];
         const shadowEffect = document.getElementById('shadowEffect').checked;
 
-        // Cambiar el color de los bordes de los slots
-        const slots = document.querySelectorAll('.slot-container');
-        slots.forEach(slot => {
-            slot.style.borderColor = borderColor;
-            if (shadowEffect) {
-                slot.classList.add('shadow');
-            } else {
-                slot.classList.remove('shadow');
-            }
-        });
+        // Cambiar el color de los bordes del contenedor main-slots
+        const mainSlotContainer = document.querySelector('.main-slots');
+        mainSlotContainer.style.borderColor = borderColor;
 
-        // Cambiar el fondo si hay una imagen seleccionada
+        // Cambiar el fondo de .main-slots si se selecciona una imagen
         if (backgroundImageFile) {
             const reader = new FileReader();
             reader.onload = function (e) {
-                document.body.style.backgroundImage = `url(${e.target.result})`;
-                document.body.classList.add('custom-background');
+                mainSlotContainer.style.backgroundImage = `url(${e.target.result})`;
+                mainSlotContainer.classList.add('custom-background');
             };
             reader.readAsDataURL(backgroundImageFile);
         } else {
-            document.body.style.backgroundImage = '';
-            document.body.classList.remove('custom-background');
+            mainSlotContainer.style.backgroundImage = '';
+            mainSlotContainer.classList.remove('custom-background');
+        }
+
+        // Cambiar la sombra
+        if (shadowEffect) {
+            mainSlotContainer.classList.add('shadow');
+        } else {
+            mainSlotContainer.classList.remove('shadow');
         }
     }
 
