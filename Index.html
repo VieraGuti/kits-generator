@@ -701,39 +701,7 @@
         
         window.addEventListener('resize', updateGalleryHeight);
     };
-// Función para alternar la visibilidad de los controles
-document.getElementById('toggleControlsButton').addEventListener('click', function() {
-    const controlsContainer = document.getElementById('controls-container');
-    const button = document.getElementById('toggleControlsButton');
 
-    // Si los controles están visibles, los ocultamos
-    if (controlsContainer.style.display === 'none') {
-        controlsContainer.style.display = 'block';
-        button.textContent = 'Guardar y Ocultar Controles';
-    } else {
-        // Aplicamos los cambios y ocultamos los controles
-        applyChanges();
-        controlsContainer.style.display = 'none';
-        button.textContent = 'Mostrar Controles';
-    }
-});
-// Función para aplicar los cambios
-function applyChanges() {
-    // Obtener el contenedor principal
-    const kitContainer = document.getElementById('kitContainer');
-
-    // Aplicar los nuevos valores al contenedor
-    kitContainer.style.borderColor = borderColor;
-    kitContainer.style.backgroundColor = backgroundColor;
-
-    if (backgroundImage) {
-        kitContainer.style.backgroundImage = `url(${backgroundImage})`;
-        kitContainer.style.backgroundSize = 'cover';
-        kitContainer.style.backgroundPosition = 'center';
-    } else {
-        kitContainer.style.backgroundImage = '';
-    }
-}
     function loadCategories() {
         const categorySelect = document.getElementById('category');
         Object.keys(items).forEach(category => {
@@ -1326,6 +1294,102 @@ function applyChanges() {
 			}
 		}
 	});
+// Función para alternar la visibilidad de los controles
+document.getElementById('toggleControlsButton').addEventListener('click', function() {
+    const controlsContainer = document.getElementById('controls-container');
+    const button = document.getElementById('toggleControlsButton');
+
+    // Si los controles están visibles, los ocultamos
+    if (controlsContainer.style.display === 'none') {
+        controlsContainer.style.display = 'block';
+        button.textContent = 'Guardar y Ocultar Controles';
+    } else {
+        // Aplicamos los cambios y ocultamos los controles
+        applyChanges();
+        controlsContainer.style.display = 'none';
+        button.textContent = 'Mostrar Controles';
+    }
+});
+// Función para aplicar los cambios
+function applyChanges() {
+    // Obtener el contenedor principal
+    const kitContainer = document.getElementById('kitContainer');
+
+    // Aplicar los nuevos valores al contenedor
+    kitContainer.style.borderColor = borderColor;
+    kitContainer.style.backgroundColor = backgroundColor;
+
+    if (backgroundImage) {
+        kitContainer.style.backgroundImage = `url(${backgroundImage})`;
+        kitContainer.style.backgroundSize = 'cover';
+        kitContainer.style.backgroundPosition = 'center';
+    } else {
+        kitContainer.style.backgroundImage = '';
+    }
+}
+document.addEventListener('DOMContentLoaded', function () {
+    // Variables globales para guardar las configuraciones de color
+    let borderColor = '#00fff7';
+    let backgroundColor = '#00000020';
+    let backgroundImage = null;
+
+    // Función para alternar la visibilidad de los controles
+    document.getElementById('toggleControlsButton').addEventListener('click', function() {
+        const controlsContainer = document.getElementById('controls-container');
+        const button = document.getElementById('toggleControlsButton');
+
+        // Si los controles están visibles, los ocultamos
+        if (controlsContainer.style.display === 'none') {
+            controlsContainer.style.display = 'block';
+            button.textContent = 'Guardar y Ocultar Controles';
+        } else {
+            // Aplicamos los cambios y ocultamos los controles
+            applyChanges();
+            controlsContainer.style.display = 'none';
+            button.textContent = 'Mostrar Controles';
+        }
+    });
+
+    // Función para aplicar los cambios
+    function applyChanges() {
+        // Obtener el contenedor principal
+        const kitContainer = document.getElementById('kitContainer');
+
+        // Aplicar los nuevos valores al contenedor
+        kitContainer.style.borderColor = borderColor;
+        kitContainer.style.backgroundColor = backgroundColor;
+
+        if (backgroundImage) {
+            kitContainer.style.backgroundImage = `url(${backgroundImage})`;
+            kitContainer.style.backgroundSize = 'cover';
+            kitContainer.style.backgroundPosition = 'center';
+        } else {
+            kitContainer.style.backgroundImage = '';
+        }
+    }
+
+    // Actualizar el color del borde
+    document.getElementById('borderColor').addEventListener('input', function(e) {
+        borderColor = e.target.value;
+    });
+
+    // Actualizar el color de fondo
+    document.getElementById('backgroundColor').addEventListener('input', function(e) {
+        backgroundColor = e.target.value;
+    });
+
+    // Actualizar la imagen de fondo
+    document.getElementById('backgroundImage').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                backgroundImage = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+});
 
 	const originalResetHandler = document.getElementById('newKit').onclick;
 	document.getElementById('newKit').onclick = () => {
