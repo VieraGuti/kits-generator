@@ -436,6 +436,68 @@
 			transform: scale(0.6);
 		}
 	}
+	    /* Estilos para el contenedor principal de slots */
+    .main-slots {
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 2px solid #00fff7;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: #00000020;
+        box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+        transition: transform 0.3s ease-out;
+        width: 30%;
+        min-width: 610px;
+    }
+
+    /* Estilos para los controles de personalización */
+    #controls-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 300px;
+        padding: 15px;
+        background: #333;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+
+    /* Estilos para los controles */
+    #customizationControls label {
+        font-size: 14px;
+        color: #fff;
+    }
+
+    #customizationControls input {
+        width: 100%;
+    }
+
+    textarea#kitPasteArea {
+        width: 100%;
+        height: 100px;
+        margin-bottom: 15px;
+        padding: 10px;
+        font-size: 14px;
+        border-radius: 8px;
+        border: 2px solid #ccc;
+    }
+
+    #pasteKitButton {
+        padding: 10px 15px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+    #pasteKitButton:hover {
+        background-color: #45a049;
+    }
     </style>
 </head>
 <body>
@@ -452,7 +514,30 @@
         <div>Kits You've Generated: <span id="localCounter">0</span></div>
         <div>Kits Generated Globally: <span id="globalCounter">0</span></div>
     </div>
+<!-- Botón para mostrar/ocultar controles -->
+<button id="toggleControlsButton">Mostrar Controles</button>
 
+<!-- Contenedor para los controles -->
+<div id="controls-container" style="display: none;">
+    <textarea id="kitPasteArea" placeholder="Pega tu kit aquí..."></textarea>
+    <button id="pasteKitButton">Pegar tu kit</button>
+
+    <div id="customizationControls">
+        <label for="borderColor">Color de borde:</label>
+        <input type="color" id="borderColor" value="#00fff7">
+
+        <label for="backgroundImage">Imagen de fondo (Solo para el contenedor):</label>
+        <input type="file" id="backgroundImage" accept="image/*">
+
+        <label for="shadowEffect">Sombras:</label>
+        <input type="checkbox" id="shadowEffect">
+    </div>
+</div>
+
+<!-- Contenedor principal de slots (El layout 6x4 sigue intacto) -->
+<div class="main-slots" id="kitContainer">
+    <!-- Aquí irán los slots, pero la estructura original no cambia -->
+</div>
     <h1>VieraGuti's Kit Generator+</h1>
 
     <div class="form-row">
@@ -1541,6 +1626,172 @@
         return 'kit add "KitName" "ItemID" 1 1 "wear"';
     }
 </script>
+<script>
+    // Variable global para almacenar los cambios
+    let currentBorderColor = '#00fff7';
+    let currentBackgroundImage = null;
+    let currentShadowEffect = false;
 
+    // Función para alternar la visibilidad de los controles
+    document.getElementById('toggleControlsButton').addEventListener('click', () => {
+        const controlsContainer = document.getElementById('controls-container');
+        const button = document.getElementById('toggleControlsButton');
+
+        // Si los controles están visibles, los ocultamos y aplicamos los cambios
+        if (controlsContainer.style.display === 'none') {
+            controlsContainer.style.display = 'flex';
+            button.textContent = 'Guardar y Ocultar Controles';
+        } else {
+            // Aplicamos los cambios antes de ocultarlos
+            applyCustomizationChanges();
+
+            controlsContainer.style.display = 'none';
+            button.textContent = 'Mostrar Controles';
+        }
+    });
+
+    // Función para aplicar los cambios al contenedor del kit
+    function applyCustomizationChanges() {
+        const kitContainer = document.getElementById('kitContainer');
+        kitContainer.style.borderColor = currentBorderColor;
+
+        // Si se seleccionó una imagen de fondo, la aplicamos
+        if (currentBackgroundImage) {
+            kitContainer.style.backgroundImage = `url(${currentBackgroundImage})`;
+            kitContainer.style.backgroundSize = 'cover';
+            kitContainer.style.backgroundPosition = 'center';
+        } else {
+            kitContainer.style.backgroundImage = '';
+        }
+
+        // Si las sombras están activadas, las aplicamos
+        if (currentShadowEffect) {
+            kitContainer.style.boxShadow = '0 0 20px rgba(255, 69, 0, 0.7)';
+        } else {
+            kitContainer.style.boxShadow = '0 0 10px rgba(255, 69, 0, 0.5)';
+        }
+    }
+
+    // Función para actualizar las configuraciones cuando el usuario cambia los valores
+    document.getElementById('borderColor').addEventListener('input', (e) => {
+        currentBorderColor = e.target.value;
+    });
+
+    document.getElementById('backgroundImage').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                currentBackgroundImage = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.getElementById('shadowEffect').addEventListener('change', (e) => {
+        currentShadowEffect = e.target.checked;
+    });
+
+    // Funcionalidad para pegar el kit
+    document.getElementById('pasteKitButton').addEventListener('click', () => {
+        const pasteArea = document.getElementById('kitPasteArea');
+        const commands = pasteArea.value.trim().split('\n');
+
+        if (commands.length === 0) {
+            alert('No hay comandos para pegar.');
+            return;
+        }
+
+        let isResetRequired = false;
+
+        commands.forEach(command => {
+            const regex = /^kit add "(.*?)" "(.*?)" (\d+) 1 "(.*?)"$/;
+            const match = command.match(regex);
+
+            if (match) {
+                const kitName = match[1];
+                const itemId = match[2];
+                const quantity = parseInt(match[3]);
+                const slotType = match[4];
+
+                let targetSlot = null;
+                if (slotType === 'wear') {
+                    targetSlot = findFirstAvailableSlot('wear');
+                } else if (slotType === 'main') {
+                    targetSlot = findFirstAvailableSlot('main');
+                } else if (slotType === 'belt') {
+                    targetSlot = findFirstAvailableSlot('belt');
+                }
+
+                if (targetSlot) {
+                    applyItemToSlot(targetSlot, {
+                        id: itemId,
+                        category: slotType
+                    }, quantity);
+                } else {
+                    isResetRequired = true;
+                }
+            } else {
+                alert('Comando no válido: ' + command);
+            }
+        });
+
+        if (isResetRequired) {
+            alert('Debes resetear primero antes de aplicar este kit.');
+        }
+
+        pasteArea.value = '';
+        updateKitCommands();
+    });
+
+    function findFirstAvailableSlot(slotType) {
+        const slots = document.querySelectorAll(`[data-type="${slotType}"]`);
+        for (let slot of slots) {
+            if (!slot.dataset.id) {
+                return slot;
+            }
+        }
+        return null;
+    }
+
+    function applyItemToSlot(slot, item, quantity) {
+        const itemContainer = document.createElement('div');
+        itemContainer.className = 'item-container';
+
+        const imgSlot = document.createElement('img');
+        imgSlot.src = `images/${item.id}.png`;
+        imgSlot.style.width = '100%';
+        imgSlot.style.height = '100%';
+
+        const controls = document.createElement('div');
+        controls.className = 'slot-controls';
+
+        const quantityDisplay = document.createElement('span');
+        quantityDisplay.className = 'quantity-display';
+        quantityDisplay.textContent = quantity;
+
+        controls.appendChild(quantityDisplay);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = 'X';
+        removeBtn.className = 'remove-item';
+        removeBtn.onclick = () => {
+            slot.innerHTML = '';
+            updateKitCommands();
+        };
+
+        controls.appendChild(removeBtn);
+        itemContainer.appendChild(imgSlot);
+        itemContainer.appendChild(controls);
+
+        slot.appendChild(itemContainer);
+    }
+
+    function updateKitCommands() {
+        // Actualiza la lista de comandos para reflejar los cambios
+        const commandList = document.getElementById('command_list');
+        commandList.textContent = '';
+    }
+</script>
 </body>
 </html>
