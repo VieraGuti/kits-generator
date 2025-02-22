@@ -34,7 +34,7 @@
 		margin: 10px 0 5px;
 		color: #00fff7;
 	}
-
+        <button onclick="pasteKit()">Paste Kit</button>
 	input, select, button {
 		width: 100%;
 		padding: 10px;
@@ -1009,7 +1009,45 @@
 			}
 		});
 	});
+async function pasteKit() {
+    try {
+        const text = await navigator.clipboard.readText();
+        const lines = text.split("\n").map(line => line.trim()).filter(line => line.startsWith("kit add"));
 
+        if (lines.length === 0) {
+            alert("Formato inválido. Asegúrate de copiar un kit válido.");
+            return;
+        }
+
+        lines.forEach(line => {
+            const parts = line.match(/"([^"]+)"|(\S+)/g);
+            if (parts && parts.length >= 5) {
+                const itemId = parts[2].replace(/"/g, '');
+                const quantity = parseInt(parts[3], 10);
+                const slotType = parts[5].replace(/"/g, '');
+
+                let targetSlot = findFirstAvailableSlot(slotType);
+
+                if (!targetSlot) {
+                    targetSlot = findFirstAvailableSlot('main');
+                }
+
+                if (targetSlot) {
+                    applyItemToSlot(targetSlot, {
+                        id: itemId,
+                        category: slotType
+                    }, quantity);
+                    updateKitCommands();
+                } else {
+                    alert(`No hay espacio disponible para ${itemId}!`);
+                }
+            }
+        });
+
+    } catch (err) {
+        alert("No se pudo acceder al portapapeles. Intenta pegar manualmente.");
+    }
+}
     function updateKitCommands() {
         const kitName = document.getElementById('kitName').value || document.getElementById('kaosList').value;
         
