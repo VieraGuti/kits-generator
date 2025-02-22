@@ -306,7 +306,7 @@ FOOD: [
     { id: 'can.beans', name: 'Can of Beans', image: 'images/food/can.beans' },
     { id: 'can.tuna', name: 'Can of Tuna', image: 'images/food/can.tuna' },
     { id: 'fish.catfish', name: 'Catfish', image: 'images/food/fish.catfish' },
-    { id: 'chocolate', name: 'Chocolate Bar', image: 'images/food/chocolate' },
+    { id: 'chocholate', name: 'Chocolate Bar', image: 'images/food/chocolate' },
     { id: 'bearmeat.cooked', name: 'Cooked Bear Meat', image: 'images/food/bearmeat.cooked' },
     { id: 'chicken.cooked', name: 'Cooked Chicken', image: 'images/food/chicken.cooked' },
     { id: 'deermeat.cooked', name: 'Cooked Deer Meat', image: 'images/food/deermeat.cooked' },
