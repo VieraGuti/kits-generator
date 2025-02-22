@@ -1304,5 +1304,59 @@
 
     getGlobalCounter();
     </script>
+	<button id="pasteKitButton">Pegar tu kit</button>
+<textarea id="kitPasteArea" placeholder="Pega tu kit aquí..."></textarea>
+
+<script>
+    document.getElementById('pasteKitButton').addEventListener('click', () => {
+        const pasteArea = document.getElementById('kitPasteArea');
+        const commands = pasteArea.value.trim().split('\n');  // Dividimos por líneas
+
+        if (commands.length === 0) {
+            alert('No hay comandos para pegar.');
+            return;
+        }
+
+        // Recorremos cada línea (comando)
+        commands.forEach(command => {
+            // Expresión regular para analizar el comando
+            const regex = /^kit add "(.*?)" "(.*?)" (\d+) 1 "(.*?)"$/;
+            const match = command.match(regex);
+            
+            if (match) {
+                const kitName = match[1];
+                const itemId = match[2];
+                const quantity = parseInt(match[3]);
+                const slotType = match[4];
+
+                // Ahora procesamos el comando y colocamos el ítem en el slot
+                let targetSlot = null;
+                if (slotType === 'wear') {
+                    targetSlot = findFirstAvailableSlot('wear');
+                } else if (slotType === 'main') {
+                    targetSlot = findFirstAvailableSlot('main');
+                } else if (slotType === 'belt') {
+                    targetSlot = findFirstAvailableSlot('belt');
+                }
+
+                if (targetSlot) {
+                    // Aquí se aplica el ítem al slot
+                    applyItemToSlot(targetSlot, {
+                        id: itemId,
+                        category: slotType // O lo que necesites
+                    }, quantity);
+                } else {
+                    alert(`No hay espacio disponible para el ítem ${itemId} en el tipo de slot ${slotType}.`);
+                }
+            } else {
+                alert('Comando no válido: ' + command);
+            }
+        });
+
+        // Limpiar el área de texto después de pegar el kit
+        pasteArea.value = '';
+        updateKitCommands();  // Para actualizar los comandos y mostrarlo si es necesario
+    });
+</script>
 </body>
 </html>
