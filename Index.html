@@ -1317,6 +1317,8 @@
             return;
         }
 
+        let isResetRequired = false;
+
         // Recorremos cada línea (comando)
         commands.forEach(command => {
             // Expresión regular para analizar el comando
@@ -1346,17 +1348,87 @@
                         category: slotType // O lo que necesites
                     }, quantity);
                 } else {
-                    alert(`No hay espacio disponible para el ítem ${itemId} en el tipo de slot ${slotType}.`);
+                    isResetRequired = true;  // Indicamos que se debe resetear
                 }
             } else {
                 alert('Comando no válido: ' + command);
             }
         });
 
+        // Si no se encuentra un slot disponible, mostramos el mensaje de reset
+        if (isResetRequired) {
+            alert('Debes resetear primero antes de aplicar este kit.');
+        }
+
         // Limpiar el área de texto después de pegar el kit
         pasteArea.value = '';
         updateKitCommands();  // Para actualizar los comandos y mostrarlo si es necesario
     });
+
+    // Función para obtener el primer slot disponible
+    function findFirstAvailableSlot(slotType) {
+        const slots = document.querySelectorAll(`[data-type="${slotType}"]`);
+        for (let slot of slots) {
+            if (!slot.dataset.id) {
+                return slot;  // Devolver el primer slot vacío
+            }
+        }
+        return null;  // Si no hay espacio disponible
+    }
+
+    // Función para aplicar el ítem al slot (con su imagen y cantidad)
+    function applyItemToSlot(slot, item, quantity) {
+        // Crear un contenedor para el ítem
+        const itemContainer = document.createElement('div');
+        itemContainer.className = 'item-container';
+
+        // Crear la imagen del ítem
+        const imgSlot = document.createElement('img');
+        imgSlot.src = `images/${item.id}.png`;
+        imgSlot.style.width = '100%';
+        imgSlot.style.height = '100%';
+
+        // Crear los controles para la cantidad
+        const controls = document.createElement('div');
+        controls.className = 'slot-controls';
+
+        const quantityDisplay = document.createElement('span');
+        quantityDisplay.className = 'quantity-display';
+        quantityDisplay.textContent = quantity;
+        quantityDisplay.onclick = (e) => {
+            e.stopPropagation();
+            const newQuantity = prompt('Enter new quantity:', quantity);
+            if (newQuantity !== null && !isNaN(newQuantity) && newQuantity > 0) {
+                quantityDisplay.textContent = newQuantity;
+                updateKitCommands();  // Actualizar comandos después de la edición
+            }
+        };
+
+        controls.appendChild(quantityDisplay);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-item';
+        removeBtn.textContent = '×';
+        removeBtn.onclick = (e) => {
+            e.stopPropagation();
+            slot.innerHTML = '';
+            delete slot.dataset.id;
+            delete slot.dataset.quantity;
+            updateKitCommands();  // Actualizar comandos después de eliminar
+        };
+
+        itemContainer.appendChild(imgSlot);
+        itemContainer.appendChild(controls);
+        itemContainer.appendChild(removeBtn);
+
+        // Insertar el ítem en el slot
+        slot.innerHTML = '';  // Limpiar el slot antes de insertar el ítem
+        slot.appendChild(itemContainer);
+
+        // Asignar datos al slot
+        slot.dataset.id = item.id;
+        slot.dataset.quantity = quantity;
+    }
 </script>
 </body>
 </html>
