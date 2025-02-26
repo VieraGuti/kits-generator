@@ -192,6 +192,8 @@ const items = {
         { id: 'diving.tank', name: 'Diving Tank', image: 'images/attire/diving.tank' },
         { id: 'boots.frog', name: 'Frog Boots', image: 'images/attire/boots.frog' },
         { id: 'hazmatsuit', name: 'Hazmat Suit', image: 'images/attire/hazmatsuit' },
+        { id: 'hazmatsuit_scientist_peacekeeper', name: 'Peacekeeper Hazmat Suit', image: 'images/attire/hazmatsuit_scientist_peacekeeper' },
+        { id: 'scientistsuit_heavy', name: 'Heavy Scientist Suit', image: 'images/attire/scientistsuit_heavy' },
         { id: 'heavy.plate.helmet', name: 'Heavy Plate Helmet', image: 'images/attire/heavy.plate.helmet' },
         { id: 'heavy.plate.jacket', name: 'Heavy Plate Jacket', image: 'images/attire/heavy.plate.jacket' },
         { id: 'heavy.plate.pants', name: 'Heavy Plate Pants', image: 'images/attire/heavy.plate.pants' },
