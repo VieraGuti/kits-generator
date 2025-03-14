@@ -306,7 +306,7 @@ FOOD: [
     { id: 'chicken.burned', name: 'Burnt Chicken', image: 'images/food/chicken.burned' },
     { id: 'chicken.cooked', name: 'Cooked Chicken', image: 'images/food/chicken.cooked' },
     { id: 'chicken.raw', name: 'Raw Chicken Breast', image: 'images/food/chicken.raw' },
-    { id: 'chocholate', name: 'Chocolate Bar', image: 'images/food/chocholate' },
+    { id: 'chocholate', name: 'Chocolate Bar', image: 'images/food/chocolate' },
     { id: 'clone.blue.berry', name: 'Blue Berry Clone', image: 'images/food/clone.blue.berry' },
     { id: 'clone.corn', name: 'Corn Clone', image: 'images/food/clone.corn' },
     { id: 'clone.green.berry', name: 'Green Berry Clone', image: 'images/food/clone.green.berry' },
