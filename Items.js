@@ -164,11 +164,14 @@ const items = {
         { id: 'furnace.large', name: 'Large Furnace', image: 'images/construction/furnace.large' },
         { id: 'ladder.wooden.wall', name: 'Wooden Ladder', image: 'images/construction/ladder.wooden.wall' },
         { id: 'wall.window.bars.wood', name: 'Wooden Window Bars', image: 'images/construction/wall.window.bars.wood' },
+	{ id: 'planter.large', name: 'Large Planter', image: 'images/construction/planter.large' },
+        { id: 'planter.small', name: 'Small Planter', image: 'images/construction/planter.small' },
         { id: 'workbench1', name: 'Workbench 1', image: 'images/construction/workbench1' },
         { id: 'workbench2', name: 'Workbench 2', image: 'images/construction/workbench2' },
         { id: 'workbench3', name: 'Workbench 3', image: 'images/construction/workbench3' },
         { id: 'bed', name: 'Bed', image: 'images/construction/bed' }
  ],
+
     ATTIRE: [
         { id: 'mask.bandana', name: 'Bandana Mask', image: 'images/attire/mask.bandana' },
         { id: 'barrelcostume', name: 'Barrel Costume', image: 'images/attire/barrelcostume' },
